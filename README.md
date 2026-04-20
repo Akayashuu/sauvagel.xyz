@@ -9,10 +9,10 @@ Personal portfolio built with Svelte + TypeScript.
 - Deployed on VPS
 
 ## Run locally
-\```bash
+```bash
 pnpm install
 pnpm dev
-\```
+```
 
 ## Live
 🔗 https://sauvagel.xyz

@@ -3,13 +3,24 @@
 	import { profile } from '$lib/data/profile';
 	import { t } from '$lib/i18n';
 	import CodeCube from './CodeCube.svelte';
+	import MatrixRain from './MatrixRain.svelte';
 	import TextScramble from './TextScramble.svelte';
 	import MagneticButton from './MagneticButton.svelte';
 	import { Mail, MapPin } from 'lucide-svelte';
 	import GithubIcon from './GithubIcon.svelte';
 	import anime from 'animejs';
 
+	// Decided client-side: the WebGL cube (708KB of Three.js + heavy sync init)
+	// only loads on capable desktops. Mobile / weak CPU / reduced-motion get the
+	// cheap 2D matrix-rain canvas instead — same vibe, none of the main-thread jank.
+	let bg = $state<'cube' | 'rain' | null>(null);
+
 	onMount(() => {
+		const finePointer = window.matchMedia('(pointer: fine)').matches;
+		const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+		const cores = navigator.hardwareConcurrency ?? 4;
+		bg = finePointer && !reducedMotion && cores >= 6 ? 'cube' : 'rain';
+
 		anime.timeline({ easing: 'easeOutCubic' })
 			.add({ targets: '.hero-badge', scale: [0.8, 1], opacity: [0, 1], duration: 500, delay: 200 })
 			.add({ targets: '.hero-greeting', translateY: [20, 0], opacity: [0, 1], duration: 600 }, '-=200')
@@ -23,7 +34,11 @@
 
 <section id="hero" class="relative flex min-h-screen items-center justify-center overflow-hidden">
 	<div class="absolute inset-0 z-0">
-		<CodeCube />
+		{#if bg === 'cube'}
+			<CodeCube />
+		{:else if bg === 'rain'}
+			<MatrixRain color="#00ff41" />
+		{/if}
 	</div>
 
 	<div class="pointer-events-none absolute inset-0 z-1 bg-linear-to-t from-zinc-950 via-zinc-950/60 to-zinc-950/30"></div>

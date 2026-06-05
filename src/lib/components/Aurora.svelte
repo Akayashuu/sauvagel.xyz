@@ -26,4 +26,10 @@
 		from { transform: translate3d(3%, 2%, 0) scale(1.05); }
 		to   { transform: translate3d(-3%, -2%, 0) scale(1); }
 	}
+	@media (prefers-reduced-motion: reduce) {
+		.aurora-1,
+		.aurora-2 {
+			animation: none;
+		}
+	}
 </style>

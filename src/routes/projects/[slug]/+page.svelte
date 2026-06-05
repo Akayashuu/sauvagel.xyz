@@ -66,6 +66,37 @@
 			</div>
 		</div>
 
+		{#if meta.preview}
+			<a
+				href={meta.externalUrl ?? meta.preview}
+				target="_blank"
+				rel="noopener noreferrer"
+				class="group/preview relative mb-8 block overflow-hidden rounded-2xl border border-zinc-800/60 sm:mb-12 sm:rounded-3xl"
+			>
+				<div class="preview-header relative aspect-video w-full bg-zinc-900">
+					<iframe
+						src={meta.preview}
+						title="Aperçu de {project.name}"
+						loading="lazy"
+						tabindex="-1"
+						aria-hidden="true"
+						scrolling="no"
+						referrerpolicy="no-referrer"
+						sandbox="allow-scripts allow-same-origin"
+						class="preview-frame"
+					></iframe>
+					<div class="absolute top-3 left-3 flex items-center gap-2 rounded-full border border-white/10 bg-zinc-950/60 px-3 py-1 text-xs font-medium text-zinc-200 backdrop-blur-sm">
+						<span class="h-2 w-2 rounded-full bg-emerald-400"></span>
+						{$t.projectPage.livePreview}
+					</div>
+					<div class="absolute right-3 bottom-3 flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 text-xs font-medium text-white opacity-0 backdrop-blur-sm transition-opacity duration-300 group-hover/preview:opacity-100">
+						{$t.projectPage.openSite}
+						<ExternalLink size={14} />
+					</div>
+				</div>
+			</a>
+		{/if}
+
 		<div class="grid gap-8 md:grid-cols-3">
 			<div class="md:col-span-2">
 				<div class="glass rounded-2xl p-5 sm:p-8">
@@ -133,3 +164,27 @@
 		</div>
 	</div>
 </section>
+
+<style>
+	.preview-header {
+		container-type: size;
+	}
+	.preview-frame {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 1280px;
+		height: 853px;
+		border: 0;
+		pointer-events: none;
+		transform-origin: top left;
+		/* Fallback for browsers without length-division support */
+		transform: scale(0.7);
+		color-scheme: light;
+	}
+	@container (min-width: 1px) {
+		.preview-frame {
+			transform: scale(calc(100cqw / 1280px));
+		}
+	}
+</style>

@@ -13,8 +13,8 @@
 		const charLen = charArray.length;
 		const fontSize = 16;
 		const font = `${fontSize}px monospace`;
-		let columns: number;
-		let drops: number[];
+		let columns = 0;
+		let drops: number[] = [];
 
 		function hexToRgb(hex: string) {
 			const r = Number.parseInt(hex.slice(1, 3), 16);
@@ -84,7 +84,19 @@
 			}
 		}
 
-		rafId = requestAnimationFrame(draw);
+		const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+		if (reducedMotion) {
+			// Static frame only — no animation loop (battery / accessibility)
+			ctx.font = font;
+			ctx.fillStyle = bodyStyle;
+			for (let i = 0; i < columns; i++) {
+				const x = i * fontSize;
+				const y = ((Math.random() * (canvas.height / fontSize)) | 0) * fontSize;
+				ctx.fillText(charArray[(Math.random() * charLen) | 0], x, y);
+			}
+		} else {
+			rafId = requestAnimationFrame(draw);
+		}
 
 		return () => {
 			cancelAnimationFrame(rafId);

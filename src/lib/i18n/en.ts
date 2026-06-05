@@ -43,6 +43,17 @@ export const en = {
     title: "Where I've worked",
     items: [
       {
+        company: "VSK Studio",
+        role: "Managing Partner",
+        period: "2025 - Present",
+        description: [
+          "Co-founder of a custom web development studio",
+          "Modern websites and web apps for clients (SvelteKit, TypeScript, Docker)",
+          "End-to-end project ownership: design, development, deployment and maintenance",
+          "Running the business and client relationships as managing partner",
+        ],
+      },
+      {
         company: "Green Ideas",
         role: "Full Stack & Mobile / DevOps",
         period: "2024 - 2025",
@@ -75,6 +86,22 @@ export const en = {
     label: "Projects",
     title: "Things I've built",
     items: [
+      {
+        name: "VSK Studio",
+        tagline: "Custom web development studio",
+        description:
+          "The web development studio I co-founded and run as managing partner. Bespoke marketing sites, web apps and booking systems for clients, built on a modern stack (SvelteKit, TypeScript, Docker) with self-hosted deployment.",
+        details: {
+          features: [
+            "Custom web development studio, co-founded as managing partner",
+            "Marketing sites and web apps for clients",
+            "Integrated booking system",
+            "Modern stack: SvelteKit, TypeScript and Tailwind",
+            "Self-hosted Docker deployment behind Nginx / Cloudflare",
+            "Bilingual website (FR / EN)",
+          ],
+        },
+      },
       {
         name: "White",
         tagline: "Text-based MMORPG on Discord",
@@ -211,6 +238,8 @@ export const en = {
     links: "Links",
     github: "GitHub",
     website: "Website",
+    livePreview: "Live preview",
+    openSite: "Open site",
   },
   footer: {
     madeWith: "Built with",

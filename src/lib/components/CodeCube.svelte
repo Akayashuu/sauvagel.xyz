@@ -29,6 +29,7 @@
 		let destroyed = false;
 		let animationId: number;
 		let isVisible = true;
+		let cleanup3D: (() => void) | undefined;
 
 		const observer = new IntersectionObserver(([entry]) => { isVisible = entry.isIntersecting; }, { threshold: 0 });
 		observer.observe(container);
@@ -294,13 +295,37 @@
 				renderer.render(scene, camera);
 			}
 
-			animationId = requestAnimationFrame(animate);
+			cleanup3D = () => {
+				container.removeEventListener('mousemove', onMouseMove);
+				window.removeEventListener('resize', onResize);
+				scene.traverse((obj) => {
+					const mesh = obj as THREE.Mesh;
+					mesh.geometry?.dispose?.();
+					const m = mesh.material as THREE.Material | THREE.Material[] | undefined;
+					const mats = Array.isArray(m) ? m : m ? [m] : [];
+					for (const mat of mats) {
+						(mat as THREE.MeshBasicMaterial).map?.dispose?.();
+						mat.dispose();
+					}
+				});
+				atlasTexture.dispose();
+				renderer.dispose();
+				renderer.forceContextLoss();
+			};
+
+			const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+			if (reducedMotion) {
+				renderer.render(scene, camera);
+			} else {
+				animationId = requestAnimationFrame(animate);
+			}
 		})();
 
 		return () => {
 			destroyed = true;
 			observer.disconnect();
 			if (animationId) cancelAnimationFrame(animationId);
+			cleanup3D?.();
 			while (container.firstChild) container.removeChild(container.firstChild);
 		};
 	});

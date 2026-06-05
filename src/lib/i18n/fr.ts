@@ -43,6 +43,17 @@ export const fr = {
     title: "Où j'ai travaillé",
     items: [
       {
+        company: "VSK Studio",
+        role: "Associé gérant",
+        period: "2025 - Présent",
+        description: [
+          "Co-fondateur d'un studio de développement web sur-mesure",
+          "Sites et applications web modernes pour des clients (SvelteKit, TypeScript, Docker)",
+          "Pilotage des projets de A à Z : conception, développement, déploiement et maintenance",
+          "Gestion de l'activité et de la relation client en tant qu'associé gérant",
+        ],
+      },
+      {
         company: "Green Ideas",
         role: "Full Stack & Mobile / DevOps",
         period: "2024 - 2025",
@@ -75,6 +86,22 @@ export const fr = {
     label: "Projets",
     title: "Ce que j'ai construit",
     items: [
+      {
+        name: "VSK Studio",
+        tagline: "Studio de développement web sur-mesure",
+        description:
+          "Le studio de développement web que j'ai co-fondé et que je gère en tant qu'associé gérant. Sites vitrines, applications web et systèmes de réservation sur-mesure pour des clients, avec une stack moderne (SvelteKit, TypeScript, Docker) et un déploiement auto-hébergé.",
+        details: {
+          features: [
+            "Studio de développement web sur-mesure, co-fondé en tant qu'associé gérant",
+            "Sites vitrines et applications web pour des clients",
+            "Système de réservation intégré",
+            "Stack moderne : SvelteKit, TypeScript et Tailwind",
+            "Déploiement auto-hébergé en Docker derrière Nginx / Cloudflare",
+            "Site bilingue (FR / EN)",
+          ],
+        },
+      },
       {
         name: "White",
         tagline: "MMORPG textuel sur Discord",
@@ -211,6 +238,8 @@ export const fr = {
     links: "Liens",
     github: "GitHub",
     website: "Site web",
+    livePreview: "Aperçu en direct",
+    openSite: "Ouvrir le site",
   },
   footer: {
     madeWith: "Fait avec",

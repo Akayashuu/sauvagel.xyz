@@ -8,7 +8,7 @@ export const profile = {
   githubUsername: "Akayashuu",
 };
 
-export const experienceLogos = ["🌱", "🏥"];
+export const experienceLogos = ["🚀", "🌱", "🏥"];
 
 export const skills = [
   {
@@ -75,7 +75,28 @@ export const techIcons: Record<string, string> = {
   PrestaShop: "https://cdn.simpleicons.org/prestashop/DF0067",
 };
 
-export const projectMeta = [
+export interface ProjectMeta {
+  slug: string;
+  tech: string[];
+  gradient: string;
+  color: string;
+  link: string;
+  logos: string[];
+  externalUrl?: string;
+  preview?: string;
+}
+
+export const projectMeta: ProjectMeta[] = [
+  {
+    slug: "vskstudio",
+    tech: ["Svelte", "TypeScript", "Tailwind", "Docker", "Node.js"],
+    gradient: "from-sky-500 to-indigo-700",
+    color: "#6366f1",
+    link: "https://github.com/Akayashuu",
+    logos: ["Svelte", "TypeScript", "Tailwind", "Docker"],
+    externalUrl: "https://vskstudio.fr",
+    preview: "https://vskstudio.fr/fr/",
+  },
   {
     slug: "white",
     tech: [
@@ -101,6 +122,7 @@ export const projectMeta = [
     link: "https://github.com/Akayashuu",
     logos: ["TypeScript", "Discord.js", "PostgreSQL"],
     externalUrl: "https://ender.gg",
+    preview: "https://ender.gg",
   },
   {
     slug: "aeroclub-electron",
@@ -126,5 +148,6 @@ export const projectMeta = [
     link: "https://github.com/Akayashuu",
     logos: ["TypeScript", "Svelte", "Docker", "Grafana"],
     externalUrl: "https://ganyu.fr",
+    preview: "https://ganyu.fr",
   },
 ];

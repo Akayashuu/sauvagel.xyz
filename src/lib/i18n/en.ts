@@ -44,13 +44,13 @@ export const en = {
     items: [
       {
         company: "VSK Studio",
-        role: "Managing Partner",
+        role: "CEO & Co-founder",
         period: "2025 - Present",
         description: [
-          "Co-founder of a custom web development studio",
-          "Modern websites and web apps for clients (SvelteKit, TypeScript, Docker)",
+          "CEO and co-founder of a custom web development studio",
+          "Modern websites and web apps for clients (React, TypeScript, Docker)",
           "End-to-end project ownership: design, development, deployment and maintenance",
-          "Running the business and client relationships as managing partner",
+          "Leading the business, strategy and client relationships",
         ],
       },
       {
@@ -90,15 +90,17 @@ export const en = {
         name: "VSK Studio",
         tagline: "Custom web development studio",
         description:
-          "The web development studio I co-founded and run as managing partner. Bespoke marketing sites, web apps and booking systems for clients, built on a modern stack (SvelteKit, TypeScript, Docker) with self-hosted deployment.",
+          "The web development studio I co-founded and lead as CEO. We build bespoke marketing sites, web apps and booking systems for clients, from mockup to production. Modern stack (React, TypeScript, Vite, Tailwind), i18next internationalization, Vitest testing, and self-hosted Docker deployment behind Nginx and Cloudflare.",
         details: {
           features: [
-            "Custom web development studio, co-founded as managing partner",
-            "Marketing sites and web apps for clients",
-            "Integrated booking system",
-            "Modern stack: SvelteKit, TypeScript and Tailwind",
-            "Self-hosted Docker deployment behind Nginx / Cloudflare",
-            "Bilingual website (FR / EN)",
+            "Custom web development studio, co-founded and led as CEO",
+            "Marketing sites and web apps for clients, built end-to-end",
+            "Integrated booking system and admin interfaces",
+            "React + Vite + TypeScript front end, Tailwind UI, reusable components",
+            "Multilingual sites via i18next (FR / EN)",
+            "Automated tests with Vitest and strict typing (ESLint, Biome)",
+            "Self-hosted Docker deployment behind Nginx and Cloudflare",
+            "Running the business: strategy, client relationships and delivery",
           ],
         },
       },
@@ -106,13 +108,14 @@ export const en = {
         name: "White",
         tagline: "Text-based MMORPG on Discord",
         description:
-          "A text-based MMORPG running entirely on Discord. Microservice architecture with RabbitMQ, sharding, Drizzle ORM, and full observability via Prometheus, Grafana and Loki.",
+          "A text-based MMORPG running entirely on Discord. A TypeScript microservice architecture where each service talks over RabbitMQ, with sharding for scalability, Drizzle ORM on PostgreSQL, Redis caching, and full observability (Prometheus, Grafana, Loki). All containerized with Docker.",
         details: {
           features: [
             "Text-based MMORPG gameplay directly inside Discord",
             "Microservice architecture — each service communicates through RabbitMQ",
             "Bot sharding for scalability across multiple servers",
             "Drizzle ORM with PostgreSQL for persistent game state",
+            "Redis for caching and real-time queues",
             "Full observability stack: Prometheus, Grafana, and Loki for logs",
             "Dockerized deployment for all services",
           ],
@@ -122,7 +125,7 @@ export const en = {
         name: "Enderbot",
         tagline: "Discord RPG bot — 6000+ cards",
         description:
-          "An advanced Discord RPG bot combining exploration, card collection (6000+ cards from games, anime & manga), economy, crafting, and multiplayer warfare. Free-to-play, running since 2017.",
+          "An advanced Discord RPG bot combining exploration, card collection (6000+ cards from games, anime & manga), economy, crafting, and multiplayer warfare. A pnpm monorepo in TypeScript with Prisma on PostgreSQL and a SvelteKit + Tailwind web dashboard. Free-to-play, running since 2017.",
         details: {
           features: [
             "Over 6,000 collectible cards from video games, anime, and manga",
@@ -130,8 +133,8 @@ export const en = {
             "Exploration across multiple locations and biomes",
             "Organization system — team up with other players and compete on leaderboards",
             "Economy, war map, and competitive rankings",
-            "SvelteKit dashboard with logs, leaderboard, library, and server stats",
-            "Public API at ender.gg",
+            "SvelteKit + Tailwind dashboard with logs, leaderboard, library, and server stats",
+            "Public API at ender.gg, deployed with Docker",
             "pnpm monorepo architecture with Prisma and PostgreSQL",
           ],
         },
@@ -172,7 +175,7 @@ export const en = {
         name: "Ganyu.fr",
         tagline: "Discord community bot",
         description:
-          "A Discord bot for community management — leveling (100+ levels with automatic role rewards), economy with daily/hourly rewards and a gacha with pity system, mini-games, moderation, and custom welcome messages.",
+          "A Discord bot for community management, written in TypeScript with Discord.js, Prisma and PostgreSQL — leveling (100+ levels with automatic role rewards), economy with daily/hourly rewards and a gacha with pity system, mini-games, moderation, and custom welcome messages. Svelte dashboard and public API, all deployed with Docker.",
         details: {
           features: [
             "Leveling system with 100+ levels — XP from text and voice activity",
@@ -181,8 +184,8 @@ export const en = {
             "Gacha system with guaranteed pity for exclusive roles and rewards",
             "Integrated mini-games playable directly in Discord",
             "Moderation tools: logging, auto-roles, welcome/farewell messages",
-            "Svelte dashboard at ganyu.fr with real-time stats",
-            "Public API at ganyu.fr/api",
+            "Discord.js bot with Prisma + PostgreSQL persistence",
+            "Svelte dashboard at ganyu.fr with real-time stats and public API (/api)",
           ],
         },
       },

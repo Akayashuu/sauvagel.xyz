@@ -3,6 +3,7 @@
 
 	import { projectMeta, techIcons } from '$lib/data/profile';
 	import { t } from '$lib/i18n';
+	import { scaledPreview } from '$lib/actions/scaledPreview';
 	import ScrollReveal from './ScrollReveal.svelte';
 	import TiltCard from './TiltCard.svelte';
 </script>
@@ -31,7 +32,10 @@
 							href="/projects/{meta.slug}"
 							class="glass group relative flex h-full flex-col overflow-hidden rounded-2xl transition-all duration-500 hover:border-primary-500/30 hover:shadow-xl hover:shadow-primary-500/10"
 						>
-							<div class="preview-header relative h-32 overflow-hidden bg-linear-to-br {meta.gradient} 2xl:h-40">
+							<div
+								class="preview-header relative h-32 overflow-hidden bg-linear-to-br {meta.gradient} 2xl:h-40"
+								use:scaledPreview={1440}
+							>
 								{#if meta.preview}
 									<iframe
 										src={meta.preview}
@@ -42,9 +46,10 @@
 										scrolling="no"
 										referrerpolicy="no-referrer"
 										sandbox="allow-scripts allow-same-origin"
+										style="color-scheme: {meta.previewScheme ?? 'light'}"
 										class="preview-frame"
 									></iframe>
-									<div class="absolute inset-0 bg-zinc-950/40 transition-colors duration-500 group-hover:bg-zinc-950/10"></div>
+									<div class="absolute inset-0 bg-zinc-950/30 transition-colors duration-500 group-hover:bg-zinc-950/5"></div>
 								{:else}
 									<div class="absolute inset-0 bg-black/20"></div>
 									<div class="absolute inset-0 opacity-20" style="background-image: linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px); background-size: 24px 24px;"></div>
@@ -97,30 +102,15 @@
 </section>
 
 <style>
-	.preview-header {
-		container-type: size;
-	}
 	.preview-frame {
 		position: absolute;
 		top: 0;
 		left: 0;
-		width: 1280px;
-		height: 853px;
+		width: 1440px;
+		height: 1100px;
 		border: 0;
 		pointer-events: none;
 		transform-origin: top left;
-		/* Fallback for browsers without length-division support */
-		transform: scale(0.32);
-		color-scheme: light;
-	}
-	@container (min-width: 1px) {
-		.preview-frame {
-			transform: scale(calc(100cqw / 1280px));
-		}
-	}
-	@media (prefers-reduced-motion: reduce) {
-		.preview-frame {
-			transition: none;
-		}
+		transform: scale(var(--preview-scale, 0.3));
 	}
 </style>

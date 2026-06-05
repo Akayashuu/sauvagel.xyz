@@ -48,6 +48,7 @@ export const techIcons: Record<string, string> = {
   Electron: devicon("electron"),
   Webpack: devicon("webpack"),
   Svelte: devicon("svelte"),
+  Vite: devicon("vitejs"),
   "Node.js": devicon("nodejs"),
   Composer: devicon("composer"),
   Python: devicon("python"),
@@ -62,6 +63,10 @@ export const techIcons: Record<string, string> = {
   Git: devicon("git"),
   ESLint: devicon("eslint"),
   Linux: devicon("linux"),
+  Nginx: devicon("nginx"),
+  Redis: devicon("redis"),
+  SvelteKit: devicon("svelte"),
+  Kotlin: devicon("kotlin"),
   WordPress: `https://cdn.jsdelivr.net/gh/devicons/devicon@v2.16.0/icons/wordpress/wordpress-plain.svg`,
   Arch: devicon("archlinux"),
   "C++": devicon("cplusplus"),
@@ -73,6 +78,10 @@ export const techIcons: Record<string, string> = {
   Shopify: "https://cdn.simpleicons.org/shopify/7AB55C",
   Liquid: "https://cdn.simpleicons.org/shopify/7AB55C",
   PrestaShop: "https://cdn.simpleicons.org/prestashop/DF0067",
+  i18next: "https://cdn.simpleicons.org/i18next/7DC4B4",
+  Cloudflare: "https://cdn.simpleicons.org/cloudflare/F38020",
+  Vitest: "https://cdn.simpleicons.org/vitest/6E9F18",
+  Loki: "https://cdn.simpleicons.org/grafana/F46800",
 };
 
 export interface ProjectMeta {
@@ -84,30 +93,35 @@ export interface ProjectMeta {
   logos: string[];
   externalUrl?: string;
   preview?: string;
+  previewScheme?: "dark" | "light";
 }
 
 export const projectMeta: ProjectMeta[] = [
   {
     slug: "vskstudio",
-    tech: ["Svelte", "TypeScript", "Tailwind", "Docker", "Node.js"],
+    tech: ["React", "TypeScript", "Vite", "Tailwind", "i18next", "Vitest", "Docker", "Nginx", "Cloudflare"],
     gradient: "from-sky-500 to-indigo-700",
     color: "#6366f1",
     link: "https://github.com/Akayashuu",
-    logos: ["Svelte", "TypeScript", "Tailwind", "Docker"],
+    logos: ["React", "TypeScript", "Vite", "Tailwind", "Docker"],
     externalUrl: "https://vskstudio.fr",
     preview: "https://vskstudio.fr/fr/",
+    previewScheme: "light",
   },
   {
     slug: "white",
     tech: [
       "TypeScript",
+      "Node.js",
       "Discord.js",
       "RabbitMQ",
-      "Docker",
       "Drizzle",
       "PostgreSQL",
+      "Redis",
+      "Docker",
       "Grafana",
       "Prometheus",
+      "Loki",
     ],
     gradient: "from-violet-600 to-purple-800",
     color: "#7c3aed",
@@ -116,17 +130,18 @@ export const projectMeta: ProjectMeta[] = [
   },
   {
     slug: "enderbot",
-    tech: ["TypeScript", "Discord.js", "Prisma", "PostgreSQL", "pnpm"],
+    tech: ["TypeScript", "Node.js", "Discord.js", "Prisma", "PostgreSQL", "SvelteKit", "Tailwind", "Docker", "pnpm"],
     gradient: "from-emerald-600 to-teal-800",
     color: "#059669",
     link: "https://github.com/Akayashuu",
-    logos: ["TypeScript", "Discord.js", "PostgreSQL"],
+    logos: ["TypeScript", "Discord.js", "PostgreSQL", "Svelte"],
     externalUrl: "https://ender.gg",
     preview: "https://ender.gg",
+    previewScheme: "dark",
   },
   {
     slug: "aeroclub-electron",
-    tech: ["Symfony", "PHP", "Electron", "PostgreSQL", "Twig", "Node.js"],
+    tech: ["Symfony", "PHP", "Electron", "Node.js", "Twig", "PostgreSQL"],
     gradient: "from-amber-600 to-orange-800",
     color: "#d97706",
     link: "https://github.com/Akayashuu/Aeroclub-Symfony-Electron",
@@ -134,7 +149,7 @@ export const projectMeta: ProjectMeta[] = [
   },
   {
     slug: "aeroclub-symfony",
-    tech: ["Symfony", "PHP", "PostgreSQL", "Twig", "Webpack", "Composer"],
+    tech: ["Symfony", "PHP", "Twig", "Webpack", "Composer", "PostgreSQL"],
     gradient: "from-cyan-600 to-blue-800",
     color: "#0891b2",
     link: "https://github.com/Akayashuu/Aeroclub-Symfony",
@@ -142,12 +157,13 @@ export const projectMeta: ProjectMeta[] = [
   },
   {
     slug: "ganyu",
-    tech: ["TypeScript", "Svelte", "Grafana", "Docker"],
+    tech: ["TypeScript", "Node.js", "Discord.js", "Svelte", "PostgreSQL", "Prisma", "Grafana", "Docker"],
     gradient: "from-pink-600 to-rose-800",
     color: "#db2777",
     link: "https://github.com/Akayashuu",
-    logos: ["TypeScript", "Svelte", "Docker", "Grafana"],
+    logos: ["TypeScript", "Discord.js", "Svelte", "Docker"],
     externalUrl: "https://ganyu.fr",
     preview: "https://ganyu.fr",
+    previewScheme: "dark",
   },
 ];

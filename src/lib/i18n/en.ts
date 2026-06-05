@@ -87,24 +87,6 @@ export const en = {
     title: "Things I've built",
     items: [
       {
-        name: "VSK Studio",
-        tagline: "Custom web development studio",
-        description:
-          "The web development studio I co-founded and lead as CEO. We build bespoke marketing sites, web apps and booking systems for clients, from mockup to production. Modern stack (React, TypeScript, Vite, Tailwind), i18next internationalization, Vitest testing, and self-hosted Docker deployment behind Nginx and Cloudflare.",
-        details: {
-          features: [
-            "Custom web development studio, co-founded and led as CEO",
-            "Marketing sites and web apps for clients, built end-to-end",
-            "Integrated booking system and admin interfaces",
-            "React + Vite + TypeScript front end, Tailwind UI, reusable components",
-            "Multilingual sites via i18next (FR / EN)",
-            "Automated tests with Vitest and strict typing (ESLint, Biome)",
-            "Self-hosted Docker deployment behind Nginx and Cloudflare",
-            "Running the business: strategy, client relationships and delivery",
-          ],
-        },
-      },
-      {
         name: "White",
         tagline: "Text-based MMORPG on Discord",
         description:

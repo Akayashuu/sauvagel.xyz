@@ -87,24 +87,6 @@ export const fr = {
     title: "Ce que j'ai construit",
     items: [
       {
-        name: "VSK Studio",
-        tagline: "Studio de développement web sur-mesure",
-        description:
-          "Le studio de développement web que j'ai co-fondé et que je dirige en tant que CEO. On conçoit des sites vitrines, des applications web et des systèmes de réservation sur-mesure pour des clients, de la maquette jusqu'à la mise en production. Stack moderne (React, TypeScript, Vite, Tailwind), internationalisation i18next, tests Vitest, et déploiement auto-hébergé en Docker derrière Nginx et Cloudflare.",
-        details: {
-          features: [
-            "Studio de développement web sur-mesure, co-fondé et dirigé en tant que CEO",
-            "Sites vitrines et applications web pour des clients, conçus de A à Z",
-            "Système de réservation intégré et interfaces d'administration",
-            "Front React + Vite + TypeScript, UI en Tailwind, composants réutilisables",
-            "Sites multilingues via i18next (FR / EN)",
-            "Tests automatisés avec Vitest et typage strict (ESLint, Biome)",
-            "Déploiement auto-hébergé en Docker derrière Nginx et Cloudflare",
-            "Pilotage de l'activité : stratégie, relation client et delivery",
-          ],
-        },
-      },
-      {
         name: "White",
         tagline: "MMORPG textuel sur Discord",
         description:

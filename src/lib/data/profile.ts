@@ -98,17 +98,6 @@ export interface ProjectMeta {
 
 export const projectMeta: ProjectMeta[] = [
   {
-    slug: "vskstudio",
-    tech: ["React", "TypeScript", "Vite", "Tailwind", "i18next", "Vitest", "Docker", "Nginx", "Cloudflare"],
-    gradient: "from-sky-500 to-indigo-700",
-    color: "#6366f1",
-    link: "https://github.com/Akayashuu",
-    logos: ["React", "TypeScript", "Vite", "Tailwind", "Docker"],
-    externalUrl: "https://vskstudio.fr",
-    preview: "https://vskstudio.fr/fr/",
-    previewScheme: "light",
-  },
-  {
     slug: "white",
     tech: [
       "TypeScript",

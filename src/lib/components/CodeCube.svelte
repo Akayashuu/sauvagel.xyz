@@ -34,7 +34,7 @@
 		const observer = new IntersectionObserver(([entry]) => { isVisible = entry.isIntersecting; }, { threshold: 0 });
 		observer.observe(container);
 
-		(async () => {
+		const init3D = async () => {
 			const THREE = await import('three');
 			if (destroyed) return;
 
@@ -319,7 +319,16 @@
 			} else {
 				animationId = requestAnimationFrame(animate);
 			}
-		})();
+		};
+
+		// Différé après le premier paint : la page devient interactive tout de
+		// suite, le chunk Three (~700 KB) se télécharge/parse pendant l'idle.
+		const start = () => { if (!destroyed) init3D(); };
+		if ('requestIdleCallback' in window) {
+			window.requestIdleCallback(start, { timeout: 2000 });
+		} else {
+			setTimeout(start, 200);
+		}
 
 		return () => {
 			destroyed = true;

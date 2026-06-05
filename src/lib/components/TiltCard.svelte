@@ -11,24 +11,37 @@
 	let isHovering = $state(false);
 	let isTouch = $state(true);
 
+	let rafId = 0;
+	let lastX = 0;
+	let lastY = 0;
+
 	onMount(() => {
 		isTouch = window.matchMedia('(pointer: coarse)').matches;
+		return () => { if (rafId) cancelAnimationFrame(rafId); };
 	});
 
+	// Throttle au rythme de l'écran : un seul recalcul (et un seul reflow via
+	// getBoundingClientRect) par frame, au lieu d'un par event mousemove.
 	function handleMouseMove(e: MouseEvent) {
 		if (isTouch) return;
-		const rect = el.getBoundingClientRect();
-		const x = (e.clientX - rect.left) / rect.width;
-		const y = (e.clientY - rect.top) / rect.height;
-
-		rotateX = (y - 0.5) * -15;
-		rotateY = (x - 0.5) * 15;
-		glareX = x * 100;
-		glareY = y * 100;
+		lastX = e.clientX;
+		lastY = e.clientY;
 		isHovering = true;
+		if (rafId) return;
+		rafId = requestAnimationFrame(() => {
+			rafId = 0;
+			const rect = el.getBoundingClientRect();
+			const x = (lastX - rect.left) / rect.width;
+			const y = (lastY - rect.top) / rect.height;
+			rotateX = (y - 0.5) * -15;
+			rotateY = (x - 0.5) * 15;
+			glareX = x * 100;
+			glareY = y * 100;
+		});
 	}
 
 	function handleMouseLeave() {
+		if (rafId) { cancelAnimationFrame(rafId); rafId = 0; }
 		rotateX = 0;
 		rotateY = 0;
 		isHovering = false;

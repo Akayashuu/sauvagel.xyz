@@ -217,12 +217,16 @@
 			scene.add(scanLine);
 
 			const mouse = { x: 0, y: 0 };
+			// On stocke juste les coords brutes ici (ultra léger) ; le calcul
+			// avec getBoundingClientRect() — qui force un reflow — est fait dans
+			// la boucle d'animation, bridée à 30 fps, au lieu de 60-120×/s.
+			const pointer = { cx: 0, cy: 0, active: false };
 			function onMouseMove(e: MouseEvent) {
-				const rect = container.getBoundingClientRect();
-				mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-				mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+				pointer.cx = e.clientX;
+				pointer.cy = e.clientY;
+				pointer.active = true;
 			}
-			container.addEventListener('mousemove', onMouseMove);
+			container.addEventListener('mousemove', onMouseMove, { passive: true });
 
 			function onResize() {
 				camera.aspect = container.clientWidth / container.clientHeight;
@@ -242,6 +246,12 @@
 				if (timestamp - lastTime < 33) return;
 				lastTime = timestamp;
 				frame++;
+
+				if (pointer.active) {
+					const rect = container.getBoundingClientRect();
+					mouse.x = ((pointer.cx - rect.left) / rect.width) * 2 - 1;
+					mouse.y = -((pointer.cy - rect.top) / rect.height) * 2 + 1;
+				}
 
 				const time = frame * 0.01;
 				let charsChanged = false;

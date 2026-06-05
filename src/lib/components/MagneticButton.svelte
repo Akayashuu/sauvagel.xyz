@@ -15,20 +15,31 @@
 	let y = $state(0);
 	let isTouch = $state(true);
 
+	let rafId = 0;
+	let lastX = 0;
+	let lastY = 0;
+
 	onMount(() => {
 		isTouch = window.matchMedia('(pointer: coarse)').matches;
+		return () => { if (rafId) cancelAnimationFrame(rafId); };
 	});
 
+	// Throttle au rythme de l'écran : un reflow max par frame au survol.
 	function handleMouseMove(e: MouseEvent) {
 		if (isTouch) return;
-		const rect = el.getBoundingClientRect();
-		const halfW = rect.width / 2;
-		const halfH = rect.height / 2;
-		x = (e.clientX - rect.left - halfW) * 0.1;
-		y = (e.clientY - rect.top - halfH) * 0.1;
+		lastX = e.clientX;
+		lastY = e.clientY;
+		if (rafId) return;
+		rafId = requestAnimationFrame(() => {
+			rafId = 0;
+			const rect = el.getBoundingClientRect();
+			x = (lastX - rect.left - rect.width / 2) * 0.1;
+			y = (lastY - rect.top - rect.height / 2) * 0.1;
+		});
 	}
 
 	function handleMouseLeave() {
+		if (rafId) { cancelAnimationFrame(rafId); rafId = 0; }
 		x = 0;
 		y = 0;
 	}

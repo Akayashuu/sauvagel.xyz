@@ -1,26 +1,9 @@
 services:
   app:
     build: .
+    # Le build SvelteKit est généré dans l image puis recopié sur l hôte à
+    # chaque démarrage (./build), d où il est servi en statique par le reverse
+    # proxy du serveur. Conteneur jetable : il copie puis s arrête.
+    command: sh -c "rm -rf /out/* && cp -a /app/build/. /out/"
     volumes:
-      - build:/app/build
-
-  nginx:
-    image: nginx:alpine
-    container_name: sauvagel-nginx
-    volumes:
-      - build:/usr/share/nginx/html:ro
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
-    networks:
-      - web
-    depends_on:
-      app:
-        condition: service_completed_successfully
-    restart: unless-stopped
-
-networks:
-  web:
-    external: true
-    name: web
-
-volumes:
-  build:
+      - ./build:/out

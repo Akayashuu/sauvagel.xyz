@@ -35,20 +35,15 @@
     }
     </script>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Police auto-hébergée préchargée : le <h1> LCP rend dans la bonne fonte
+         tôt, sans round-trip Google Fonts ni repaint tardif. -->
     <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&family=Space+Grotesk:wght@400;500;600;700&display=swap"
-      media="print"
-      onload="this.media='all'"
+      rel="preload"
+      href="/fonts/space-grotesk-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
     />
-    <noscript>
-      <link
-        rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&family=Space+Grotesk:wght@400;500;600;700&display=swap"
-      />
-    </noscript>
     %sveltekit.head%
   </head>
   <body

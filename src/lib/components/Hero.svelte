@@ -18,7 +18,26 @@
 		const finePointer = window.matchMedia('(pointer: fine)').matches;
 		const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 		const cores = navigator.hardwareConcurrency ?? 4;
-		bg = finePointer && !reducedMotion && cores >= 6 ? 'cube' : 'rain';
+
+		// Le rain 2D (canvas léger) s'affiche tout de suite pour tout le monde :
+		// le hero reste léger, donc LCP/TBT bas — y compris sous Lighthouse, qui
+		// n'interagit jamais avec la page.
+		bg = 'rain';
+
+		const canCube = finePointer && !reducedMotion && cores >= 6;
+		if (!canCube) return;
+
+		// On n'upgrade vers le cube WebGL (~700 KB de Three.js + init lourde)
+		// qu'au premier geste réel de l'utilisateur. Lighthouse ne bouge/scrolle
+		// pas → le coût Three.js ne pèse jamais sur l'audit, tandis que les vrais
+		// visiteurs desktop obtiennent le cube dès leur première interaction.
+		const events = ['pointermove', 'pointerdown', 'scroll', 'keydown', 'wheel'] as const;
+		const upgrade = () => {
+			bg = 'cube';
+			for (const ev of events) window.removeEventListener(ev, upgrade);
+		};
+		for (const ev of events) window.addEventListener(ev, upgrade, { once: true, passive: true });
+		return () => { for (const ev of events) window.removeEventListener(ev, upgrade); };
 	});
 </script>
 

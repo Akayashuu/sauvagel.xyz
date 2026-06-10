@@ -155,3 +155,19 @@
     transform: none;
   }
 }
+
+/* Le navigateur saute le layout/paint des sections hors écran jusqu'à ce
+   qu'on s'en approche : au chargement il ne rend que le hero au lieu de toute
+   la page d'un coup → Style&Layout + Rendering effondrés, donc TBT en baisse.
+   #travels exclu : sa carte Leaflet doit mesurer un conteneur réellement rendu.
+   contain-intrinsic-size sert d'estimation de hauteur (évite les sauts de
+   scroll) ; le navigateur mémorise la taille réelle après le 1er rendu. */
+#about,
+#experience,
+#skills,
+#projects,
+#education,
+#contact {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 700px;
+}

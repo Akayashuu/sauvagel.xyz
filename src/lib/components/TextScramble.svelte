@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 
 	let { text, className = '' }: { text: string; className?: string } = $props();
-	let displayText = $state('');
+	let displayText = $state(text);
 	let el: HTMLSpanElement;
 
 	const chars = '!@#$%^&*()_+-=[]{}|;:,.<>?/~`ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';

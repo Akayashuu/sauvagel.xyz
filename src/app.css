@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Space Grotesk", "Inter", system-ui, sans-serif;
+  --font-sans: "Space Grotesk", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", monospace;
 
   --color-primary-50: oklch(0.97 0.02 280);
@@ -79,5 +79,49 @@
   }
   50% {
     background-position: 100% 50%;
+  }
+}
+
+/* CSS-driven entrance: runs on first paint, no JS bundle required.
+   Decouples FCP/LCP from JS so prerendered content is visible immediately. */
+@keyframes enter-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.enter {
+  opacity: 0;
+  animation: enter-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--enter-delay, 0s);
+}
+
+/* Opacity-only variant for elements whose transform is driven by JS
+   (e.g. MagneticButton) — avoids a transform conflict. */
+@keyframes enter-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.enter-link {
+  opacity: 0;
+  animation: enter-fade 0.6s ease 0.55s both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .enter,
+  .enter-link {
+    animation: none;
+    opacity: 1;
+    transform: none;
   }
 }

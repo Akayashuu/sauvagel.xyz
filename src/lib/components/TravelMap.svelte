@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
+	import { browser } from '$app/environment';
 	import { t } from '$lib/i18n';
 	import { cities } from '$lib/data/cities';
 	import { Maximize2, Minimize2 } from 'lucide-svelte';
@@ -128,6 +129,7 @@
 	});
 
 	onDestroy(() => {
+		if (!browser) return;
 		document.removeEventListener('fullscreenchange', onFullscreenChange);
 		mapInstance?.remove();
 	});

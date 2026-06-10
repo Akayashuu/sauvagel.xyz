@@ -8,7 +8,6 @@
 	import Lenis from 'lenis';
 
 	let { children } = $props();
-	let mounted = $state(false);
 	let isTouch = $state(false);
 
 	$effect(() => {
@@ -16,7 +15,6 @@
 	});
 
 	onMount(() => {
-		mounted = true;
 		isTouch = window.matchMedia('(pointer: coarse)').matches;
 
 		if (!isTouch) {
@@ -48,7 +46,7 @@
 
 <div class={isTouch ? '' : 'cursor-none'}>
 	<Navbar />
-	<main class="transition-opacity duration-500" style="opacity: {mounted ? 1 : 0}">
+	<main>
 		{@render children()}
 	</main>
 </div>

@@ -8,7 +8,6 @@
 	import MagneticButton from './MagneticButton.svelte';
 	import { Mail, MapPin } from 'lucide-svelte';
 	import GithubIcon from './GithubIcon.svelte';
-	import anime from 'animejs';
 
 	// Decided client-side: the WebGL cube (708KB of Three.js + heavy sync init)
 	// only loads on capable desktops. Mobile / weak CPU / reduced-motion get the
@@ -20,15 +19,6 @@
 		const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 		const cores = navigator.hardwareConcurrency ?? 4;
 		bg = finePointer && !reducedMotion && cores >= 6 ? 'cube' : 'rain';
-
-		anime.timeline({ easing: 'easeOutCubic' })
-			.add({ targets: '.hero-badge', scale: [0.8, 1], opacity: [0, 1], duration: 500, delay: 200 })
-			.add({ targets: '.hero-greeting', translateY: [20, 0], opacity: [0, 1], duration: 600 }, '-=200')
-			.add({ targets: '.hero-name', translateY: [40, 0], opacity: [0, 1], duration: 800 }, '-=300')
-			.add({ targets: '.hero-title', opacity: [0, 1], duration: 600 }, '-=400')
-			.add({ targets: '.hero-sub', translateY: [15, 0], opacity: [0, 1], duration: 600 }, '-=300')
-			.add({ targets: '.hero-link', translateY: [15, 0], opacity: [0, 1], duration: 500, delay: anime.stagger(80) }, '-=200')
-			.add({ targets: '.hero-scroll', opacity: [0, 1], duration: 600 }, '-=200');
 	});
 </script>
 
@@ -49,23 +39,23 @@
 	</div>
 
 	<div class="relative z-10 mx-auto max-w-3xl px-6 text-center 2xl:max-w-4xl">
-		<div class="hero-badge mb-6 inline-block rounded-full gradient-border px-4 py-1.5 opacity-0">
+		<div class="hero-badge enter mb-6 inline-block rounded-full gradient-border px-4 py-1.5" style="--enter-delay: 0.1s">
 			<span class="text-xs font-medium tracking-wider text-primary-300 uppercase 2xl:text-sm">
 				{$t.hero.greeting}
 			</span>
 		</div>
 
-		<h1 class="hero-name mb-6 text-5xl font-bold tracking-tight opacity-0 sm:text-7xl lg:text-8xl 2xl:text-9xl">
+		<h1 class="hero-name enter mb-6 text-5xl font-bold tracking-tight sm:text-7xl lg:text-8xl 2xl:text-9xl" style="--enter-delay: 0.2s">
 			<span class="bg-linear-to-r from-zinc-50 via-primary-200 to-accent-400 bg-clip-text text-transparent">
 				<TextScramble text={profile.name} />
 			</span>
 		</h1>
 
-		<p class="hero-title mb-4 font-mono text-sm text-primary-400 opacity-0 glow-text 2xl:text-base">
+		<p class="hero-title enter mb-4 font-mono text-sm text-primary-400 glow-text 2xl:text-base" style="--enter-delay: 0.35s">
 			{$t.profile.title}
 		</p>
 
-		<p class="hero-sub mx-auto mb-10 max-w-lg text-zinc-400 opacity-0 2xl:text-lg">
+		<p class="hero-sub enter mx-auto mb-10 max-w-lg text-zinc-400 2xl:text-lg" style="--enter-delay: 0.45s">
 			{$t.profile.subtitle}
 		</p>
 
@@ -74,7 +64,7 @@
 				href={profile.github}
 				target="_blank"
 				rel="noopener noreferrer"
-				className="hero-link flex items-center gap-2 rounded-lg border border-zinc-800 bg-zinc-950/50 backdrop-blur-sm px-5 py-2.5 text-sm text-zinc-300 opacity-0 transition-colors hover:border-primary-500/50 hover:text-white 2xl:text-base"
+				className="hero-link enter-link flex items-center gap-2 rounded-lg border border-zinc-800 bg-zinc-950/50 backdrop-blur-sm px-5 py-2.5 text-sm text-zinc-300 transition-colors hover:border-primary-500/50 hover:text-white 2xl:text-base"
 			>
 				<GithubIcon size={16} />
 				<span>{$t.contact.github}</span>
@@ -82,20 +72,20 @@
 
 			<MagneticButton
 				href="mailto:{profile.email}"
-				className="hero-link flex items-center gap-2 rounded-lg bg-linear-to-r from-primary-500 to-accent-500 px-5 py-2.5 text-sm font-medium text-white opacity-0 transition-shadow hover:shadow-lg hover:shadow-primary-500/25 2xl:text-base"
+				className="hero-link enter-link flex items-center gap-2 rounded-lg bg-linear-to-r from-primary-500 to-accent-500 px-5 py-2.5 text-sm font-medium text-white transition-shadow hover:shadow-lg hover:shadow-primary-500/25 2xl:text-base"
 			>
 				<Mail size={16} />
 				<span>{$t.hero.cta}</span>
 			</MagneticButton>
 
-			<span class="hero-link flex items-center gap-2 text-sm text-zinc-500 opacity-0">
+			<span class="hero-link enter-link flex items-center gap-2 text-sm text-zinc-500">
 				<MapPin size={14} />
 				{profile.location}
 			</span>
 		</div>
 	</div>
 
-	<div class="hero-scroll absolute bottom-10 left-1/2 -translate-x-1/2 opacity-0">
+	<div class="hero-scroll enter-link absolute bottom-10 left-1/2 -translate-x-1/2">
 		<a href="#about" class="flex flex-col items-center gap-1 text-zinc-600 transition-colors hover:text-zinc-400">
 			<span class="text-[11px] tracking-wider uppercase">{$t.hero.scroll}</span>
 			<svg width="16" height="24" viewBox="0 0 16 24" fill="none" class="animate-bounce"><path d="M8 4v12m0 0l-4-4m4 4l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>

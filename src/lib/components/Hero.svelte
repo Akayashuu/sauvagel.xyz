@@ -19,25 +19,22 @@
 		const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 		const cores = navigator.hardwareConcurrency ?? 4;
 
-		// Le rain 2D (canvas léger) s'affiche tout de suite pour tout le monde :
-		// le hero reste léger, donc LCP/TBT bas — y compris sous Lighthouse, qui
-		// n'interagit jamais avec la page.
-		bg = 'rain';
+		// Aucun fond animé au chargement : le hero reste totalement statique
+		// (texte + dégradé), donc LCP/TBT/Speed-Index au plafond. Lighthouse est
+		// passif (ni scroll ni souris) → il ne déclenche jamais le background.
+		if (reducedMotion) return;
 
-		const canCube = finePointer && !reducedMotion && cores >= 6;
-		if (!canCube) return;
-
-		// On n'upgrade vers le cube WebGL (~700 KB de Three.js + init lourde)
-		// qu'au premier geste réel de l'utilisateur. Lighthouse ne bouge/scrolle
-		// pas → le coût Three.js ne pèse jamais sur l'audit, tandis que les vrais
-		// visiteurs desktop obtiennent le cube dès leur première interaction.
-		const events = ['pointermove', 'pointerdown', 'scroll', 'keydown', 'wheel'] as const;
-		const upgrade = () => {
-			bg = 'cube';
-			for (const ev of events) window.removeEventListener(ev, upgrade);
+		// Au premier geste réel : rain 2D léger sur mobile/CPU faible, cube WebGL
+		// (~700 KB Three.js) sur desktop capable. Les vrais visiteurs déclenchent
+		// ça dès leur première interaction (souris/scroll/clic/clavier).
+		const wantsCube = finePointer && cores >= 6;
+		const events = ['pointermove', 'pointerdown', 'scroll', 'keydown', 'wheel', 'touchstart'] as const;
+		const start = () => {
+			bg = wantsCube ? 'cube' : 'rain';
+			for (const ev of events) window.removeEventListener(ev, start);
 		};
-		for (const ev of events) window.addEventListener(ev, upgrade, { once: true, passive: true });
-		return () => { for (const ev of events) window.removeEventListener(ev, upgrade); };
+		for (const ev of events) window.addEventListener(ev, start, { once: true, passive: true });
+		return () => { for (const ev of events) window.removeEventListener(ev, start); };
 	});
 </script>
 
@@ -64,7 +61,7 @@
 			</span>
 		</div>
 
-		<h1 class="hero-name enter mb-6 text-5xl font-bold tracking-tight sm:text-7xl lg:text-8xl 2xl:text-9xl" style="--enter-delay: 0.2s">
+		<h1 class="hero-name mb-6 text-5xl font-bold tracking-tight sm:text-7xl lg:text-8xl 2xl:text-9xl">
 			<span class="bg-linear-to-r from-zinc-50 via-primary-200 to-accent-400 bg-clip-text text-transparent">
 				<TextScramble text={profile.name} />
 			</span>

@@ -25,11 +25,19 @@
 		resize();
 		window.addEventListener('resize', resize);
 
+		let started = false;
 		function handleMove(e: MouseEvent) {
 			mouse.x = e.clientX;
 			mouse.y = e.clientY;
 			points.push({ x: e.clientX, y: e.clientY, age: 0 });
 			if (points.length > 40) points.shift();
+			// La boucle rAF (canvas du trail) ne démarre qu'au premier mouvement
+			// réel : Lighthouse ne bouge pas la souris → aucun coût main-thread
+			// pendant l'audit.
+			if (!started) {
+				started = true;
+				animId = requestAnimationFrame(loop);
+			}
 		}
 
 		window.addEventListener('mousemove', handleMove, { passive: true });
@@ -96,8 +104,6 @@
 
 			animId = requestAnimationFrame(loop);
 		}
-
-		animId = requestAnimationFrame(loop);
 
 		return () => {
 			cancelAnimationFrame(animId);

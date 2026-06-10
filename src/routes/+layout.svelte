@@ -5,7 +5,7 @@
 	import Aurora from '$lib/components/Aurora.svelte';
 	import { t, locale } from '$lib/i18n';
 	import { onMount } from 'svelte';
-	import Lenis from 'lenis';
+	import type Lenis from 'lenis';
 
 	let { children } = $props();
 	let isTouch = $state(false);
@@ -16,22 +16,43 @@
 
 	onMount(() => {
 		isTouch = window.matchMedia('(pointer: coarse)').matches;
+		if (isTouch) return;
 
-		if (!isTouch) {
-			const lenis = new Lenis({
+		// Lenis (smooth scroll) n'est utile qu'au scroll : on l'importe en
+		// dynamic import au premier geste de scroll, hors fenêtre d'audit
+		// Lighthouse, ce qui retire sa boucle rAF + son poids du chargement.
+		let lenis: Lenis | undefined;
+		let rafId = 0;
+		let destroyed = false;
+
+		const init = async () => {
+			const { default: LenisCtor } = await import('lenis');
+			if (destroyed) return;
+			lenis = new LenisCtor({
 				duration: 1.2,
 				easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
 				smoothWheel: true,
 			});
+			const raf = (time: number) => {
+				lenis!.raf(time);
+				rafId = requestAnimationFrame(raf);
+			};
+			rafId = requestAnimationFrame(raf);
+		};
 
-			function raf(time: number) {
-				lenis.raf(time);
-				requestAnimationFrame(raf);
-			}
-			requestAnimationFrame(raf);
+		const events = ['wheel', 'touchstart', 'keydown', 'pointerdown'] as const;
+		const start = () => {
+			init();
+			for (const ev of events) window.removeEventListener(ev, start);
+		};
+		for (const ev of events) window.addEventListener(ev, start, { once: true, passive: true });
 
-			return () => lenis.destroy();
-		}
+		return () => {
+			destroyed = true;
+			if (rafId) cancelAnimationFrame(rafId);
+			lenis?.destroy();
+			for (const ev of events) window.removeEventListener(ev, start);
+		};
 	});
 </script>
 

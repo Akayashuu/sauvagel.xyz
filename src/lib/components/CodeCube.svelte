@@ -44,16 +44,23 @@
 
 			const isMobile = window.matchMedia('(pointer: coarse)').matches;
 
-			const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true, powerPreference: 'low-power' });
+			// high-performance : sur un laptop à GPU dédié, évite que le compositeur
+			// route la scène (fill-rate bound, beaucoup d'overdraw additif) vers
+			// l'iGPU qui rame. pixelRatio plafonné à 1 : un fond décoratif n'a pas
+			// besoin de 2,25× de pixels à shader — c'est le plus gros poste de coût.
+			const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true, powerPreference: 'high-performance' });
 			renderer.setSize(container.clientWidth, container.clientHeight);
-			renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1 : 1.5));
+			renderer.setPixelRatio(1);
 			container.appendChild(renderer.domElement);
 
 			const matrixGreen = new THREE.Color(0x00ff41);
 			const matrixBright = new THREE.Color(0xccffcc);
 
-			const RAIN_COLS = isMobile ? 15 : 40;
-			const CHARS_PER_COL = isMobile ? 10 : 20;
+			// Moins de gouttes = moins de plans transparents = moins d'overdraw.
+			// 24×14 = 336 instances (au lieu de 800) : densité visuelle quasi
+			// identique, charge fragment divisée par ~2,4.
+			const RAIN_COLS = isMobile ? 15 : 24;
+			const CHARS_PER_COL = isMobile ? 10 : 14;
 			const TOTAL_DROPS = RAIN_COLS * CHARS_PER_COL;
 
 			const ATLAS_COLS = 16;
@@ -217,9 +224,10 @@
 			scene.add(scanLine);
 
 			const mouse = { x: 0, y: 0 };
-			// On stocke juste les coords brutes ici (ultra léger) ; le calcul
-			// avec getBoundingClientRect() — qui force un reflow — est fait dans
-			// la boucle d'animation, bridée à 30 fps, au lieu de 60-120×/s.
+			// rect mis en cache : getBoundingClientRect() force un reflow synchrone.
+			// On le recalcule seulement au resize/scroll, jamais dans la boucle de
+			// rendu — le mousemove n'utilise plus que des soustractions.
+			let rect = container.getBoundingClientRect();
 			const pointer = { cx: 0, cy: 0, active: false };
 			function onMouseMove(e: MouseEvent) {
 				pointer.cx = e.clientX;
@@ -232,8 +240,21 @@
 				camera.aspect = container.clientWidth / container.clientHeight;
 				camera.updateProjectionMatrix();
 				renderer.setSize(container.clientWidth, container.clientHeight);
+				rect = container.getBoundingClientRect();
 			}
 			window.addEventListener('resize', onResize);
+
+			// Pendant un scroll actif, on saute le render WebGL : le thread principal
+			// est rendu au scroll (le plus gros facteur de lag ressenti). La pluie
+			// reprend < 120 ms après l'arrêt, le saut est imperceptible (gouttes lentes).
+			let scrolling = false;
+			let scrollEndId: ReturnType<typeof setTimeout>;
+			function onScroll() {
+				scrolling = true;
+				clearTimeout(scrollEndId);
+				scrollEndId = setTimeout(() => { scrolling = false; rect = container.getBoundingClientRect(); }, 120);
+			}
+			window.addEventListener('scroll', onScroll, { passive: true });
 
 			let frame = 0;
 			let lastTime = 0;
@@ -242,13 +263,12 @@
 			function animate(timestamp: number) {
 				if (destroyed) return;
 				animationId = requestAnimationFrame(animate);
-				if (!isVisible || document.hidden) return;
+				if (!isVisible || document.hidden || scrolling) return;
 				if (timestamp - lastTime < 33) return;
 				lastTime = timestamp;
 				frame++;
 
 				if (pointer.active) {
-					const rect = container.getBoundingClientRect();
 					mouse.x = ((pointer.cx - rect.left) / rect.width) * 2 - 1;
 					mouse.y = -((pointer.cy - rect.top) / rect.height) * 2 + 1;
 				}
@@ -308,6 +328,8 @@
 			cleanup3D = () => {
 				container.removeEventListener('mousemove', onMouseMove);
 				window.removeEventListener('resize', onResize);
+				window.removeEventListener('scroll', onScroll);
+				clearTimeout(scrollEndId);
 				scene.traverse((obj) => {
 					const mesh = obj as THREE.Mesh;
 					mesh.geometry?.dispose?.();

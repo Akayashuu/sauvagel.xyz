@@ -116,6 +116,9 @@ export const projectMeta: ProjectMeta[] = [
     color: "#7c3aed",
     link: "https://github.com/Akayashuu",
     logos: ["TypeScript", "Discord.js", "RabbitMQ", "Docker"],
+    externalUrl: "https://whiteashes.fr",
+    preview: "https://whiteashes.fr",
+    previewScheme: "dark",
   },
   {
     slug: "enderbot",

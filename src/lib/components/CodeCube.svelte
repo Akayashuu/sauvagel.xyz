@@ -376,6 +376,11 @@
 
 <style>
 	div {
+		/* couche compositée dédiée : le canvas plein écran ne force plus de repaint
+		   pendant le smooth-scroll, juste un déplacement GPU de sa layer. */
+		will-change: transform;
+		transform: translateZ(0);
+		contain: layout paint;
 		background: repeating-linear-gradient(
 			to bottom,
 			transparent 0px,

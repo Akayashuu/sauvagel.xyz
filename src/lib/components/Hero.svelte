@@ -29,9 +29,22 @@
 		// ça dès leur première interaction (souris/scroll/clic/clavier).
 		const wantsCube = finePointer && cores >= 6;
 		const events = ['pointermove', 'pointerdown', 'scroll', 'keydown', 'wheel', 'touchstart'] as const;
+
+		// L'init du cube est lourde (import Three ~708 KB + contexte WebGL + atlas +
+		// shaders, tout sur le thread principal). Si on la lance pile sur le 1er
+		// scroll, elle fige le scroll. On attend donc que le thread soit libre
+		// (requestIdleCallback) — en pratique après que le scroll se soit calmé.
+		let armed = false;
 		const start = () => {
-			bg = wantsCube ? 'cube' : 'rain';
+			if (armed) return;
+			armed = true;
 			for (const ev of events) window.removeEventListener(ev, start);
+			const flip = () => { bg = wantsCube ? 'cube' : 'rain'; };
+			if ('requestIdleCallback' in window) {
+				window.requestIdleCallback(flip, { timeout: 1500 });
+			} else {
+				setTimeout(flip, 300);
+			}
 		};
 		for (const ev of events) window.addEventListener(ev, start, { once: true, passive: true });
 		return () => { for (const ev of events) window.removeEventListener(ev, start); };

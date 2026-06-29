@@ -50,7 +50,12 @@
 			// besoin de 2,25× de pixels à shader — c'est le plus gros poste de coût.
 			const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true, powerPreference: 'high-performance' });
 			renderer.setSize(container.clientWidth, container.clientHeight);
-			renderer.setPixelRatio(1);
+			// Résolution interne sous-échantillonnée puis upscalée en CSS : le coût
+				// fragment (fill-rate) est le poste dominant d'un canvas plein écran en
+				// blending additif. 0.7× = ~2× moins de pixels à shader, imperceptible
+				// sur une pluie matrix floutée. C'est le plus gros gain perf restant.
+				const renderScale = isMobile ? 0.6 : 0.7;
+				renderer.setPixelRatio(renderScale);
 			container.appendChild(renderer.domElement);
 
 			const matrixGreen = new THREE.Color(0x00ff41);

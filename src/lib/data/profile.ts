@@ -173,6 +173,9 @@ export const projectMeta: ProjectMeta[] = [
     color: "#0284c7",
     link: "https://github.com/orgs/vskstudio/repositories?q=takt",
     logos: ["Go", "ClickHouse", "SvelteKit", "Docker"],
+    externalUrl: "https://taktlytics.com",
+    preview: "https://taktlytics.com",
+    previewScheme: "dark",
     ecosystem: [
       { name: "@takt/core", url: "https://github.com/vskstudio/takt-core", tag: "SDK JS" },
       { name: "takt-core-php", url: "https://github.com/vskstudio/takt-core-php", tag: "SDK PHP" },
@@ -197,5 +200,8 @@ export const projectMeta: ProjectMeta[] = [
     color: "#dc2626",
     link: "https://github.com/vskstudio/naht",
     logos: ["Rust", "Luau", "SQLite", "Svelte"],
+    externalUrl: "https://naht.dev",
+    preview: "https://naht.dev",
+    previewScheme: "dark",
   },
 ];

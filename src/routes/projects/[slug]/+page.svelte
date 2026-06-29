@@ -179,6 +179,27 @@
 					</div>
 				</div>
 
+				{#if meta.ecosystem}
+					<div class="glass rounded-2xl p-6">
+						<h3 class="mb-2 text-sm font-semibold tracking-widest text-zinc-300 uppercase">{$t.projectPage.ecosystem}</h3>
+						<p class="mb-4 text-xs leading-relaxed text-zinc-500">{$t.projectPage.ecosystemNote}</p>
+						<div class="flex flex-wrap gap-2">
+							{#each meta.ecosystem as pkg (pkg.url)}
+								<a
+									href={pkg.url}
+									target="_blank"
+									rel="noopener noreferrer"
+									class="group/pkg flex items-center gap-1.5 rounded-full border border-zinc-700/30 bg-zinc-800/50 px-3 py-1 text-xs font-medium text-zinc-300 transition-all hover:border-primary-500/30 hover:text-primary-300"
+								>
+									<GithubIcon size={13} />
+									<span class="font-mono">{pkg.name}</span>
+									<span class="text-[10px] text-zinc-500 group-hover/pkg:text-primary-400/70">{pkg.tag}</span>
+								</a>
+							{/each}
+						</div>
+					</div>
+				{/if}
+
 				<div class="glass rounded-2xl p-6">
 					<h3 class="mb-4 text-sm font-semibold tracking-widest text-zinc-300 uppercase">{$t.projectPage.links}</h3>
 					<div class="space-y-3">

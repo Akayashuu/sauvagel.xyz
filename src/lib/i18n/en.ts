@@ -171,6 +171,41 @@ export const en = {
           ],
         },
       },
+      {
+        name: "Takt",
+        tagline: "Privacy-friendly, self-hosted web analytics",
+        description:
+          "A privacy-friendly, self-hosted web analytics platform — our alternative to Plausible. A Go core with ClickHouse for events and Postgres for relational data, a NATS JetStream ingestion pipeline, and a SvelteKit dashboard. No cookies, no personal data, GDPR-compliant with no consent banner. The core is private, but the whole ecosystem (SDKs, framework integrations, MCP) is open-source.",
+        details: {
+          features: [
+            "Privacy by design — no cookies, no PII, GDPR-compliant with no consent banner",
+            "Tracking script < 6 KB, 100% server-side enrichment",
+            "Go core: HTTP ingestion → NATS JetStream → worker → ClickHouse",
+            "Postgres + Ent for relational data, organizations & RBAC, session + OAuth/OIDC auth (Argon2id)",
+            "Conversion goals and funnels, cluster mode (HRW sharding + KEDA autoscaling)",
+            "OpenTelemetry observability → Prometheus / Grafana / Tempo / Loki",
+            "SvelteKit + Tailwind dashboard, multi-site, Docker Compose deployment",
+            "Open-source ecosystem: JS (@takt/core) & PHP SDKs, React/Vue/Svelte/Solid/Angular/Astro wrappers, Laravel/Symfony, a WordPress plugin and an MCP server",
+          ],
+        },
+      },
+      {
+        name: "Naht",
+        tagline: "Filesystem ↔ Roblox Studio sync in Rust",
+        description:
+          "A Rust filesystem-sync tool for Roblox Studio: it keeps your code on disk and your Studio session in lockstep in both directions at once, and when both sides change the same script it does a real 3-way merge instead of silently overwriting your work. A from-scratch alternative to Rojo and Argon, built around their failure modes.",
+        details: {
+          features: [
+            "Bidirectional sync is the core design — a failed write pauses one path, never kills the session",
+            "Real 3-way merge with a persisted base; unmergeable conflicts get git-style markers and freeze the path until resolved",
+            "Last-sync state persisted to SQLite — restarts and reconnects re-diff safely instead of re-clobbering",
+            "Convention over configuration; naht init --from-rojo migrates an existing project",
+            "Unsyncable properties (CSG, terrain, MeshId…) are detected and reported, never silently dropped",
+            "Localhost daemon + MessagePack protocol, CLI, Luau Studio plugin",
+            "Animated Svelte documentation site; the Rust side is covered by tests",
+          ],
+        },
+      },
     ],
   },
   education: {
@@ -225,6 +260,8 @@ export const en = {
     website: "Website",
     livePreview: "Live preview",
     openSite: "Open site",
+    ecosystem: "Open-source ecosystem",
+    ecosystemNote: "The core is private, but every SDK and integration is open-source.",
   },
   footer: {
     madeWith: "Built with",

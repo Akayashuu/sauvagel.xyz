@@ -54,6 +54,8 @@ export const techIcons: Record<string, string> = {
   Python: devicon("python"),
   Java: devicon("java"),
   Rust: devicon("rust"),
+  Go: devicon("go"),
+  SQLite: devicon("sqlite"),
   React: devicon("react"),
   "Vue.js": devicon("vuejs"),
   Tailwind: devicon("tailwindcss"),
@@ -82,6 +84,11 @@ export const techIcons: Record<string, string> = {
   Cloudflare: "https://cdn.simpleicons.org/cloudflare/F38020",
   Vitest: "https://cdn.simpleicons.org/vitest/6E9F18",
   Loki: "https://cdn.simpleicons.org/grafana/F46800",
+  ClickHouse: "https://cdn.simpleicons.org/clickhouse/FFCC01",
+  NATS: "https://cdn.simpleicons.org/natsdotio/27AAE1",
+  OpenTelemetry: "https://cdn.simpleicons.org/opentelemetry/F5A800",
+  Luau: "https://cdn.simpleicons.org/lua/2C2D72",
+  Roblox: "https://cdn.simpleicons.org/roblox/FFFFFF",
 };
 
 export interface ProjectMeta {
@@ -94,6 +101,7 @@ export interface ProjectMeta {
   externalUrl?: string;
   preview?: string;
   previewScheme?: "dark" | "light";
+  ecosystem?: { name: string; url: string; tag: string }[];
 }
 
 export const projectMeta: ProjectMeta[] = [
@@ -157,5 +165,37 @@ export const projectMeta: ProjectMeta[] = [
     externalUrl: "https://ganyu.fr",
     preview: "https://ganyu.fr",
     previewScheme: "dark",
+  },
+  {
+    slug: "takt",
+    tech: ["Go", "ClickHouse", "PostgreSQL", "NATS", "SvelteKit", "Tailwind", "Docker", "Grafana", "OpenTelemetry"],
+    gradient: "from-sky-600 to-indigo-800",
+    color: "#0284c7",
+    link: "https://github.com/orgs/vskstudio/repositories?q=takt",
+    logos: ["Go", "ClickHouse", "SvelteKit", "Docker"],
+    ecosystem: [
+      { name: "@takt/core", url: "https://github.com/vskstudio/takt-core", tag: "SDK JS" },
+      { name: "takt-core-php", url: "https://github.com/vskstudio/takt-core-php", tag: "SDK PHP" },
+      { name: "takt-read", url: "https://github.com/vskstudio/takt-read", tag: "SDK API" },
+      { name: "takt-mcp", url: "https://github.com/vskstudio/takt-mcp", tag: "MCP" },
+      { name: "takt-react", url: "https://github.com/vskstudio/takt-react", tag: "React" },
+      { name: "takt-vue", url: "https://github.com/vskstudio/takt-vue", tag: "Vue" },
+      { name: "takt-svelte", url: "https://github.com/vskstudio/takt-svelte", tag: "Svelte" },
+      { name: "takt-solid", url: "https://github.com/vskstudio/takt-solid", tag: "Solid" },
+      { name: "takt-angular", url: "https://github.com/vskstudio/takt-angular", tag: "Angular" },
+      { name: "takt-astro", url: "https://github.com/vskstudio/takt-astro", tag: "Astro" },
+      { name: "takt-laravel", url: "https://github.com/vskstudio/takt-laravel", tag: "Laravel" },
+      { name: "takt-symfony", url: "https://github.com/vskstudio/takt-symfony", tag: "Symfony" },
+      { name: "takt-wordpress", url: "https://github.com/vskstudio/takt-wordpress", tag: "WordPress" },
+      { name: "takt-examples", url: "https://github.com/vskstudio/takt-examples", tag: "Exemples" },
+    ],
+  },
+  {
+    slug: "naht",
+    tech: ["Rust", "Luau", "SQLite", "Svelte"],
+    gradient: "from-red-600 to-orange-800",
+    color: "#dc2626",
+    link: "https://github.com/vskstudio/naht",
+    logos: ["Rust", "Luau", "SQLite", "Svelte"],
   },
 ];

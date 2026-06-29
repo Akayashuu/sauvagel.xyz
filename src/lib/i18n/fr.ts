@@ -171,6 +171,41 @@ export const fr = {
           ],
         },
       },
+      {
+        name: "Takt",
+        tagline: "Analytics web privacy-friendly, self-hosted",
+        description:
+          "Une plateforme d'analytics web privacy-friendly et self-hosted — notre alternative à Plausible. Cœur en Go avec ClickHouse pour les events et Postgres pour le relationnel, pipeline d'ingestion NATS JetStream et dashboard SvelteKit. Sans cookies, sans données personnelles, conforme RGPD sans bannière. Le cœur est privé, mais tout l'écosystème (SDK, intégrations framework, MCP) est open-source.",
+        details: {
+          features: [
+            "Privacy by design — pas de cookies, pas de PII, RGPD sans bannière de consentement",
+            "Script de tracking < 6 Ko, enrichissement 100 % côté serveur",
+            "Cœur Go : ingestion HTTP → NATS JetStream → worker → ClickHouse",
+            "Postgres + Ent pour le relationnel, organisations & RBAC, auth sessions + OAuth/OIDC (Argon2id)",
+            "Objectifs et entonnoirs de conversion, mode cluster (sharding HRW + autoscaling KEDA)",
+            "Observabilité OpenTelemetry → Prometheus / Grafana / Tempo / Loki",
+            "Dashboard SvelteKit + Tailwind, multi-sites, déploiement Docker Compose",
+            "Écosystème open-source : SDK JS (@takt/core) & PHP, wrappers React/Vue/Svelte/Solid/Angular/Astro, Laravel/Symfony, plugin WordPress et serveur MCP",
+          ],
+        },
+      },
+      {
+        name: "Naht",
+        tagline: "Sync filesystem ↔ Roblox Studio en Rust",
+        description:
+          "Un outil Rust de synchronisation de fichiers pour Roblox Studio : il garde ton code sur le disque et ta session Studio alignés dans les deux sens à la fois, et quand les deux côtés modifient le même script il fait un vrai merge 3-way au lieu d'écraser ton travail. Une alternative repensée à Rojo et Argon, construite autour de leurs modes de défaillance.",
+        details: {
+          features: [
+            "Synchronisation bidirectionnelle au cœur du design — un écrit qui échoue met une voie en pause, ne tue jamais la session",
+            "Vrai merge 3-way avec base persistée ; les conflits non fusionnables sont marqués façon git et gèlent le chemin jusqu'à résolution",
+            "État de dernière synchro persisté en SQLite — restarts et reconnexions re-diffent sans tout réécraser",
+            "Convention plutôt que configuration ; naht init --from-rojo migre un projet existant",
+            "Propriétés non synchronisables (CSG, terrain, MeshId…) détectées et signalées, jamais perdues silencieusement",
+            "Démon localhost + protocole MessagePack, CLI, plugin Studio en Luau",
+            "Site de doc animé en Svelte ; côté Rust couvert par des tests",
+          ],
+        },
+      },
     ],
   },
   education: {
@@ -225,6 +260,8 @@ export const fr = {
     website: "Site web",
     livePreview: "Aperçu en direct",
     openSite: "Ouvrir le site",
+    ecosystem: "Écosystème open-source",
+    ecosystemNote: "Le cœur est privé, mais tous les SDK et intégrations sont open-source.",
   },
   footer: {
     madeWith: "Fait avec",

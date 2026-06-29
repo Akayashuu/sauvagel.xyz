@@ -4,7 +4,6 @@
 
 	import MatrixRain from '$lib/components/MatrixRain.svelte';
 	import { techIcons } from '$lib/data/profile';
-	import { scaledPreview } from '$lib/actions/scaledPreview';
 	import { t } from '$lib/i18n';
 
 	let { data } = $props();
@@ -12,7 +11,7 @@
 	let project = $derived($t.projects.items[data.index]);
 	let meta = $derived(data.meta);
 	let displayUrl = $derived(
-		(meta.externalUrl ?? meta.preview ?? '').replace(/^https?:\/\//, '').replace(/\/+$/, '')
+		(meta.externalUrl ?? '').replace(/^https?:\/\//, '').replace(/\/+$/, '')
 	);
 
 	$effect(() => {
@@ -47,7 +46,7 @@
 			{$t.projectPage.back}
 		</a>
 
-		{#if meta.preview}
+		{#if meta.image}
 			<div class="mb-8 sm:mb-12">
 				<div class="mb-6 flex flex-wrap items-end justify-between gap-4">
 					<div>
@@ -69,7 +68,7 @@
 				</div>
 
 				<a
-					href={meta.externalUrl ?? meta.preview}
+					href={meta.externalUrl}
 					target="_blank"
 					rel="noopener noreferrer"
 					class="group/preview relative block"
@@ -97,19 +96,13 @@
 								<span class="hidden sm:inline">{$t.projectPage.livePreview}</span>
 							</span>
 						</div>
-						<div class="preview-header relative aspect-video w-full bg-zinc-950" use:scaledPreview={1440}>
-							<iframe
-								src={meta.preview}
-								title="Aperçu de {project.name}"
+						<div class="preview-header relative aspect-video w-full overflow-hidden bg-zinc-950">
+							<img
+								src={meta.image}
+								alt="Aperçu de {project.name}"
 								loading="lazy"
-								tabindex="-1"
-								aria-hidden="true"
-								scrolling="no"
-								referrerpolicy="no-referrer"
-								sandbox="allow-scripts allow-same-origin"
-								style="color-scheme: {meta.previewScheme ?? 'light'}"
-								class="preview-frame"
-							></iframe>
+								class="h-full w-full object-cover object-top"
+							/>
 							<div class="absolute right-3 bottom-3 flex items-center gap-2 rounded-full bg-zinc-950/70 px-3 py-1.5 text-xs font-medium text-white opacity-0 ring-1 ring-white/10 backdrop-blur-sm transition-opacity duration-300 group-hover/preview:opacity-100">
 								{$t.projectPage.openSite}
 								<ExternalLink size={14} />
@@ -231,17 +224,3 @@
 		</div>
 	</div>
 </section>
-
-<style>
-	.preview-frame {
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 1440px;
-		height: 810px;
-		border: 0;
-		pointer-events: none;
-		transform-origin: top left;
-		transform: scale(var(--preview-scale, 0.6));
-	}
-</style>

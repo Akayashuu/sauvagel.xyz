@@ -99,8 +99,9 @@ export interface ProjectMeta {
   link: string;
   logos: string[];
   externalUrl?: string;
-  preview?: string;
-  previewScheme?: "dark" | "light";
+  // Capture statique (webp) servie depuis /static — remplace les anciennes
+  // iframes live qui rendaient ~5 sites entiers en parallèle (gros lag).
+  image?: string;
   ecosystem?: { name: string; url: string; tag: string }[];
 }
 
@@ -125,8 +126,7 @@ export const projectMeta: ProjectMeta[] = [
     link: "https://github.com/Akayashuu",
     logos: ["TypeScript", "Discord.js", "RabbitMQ", "Docker"],
     externalUrl: "https://whiteashes.fr",
-    preview: "https://whiteashes.fr",
-    previewScheme: "dark",
+    image: "/projects/white.webp",
   },
   {
     slug: "enderbot",
@@ -136,8 +136,7 @@ export const projectMeta: ProjectMeta[] = [
     link: "https://github.com/Akayashuu",
     logos: ["TypeScript", "Discord.js", "PostgreSQL", "Svelte"],
     externalUrl: "https://ender.gg",
-    preview: "https://ender.gg",
-    previewScheme: "dark",
+    image: "/projects/enderbot.webp",
   },
   {
     slug: "aeroclub-electron",
@@ -163,8 +162,7 @@ export const projectMeta: ProjectMeta[] = [
     link: "https://github.com/Akayashuu",
     logos: ["TypeScript", "Discord.js", "Svelte", "Docker"],
     externalUrl: "https://ganyu.fr",
-    preview: "https://ganyu.fr",
-    previewScheme: "dark",
+    image: "/projects/ganyu.webp",
   },
   {
     slug: "takt",
@@ -174,8 +172,7 @@ export const projectMeta: ProjectMeta[] = [
     link: "https://github.com/orgs/vskstudio/repositories?q=takt",
     logos: ["Go", "ClickHouse", "SvelteKit", "Docker"],
     externalUrl: "https://taktlytics.com",
-    preview: "https://taktlytics.com",
-    previewScheme: "dark",
+    image: "/projects/takt.webp",
     ecosystem: [
       { name: "@takt/core", url: "https://github.com/vskstudio/takt-core", tag: "SDK JS" },
       { name: "takt-core-php", url: "https://github.com/vskstudio/takt-core-php", tag: "SDK PHP" },
@@ -201,7 +198,6 @@ export const projectMeta: ProjectMeta[] = [
     link: "https://github.com/vskstudio/naht",
     logos: ["Rust", "Luau", "SQLite", "Svelte"],
     externalUrl: "https://naht.dev",
-    preview: "https://naht.dev",
-    previewScheme: "dark",
+    image: "/projects/naht.webp",
   },
 ];

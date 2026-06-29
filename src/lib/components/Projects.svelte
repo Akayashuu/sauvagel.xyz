@@ -3,7 +3,6 @@
 
 	import { projectMeta, techIcons } from '$lib/data/profile';
 	import { t } from '$lib/i18n';
-	import { scaledPreview } from '$lib/actions/scaledPreview';
 	import ScrollReveal from './ScrollReveal.svelte';
 	import TiltCard from './TiltCard.svelte';
 </script>
@@ -34,21 +33,14 @@
 						>
 							<div
 								class="preview-header relative h-32 overflow-hidden bg-linear-to-br {meta.gradient} 2xl:h-40"
-								use:scaledPreview={1440}
 							>
-								{#if meta.preview}
-									<iframe
-										src={meta.preview}
-										title="Aperçu de {project.name}"
+								{#if meta.image}
+									<img
+										src={meta.image}
+										alt="Aperçu de {project.name}"
 										loading="lazy"
-										tabindex="-1"
-										aria-hidden="true"
-										scrolling="no"
-										referrerpolicy="no-referrer"
-										sandbox="allow-scripts allow-same-origin"
-										style="color-scheme: {meta.previewScheme ?? 'light'}"
-										class="preview-frame"
-									></iframe>
+										class="absolute inset-0 h-full w-full object-cover object-top"
+									/>
 									<div class="absolute inset-0 bg-zinc-950/30 transition-colors duration-500 group-hover:bg-zinc-950/5"></div>
 								{:else}
 									<div class="absolute inset-0 bg-black/20"></div>
@@ -100,17 +92,3 @@
 		</div>
 	</div>
 </section>
-
-<style>
-	.preview-frame {
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 1440px;
-		height: 1100px;
-		border: 0;
-		pointer-events: none;
-		transform-origin: top left;
-		transform: scale(var(--preview-scale, 0.3));
-	}
-</style>

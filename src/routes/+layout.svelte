@@ -63,7 +63,7 @@
 </svelte:head>
 
 
-<Takt domain="sauvagel.xyz" outbound files />
+<Takt domain="sauvagel.xyz" scriptOrigin="https://taktlytics.com" outbound files />
 
 <CustomCursor />
 <Aurora />

@@ -8,6 +8,12 @@ importers:
 
   .:
     dependencies:
+      '@vskstudio/takt-core':
+        specifier: ^0.5.1
+        version: 0.5.1
+      '@vskstudio/takt-svelte':
+        specifier: ^0.5.0
+        version: 0.5.0(@vskstudio/takt-core@0.5.1)(svelte@5.53.10)
       leaflet:
         specifier: ^1.9.4
         version: 1.9.4
@@ -739,6 +745,17 @@ packages:
   '@typescript-eslint/visitor-keys@8.57.0':
     resolution: {integrity: sha512-zm6xx8UT/Xy2oSr2ZXD0pZo7Jx2XsCoID2IUh9YSTFRu7z+WdwYTRk6LhUftm1crwqbuoF6I8zAFeCMw0YjwDg==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+
+  '@vskstudio/takt-core@0.5.1':
+    resolution: {integrity: sha512-/Q1GEjr0McZLfc8Q+newlc3m3qFf1wzbjNr/FaHXE08Hw4awHcboGpF+jGrPDXhg6fyDa1KkI2u25QYAeLvsIA==}
+    engines: {node: '>=18'}
+
+  '@vskstudio/takt-svelte@0.5.0':
+    resolution: {integrity: sha512-4HWd+4zM1tz9tAx3fHXnpuaZDYRTfNS7H30Rs2P9TAs4uvSM7gf4F6JkzktGU+PB0G0gCzvW8u7CoWRk4k0qfA==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      '@vskstudio/takt-core': '>=0.5.0'
+      svelte: ^5.19.0
 
   '@webgpu/types@0.1.69':
     resolution: {integrity: sha512-RPmm6kgRbI8e98zSD3RVACvnuktIja5+yLgDAkTmxLr90BEwdTXRQWNLF3ETTTyH/8mKhznZuN5AveXYFEsMGQ==}
@@ -1940,6 +1957,13 @@ snapshots:
     dependencies:
       '@typescript-eslint/types': 8.57.0
       eslint-visitor-keys: 5.0.1
+
+  '@vskstudio/takt-core@0.5.1': {}
+
+  '@vskstudio/takt-svelte@0.5.0(@vskstudio/takt-core@0.5.1)(svelte@5.53.10)':
+    dependencies:
+      '@vskstudio/takt-core': 0.5.1
+      svelte: 5.53.10
 
   '@webgpu/types@0.1.69': {}
 

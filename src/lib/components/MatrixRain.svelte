@@ -49,13 +49,17 @@
 		let lastTime = 0;
 		const frameInterval = 40;
 
+		let isVisible = true;
+		const observer = new IntersectionObserver(([e]) => { isVisible = e.isIntersecting; }, { threshold: 0 });
+		observer.observe(canvas);
+
 		function draw(timestamp: number) {
 			rafId = requestAnimationFrame(draw);
 
 			if (timestamp - lastTime < frameInterval) return;
 			lastTime = timestamp;
 
-			if (document.hidden || !ctx) return;
+			if (document.hidden || !isVisible || !ctx) return;
 
 			const w = canvas.width;
 			const h = canvas.height;
@@ -101,6 +105,7 @@
 		return () => {
 			cancelAnimationFrame(rafId);
 			clearTimeout(resizeTimer);
+			observer.disconnect();
 			window.removeEventListener('resize', debouncedResize);
 		};
 	});

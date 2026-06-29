@@ -55,9 +55,23 @@
 		return tagPriority.find((t) => tags.includes(t)) ?? 'visited';
 	}
 
-	onMount(async () => {
+	onMount(() => {
 		document.addEventListener('fullscreenchange', onFullscreenChange);
 
+		let started = false;
+		const io = new IntersectionObserver((entries) => {
+			if (!started && entries.some((e) => e.isIntersecting)) {
+				started = true;
+				io.disconnect();
+				initMap();
+			}
+		}, { rootMargin: '300px' });
+		io.observe(mapContainer);
+
+		return () => io.disconnect();
+	});
+
+	async function initMap() {
 		const L = await import('leaflet');
 		await import('leaflet/dist/leaflet.css');
 
@@ -126,7 +140,7 @@
 		}
 
 		mapInstance = map;
-	});
+	}
 
 	onDestroy(() => {
 		if (!browser) return;

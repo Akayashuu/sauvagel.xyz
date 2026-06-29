@@ -54,7 +54,15 @@
 				// fragment (fill-rate) est le poste dominant d'un canvas plein écran en
 				// blending additif. 0.7× = ~2× moins de pixels à shader, imperceptible
 				// sur une pluie matrix floutée. C'est le plus gros gain perf restant.
-				const renderScale = isMobile ? 0.6 : 0.7;
+				// renderScale est adaptatif : un FPS-guard l'abaisse si la machine rame.
+				let renderScale = isMobile ? 0.6 : 0.7;
+				const MIN_SCALE = isMobile ? 0.4 : 0.45;
+				let cssW = container.clientWidth;
+				let cssH = container.clientHeight;
+				const applyScale = () => {
+					renderer.setPixelRatio(renderScale);
+					renderer.setSize(cssW, cssH);
+				};
 				renderer.setPixelRatio(renderScale);
 			container.appendChild(renderer.domElement);
 
@@ -242,9 +250,11 @@
 			container.addEventListener('mousemove', onMouseMove, { passive: true });
 
 			function onResize() {
-				camera.aspect = container.clientWidth / container.clientHeight;
+				cssW = container.clientWidth;
+				cssH = container.clientHeight;
+				camera.aspect = cssW / cssH;
 				camera.updateProjectionMatrix();
-				renderer.setSize(container.clientWidth, container.clientHeight);
+				renderer.setSize(cssW, cssH);
 				rect = container.getBoundingClientRect();
 			}
 			window.addEventListener('resize', onResize);
@@ -263,15 +273,37 @@
 
 			let frame = 0;
 			let lastTime = 0;
-			const charIndexAttr = rainGeo.getAttribute('charIndex') as THREE.InstancedBufferAttribute;
+			// FPS-guard adaptatif : on échantillonne l'intervalle réel entre frames
+				// rendues ; si la moyenne dépasse ~40 ms (< 25 fps) la machine peine, on
+				// abaisse renderScale d'un cran jusqu'à MIN_SCALE. Sens unique (jamais de
+				// remontée) pour éviter toute oscillation visible.
+				let fpsAcc = 0;
+				let fpsCount = 0;
+				const charIndexAttr = rainGeo.getAttribute('charIndex') as THREE.InstancedBufferAttribute;
 
 			function animate(timestamp: number) {
 				if (destroyed) return;
 				animationId = requestAnimationFrame(animate);
 				if (!isVisible || document.hidden || scrolling) return;
-				if (timestamp - lastTime < 33) return;
+				const frameDt = timestamp - lastTime;
+				if (frameDt < 33) return;
 				lastTime = timestamp;
 				frame++;
+
+				// frameDt < 100 : ignore les reprises (onglet caché, fin de scroll) qui
+				// produiraient un pic faussant la mesure.
+				if (frameDt < 100) {
+					fpsAcc += frameDt;
+					fpsCount++;
+					if (fpsCount >= 60) {
+						if (fpsAcc / fpsCount > 40 && renderScale > MIN_SCALE) {
+							renderScale = Math.max(MIN_SCALE, renderScale - 0.1);
+							applyScale();
+						}
+						fpsAcc = 0;
+						fpsCount = 0;
+					}
+				}
 
 				if (pointer.active) {
 					mouse.x = ((pointer.cx - rect.left) / rect.width) * 2 - 1;

@@ -63,7 +63,7 @@
 </svelte:head>
 
 
-<Takt domain="sauvagel.xyz" outbound files />
+<Takt domain="sauvagel.xyz" endpoint="/_takt/api/event" outbound files />
 
 <CustomCursor />
 <Aurora />

@@ -70,6 +70,16 @@
 
 			cursorDot.style.transform = `translate3d(${mouse.x - 3}px, ${mouse.y - 3}px, 0)`;
 
+			// Mise en veille : quand le curseur a rejoint sa cible et que la traînée
+			// est vide, plus rien ne bouge → on arrête la boucle rAF. Le prochain
+			// mousemove la relance. Évite un rAF 60fps perpétuel au repos.
+			const dx = mouse.x - pos.x;
+			const dy = mouse.y - pos.y;
+			if (dx * dx + dy * dy < 0.05 && points.length === 0) {
+				started = false;
+				return;
+			}
+
 			if (ts - lastTrailDraw >= TRAIL_INTERVAL) {
 				lastTrailDraw = ts;
 

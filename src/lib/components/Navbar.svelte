@@ -36,7 +36,7 @@
 
 <nav
 	class="fixed top-0 left-0 right-0 z-50 transition-all duration-500 {scrolled
-		? 'glass shadow-lg shadow-primary-500/5'
+		? 'border-b border-zinc-800/40 bg-zinc-950/85 shadow-lg shadow-primary-500/5'
 		: 'bg-transparent'}"
 >
 	<div class="mx-auto max-w-7xl px-6 2xl:max-w-400">

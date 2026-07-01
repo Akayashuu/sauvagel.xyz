@@ -29,9 +29,12 @@
 		const init = async () => {
 			const { default: LenisCtor } = await import('lenis');
 			if (destroyed) return;
+			// lerp (interpolation par frame) plutôt qu'une animation à durée fixe :
+			// le scroll suit le geste image par image au lieu de rejouer une courbe
+			// de 1,2 s à longue traîne. Fini l'« impression de lag » = la page ne
+			// traîne plus derrière la molette. 0.14 = fluide mais réactif.
 			lenis = new LenisCtor({
-				duration: 1.2,
-				easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+				lerp: 0.14,
 				smoothWheel: true,
 			});
 			const raf = (time: number) => {

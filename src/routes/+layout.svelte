@@ -6,57 +6,15 @@
 	import { Takt } from '@vskstudio/takt-svelte';
 	import { t, locale } from '$lib/i18n';
 	import { onMount } from 'svelte';
-	import type Lenis from 'lenis';
-
 	let { children } = $props();
 	let isTouch = $state(false);
 
-	$effect(() => {
-		document.documentElement.lang = $locale;
-	});
-
 	onMount(() => {
 		isTouch = window.matchMedia('(pointer: coarse)').matches;
-		if (isTouch) return;
+	});
 
-		// Lenis (smooth scroll) n'est utile qu'au scroll : on l'importe en
-		// dynamic import au premier geste de scroll, hors fenêtre d'audit
-		// Lighthouse, ce qui retire sa boucle rAF + son poids du chargement.
-		let lenis: Lenis | undefined;
-		let rafId = 0;
-		let destroyed = false;
-
-		const init = async () => {
-			const { default: LenisCtor } = await import('lenis');
-			if (destroyed) return;
-			// lerp (interpolation par frame) plutôt qu'une animation à durée fixe :
-			// le scroll suit le geste image par image au lieu de rejouer une courbe
-			// de 1,2 s à longue traîne. Fini l'« impression de lag » = la page ne
-			// traîne plus derrière la molette. 0.14 = fluide mais réactif.
-			lenis = new LenisCtor({
-				lerp: 0.14,
-				smoothWheel: true,
-			});
-			const raf = (time: number) => {
-				lenis!.raf(time);
-				rafId = requestAnimationFrame(raf);
-			};
-			rafId = requestAnimationFrame(raf);
-		};
-
-		const events = ['wheel', 'touchstart', 'keydown', 'pointerdown'] as const;
-		const start = () => {
-			init();
-			for (const ev of events) window.removeEventListener(ev, start);
-		};
-		for (const ev of events) window.addEventListener(ev, start, { once: true, passive: true });
-
-		return () => {
-			destroyed = true;
-			if (rafId) cancelAnimationFrame(rafId);
-			lenis?.destroy();
-			for (const ev of events) window.removeEventListener(ev, start);
-		};
+	$effect(() => {
+		document.documentElement.lang = $locale;
 	});
 </script>
 

@@ -266,6 +266,26 @@ export const fr = {
   footer: {
     madeWith: "Fait avec",
     and: "& SvelteKit",
+    privacy: "Confidentialité",
+  },
+  privacy: {
+    metaTitle: "Confidentialité",
+    title: "Confidentialité",
+    updated: "Dernière mise à jour : 30 juillet 2026",
+    intro:
+      "Ce site personnel collecte le strict minimum. Aucune publicité, aucun traceur tiers, aucun cookie soumis à consentement.",
+    cookiesTitle: "Cookies",
+    cookies:
+      "Le site ne dépose aucun cookie publicitaire ni traceur tiers. Aucun bandeau de consentement n'est donc nécessaire.",
+    analyticsTitle: "Mesure d'audience",
+    analytics:
+      "La fréquentation est mesurée avec <strong>Takt</strong>, une solution d'analytics sans cookie et auto-hébergée. Aucun cookie ni identifiant n'est déposé sur votre appareil, et aucun suivi entre différents sites n'est possible.",
+    ip:
+      "Votre adresse IP sert uniquement, de façon transitoire, à déterminer le pays et à calculer un identifiant de visite anonyme (haché avec une clé renouvelée chaque jour), puis elle est immédiatement supprimée — jamais stockée. Le signal « Do Not Track » de votre navigateur est respecté.",
+    rightsTitle: "Contact & droits",
+    rights:
+      "Pour toute question ou pour exercer vos droits (accès, rectification, effacement), écrivez-moi à",
+    back: "Retour à l'accueil",
   },
   profile: {
     title: "Développeur Full Stack",

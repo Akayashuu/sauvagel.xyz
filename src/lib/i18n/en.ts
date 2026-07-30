@@ -266,6 +266,26 @@ export const en = {
   footer: {
     madeWith: "Built with",
     and: "& SvelteKit",
+    privacy: "Privacy",
+  },
+  privacy: {
+    metaTitle: "Privacy",
+    title: "Privacy",
+    updated: "Last updated: July 30, 2026",
+    intro:
+      "This personal site collects the bare minimum. No advertising, no third-party trackers, no consent-requiring cookies.",
+    cookiesTitle: "Cookies",
+    cookies:
+      "The site sets no advertising cookies and no third-party trackers. No consent banner is therefore required.",
+    analyticsTitle: "Audience measurement",
+    analytics:
+      "Traffic is measured with <strong>Takt</strong>, a cookieless, self-hosted analytics solution. No cookie or identifier is stored on your device, and no cross-site tracking is possible.",
+    ip:
+      "Your IP address is used only transiently, to derive your country and compute an anonymous visit identifier (hashed with a key rotated every day), then immediately discarded — never stored. Your browser's “Do Not Track” signal is respected.",
+    rightsTitle: "Contact & rights",
+    rights:
+      "For any question or to exercise your rights (access, rectification, erasure), email me at",
+    back: "Back to home",
   },
   profile: {
     title: "Full Stack Developer",

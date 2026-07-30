@@ -92,9 +92,17 @@
 			<p class="flex items-center gap-1 text-sm text-zinc-500 2xl:text-base">
 				&copy; {new Date().getFullYear()} Léo Sauvage
 			</p>
-			<p class="flex items-center gap-1 text-sm text-zinc-600 2xl:text-base">
-				{$t.footer.madeWith} <Heart size={14} class="text-primary-500" /> {$t.footer.and}
-			</p>
+			<div class="flex items-center gap-4">
+				<a
+					href="/privacy"
+					class="text-sm text-zinc-500 transition-colors hover:text-primary-400 2xl:text-base"
+				>
+					{$t.footer.privacy}
+				</a>
+				<p class="flex items-center gap-1 text-sm text-zinc-600 2xl:text-base">
+					{$t.footer.madeWith} <Heart size={14} class="text-primary-500" /> {$t.footer.and}
+				</p>
+			</div>
 		</div>
 	</div>
 </footer>

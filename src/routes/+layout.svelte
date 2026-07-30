@@ -24,6 +24,8 @@
 </svelte:head>
 
 
+<!-- Analytics sans cookie (autocapture uniquement). RGPD : ne JAMAIS passer de donnée
+	 personnelle (email, nom, id…) dans les props d'un track() — cf. /privacy. -->
 <Takt domain="sauvagel.xyz" endpoint="/_takt/api/event" outbound files />
 
 <CustomCursor />

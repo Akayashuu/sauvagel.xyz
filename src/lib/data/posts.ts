@@ -73,14 +73,14 @@ const enderbotGateway: Post = {
   meta: {
     slug: "enderbot-passerelle-go",
     date: "2026-08-22",
-    readingMinutes: 11,
-    tags: ["Go", "TypeScript", "Discord", "Performance", "PostgreSQL"],
+    readingMinutes: 14,
+    tags: ["Go", "TypeScript", "Bun", "Discord", "Performance", "PostgreSQL"],
     project: "enderbot",
   },
   fr: {
     title: "Enderbot : la passerelle Discord réécrite en Go, puis la chasse aux millisecondes",
     excerpt:
-      "Six semaines et deux mille commits pour sortir discord.js de la production, remplacer le client par un binaire Go qui parle le même protobuf, puis aller chercher dans les métriques les 2,2 Go de RSS que personne n'avait vus.",
+      "Six semaines et deux mille commits pour sortir discord.js de la production, remplacer le client par un binaire Go qui parle le même protobuf, faire passer le monorepo sous Bun, puis aller chercher dans les métriques les 2,2 Go de RSS que personne n'avait vus.",
     body: [
       {
         t: "p",
@@ -116,6 +116,16 @@ const enderbotGateway: Post = {
             icon: "rollback",
             title: "Un retour arrière utilisé pour de vrai",
             text: "La bascule du 9 août a été annulée le jour même. Sept jours de correctifs plus tard, le client JS a pu être supprimé.",
+          },
+          {
+            icon: "rocket",
+            title: "Un étage de build en moins",
+            text: "Le cœur n'est plus empaqueté : Bun exécute les sources, et le bundle de 2962 modules disparaît avec ses quatre bundlers.",
+          },
+          {
+            icon: "flask",
+            title: "Une CI qui teste enfin",
+            text: "Le monorepo n'avait aucun job de test. Il en a deux, et 4196 tests passent à l'identique sous le nouveau runtime.",
           },
         ],
       },
@@ -319,6 +329,49 @@ const enderbotGateway: Post = {
         t: "p",
         text: "Depuis, un échec d'activation fait sortir le process, et Docker le relance.",
       },
+      { t: "h", text: "Pourquoi Bun, et ce que le passage a cassé", icon: "rocket" },
+      {
+        t: "p",
+        text: "Pendant qu'EnderSpirit refaisait la passerelle, j'ai attaqué le runtime du cœur. La raison n'est pas la mode, c'est une couche entière devenue inutile : le cœur était livré en bundle esbuild, un dist/out.js de 2962 modules reconstruit à chaque changement, et trois autres bundlers vivaient à côté pour la CLI de scrap, l'export du wiki et fakecord. Bun lit le TypeScript directement, donc tout cet étage disparaît. Une trace d'erreur pointe de nouveau un fichier source plutôt qu'une ligne dans un bundle.",
+      },
+      {
+        t: "facts",
+        items: [
+          { icon: "layers", value: "2962", label: "modules dans le bundle supprimé" },
+          { icon: "package", value: "4", label: "bundlers retirés" },
+          { icon: "flask", value: "4196", label: "tests, identiques à Node" },
+          { icon: "shield", value: "7 j", label: "de quarantaine sur les dépendances" },
+          { icon: "container", value: "0", label: "Node dans les images" },
+          { icon: "git", value: "2", label: "jobs de test qui n'existaient pas" },
+        ],
+      },
+      {
+        t: "p",
+        text: "Ce qui a rendu la bascule possible, c'est la migration canvas faite plus tôt : toutes les dépendances natives qui restaient sont du N-API avec binaires préconstruits, que Bun charge sans y toucher, et le seul appel Node délicat du code, AsyncLocalStorage dans le logger, fonctionne. bun install remplace pnpm, et le blocage d'approvisionnement est reporté tel quel dans bunfig.toml : sept jours de quarantaine avant qu'une version publiée soit installable. Le régime des scripts d'installation se resserre au passage, puisque pnpm les autorisait tous en bloc dans les images alors que Bun n'exécute que ceux des quatre paquets nommés explicitement.",
+      },
+      {
+        t: "p",
+        text: "Le prix se paie sur les différences de sémantique, pas sur les performances. Cinq pièges, tous trouvés en une journée :",
+      },
+      {
+        t: "list",
+        items: [
+          "useDefineForClassFields : tsc le déduit à false, Bun le suppose à true. Un champ initialisé depuis une propriété de constructeur voyait donc undefined, et toutes les commandes liées à une guilde levaient. L'option est maintenant écrite noir sur blanc.",
+          "un npx prettier au démarrage du générateur de clés de langue, sur un fichier que l'API prettier venait de formater deux lignes plus haut. Redondant, et introuvable dans une image Bun.",
+          "bun --watch redémarre sur toute écriture dans l'arbre surveillé : les générateurs qui réécrivaient des octets identiques provoquaient soixante démarrages en trois minutes. Ils comparent avant d'écrire, et le fichier de log est sorti de l'arbre.",
+          "zod sous vitest : le runner de modules renvoyait undefined pour le binding nommé, ce qui cassait les 95 fichiers qui l'importent ainsi. Le paquet est inliné dans la config vitest.",
+          "better-sqlite3 n'est pas seulement à recompiler, Bun l'intercepte et lève. fakecord passe à bun:sqlite, dont les génériques, l'absence de pragma et le null au lieu de undefined se rattrapent aux trois getters concernés.",
+        ],
+      },
+      {
+        t: "p",
+        text: "Ce que ça donne une fois posé : plus aucune image ne contient Node, l'étage de production du cœur se réduit à une installation et une copie des sources, et le réglage de taille de heap disparaît puisque JSC se dimensionne sur la RAM disponible. La CI tourne sous Bun et a gagné deux jobs de test qu'elle n'avait jamais eus, ce qui explique qu'une assertion sensible à l'ordre ait pu pourrir sans que personne le voie. Un script de garde refuse désormais tout retour de Node : shebang, appel à un gestionnaire de paquets, image de base ou action de CI.",
+      },
+      {
+        t: "note",
+        icon: "scale",
+        text: "Tout ne migre pas pour autant. sharp reste : Bun.Image ne sait redimensionner qu'en fill ou inside, sans composition ni accès aux pixels bruts ni décodage multi-frame, donc ni le compositing animé du summon ni l'extraction de frames de GIF ne s'y expriment. Le trafic Redis applicatif, lui, est bien passé sur le client natif de Bun, qui parle RESP sans traverser la couche de compatibilité node:net.",
+      },
       { t: "h", text: "Ce que disaient réellement les métriques", icon: "gauge" },
       {
         t: "p",
@@ -472,7 +525,7 @@ const enderbotGateway: Post = {
   en: {
     title: "Enderbot: rewriting the Discord gateway in Go, then hunting milliseconds",
     excerpt:
-      "Six weeks and two thousand commits to get discord.js out of production, replace the client with a Go binary speaking the same protobuf, then dig into the metrics for the 2.2 GB of RSS nobody had noticed.",
+      "Six weeks and two thousand commits to get discord.js out of production, replace the client with a Go binary speaking the same protobuf, move the monorepo onto Bun, then dig into the metrics for the 2.2 GB of RSS nobody had noticed.",
     body: [
       {
         t: "p",
@@ -508,6 +561,16 @@ const enderbotGateway: Post = {
             icon: "rollback",
             title: "A rollback that was actually used",
             text: "The 9 August switch was undone the same day. Seven days of fixes later, the JS client could be deleted.",
+          },
+          {
+            icon: "rocket",
+            title: "One build stage fewer",
+            text: "The core is no longer bundled: Bun runs the sources, and the 2962 module bundle goes away with its four bundlers.",
+          },
+          {
+            icon: "flask",
+            title: "CI that finally tests",
+            text: "The monorepo had no test job at all. It now has two, and 4196 tests pass unchanged on the new runtime.",
           },
         ],
       },
@@ -710,6 +773,49 @@ const enderbotGateway: Post = {
       {
         t: "p",
         text: "Since then, a failed activation exits the process and Docker restarts it.",
+      },
+      { t: "h", text: "Why Bun, and what the move broke", icon: "rocket" },
+      {
+        t: "p",
+        text: "While EnderSpirit was redoing the gateway, I went after the core's runtime. The reason was not fashion, it was a whole layer that had stopped earning its keep: the core shipped as an esbuild bundle, a dist/out.js of 2962 modules rebuilt on every change, with three more bundlers living alongside it for the scrap CLI, the wiki export and fakecord. Bun reads TypeScript directly, so that entire stage disappears. A stack trace points at a source file again rather than a line inside a bundle.",
+      },
+      {
+        t: "facts",
+        items: [
+          { icon: "layers", value: "2962", label: "modules in the deleted bundle" },
+          { icon: "package", value: "4", label: "bundlers removed" },
+          { icon: "flask", value: "4196", label: "tests, same as on Node" },
+          { icon: "shield", value: "7 d", label: "quarantine on dependencies" },
+          { icon: "container", value: "0", label: "Node left in the images" },
+          { icon: "git", value: "2", label: "test jobs that never existed" },
+        ],
+      },
+      {
+        t: "p",
+        text: "What made the switch possible was the earlier canvas migration: every native dependency left is N-API with prebuilt binaries, which Bun loads untouched, and the one delicate Node API in the codebase, AsyncLocalStorage in the logger, works. bun install replaces pnpm, and the supply chain hold moves into bunfig.toml verbatim: seven days of quarantine before a published version can be installed. Install scripts get stricter on the way, since pnpm waved them all through in the Docker installs while Bun runs only those of the four packages named explicitly.",
+      },
+      {
+        t: "p",
+        text: "The price is paid in semantics, not in performance. Five traps, all found in a single day:",
+      },
+      {
+        t: "list",
+        items: [
+          "useDefineForClassFields: tsc infers false, Bun assumes true. A field initialised from a constructor parameter property therefore saw undefined, and every guild-scoped command threw. The option is now stated explicitly.",
+          "an npx prettier at boot in the lang-key generator, on a file the prettier API had formatted and written two lines above. Pure redundancy, and missing from a Bun image.",
+          "bun --watch restarts on any write inside the watched tree: generators rewriting identical bytes caused sixty boots in three minutes. They compare before writing, and the log file moved out of the tree.",
+          "zod under vitest: the module runner returned undefined for the named binding, which broke the 95 files importing it that way. The package is inlined in the vitest config.",
+          "better-sqlite3 is not merely a rebuild, Bun intercepts it and throws. fakecord moved to bun:sqlite, whose generics, missing pragma and null instead of undefined are normalised at the three getters that promise undefined.",
+        ],
+      },
+      {
+        t: "p",
+        text: "Where it landed: no image contains Node any more, the core's production stage shrinks to an install plus a copy of the sources, and the heap size flag is gone since JSC sizes itself from available RAM. CI runs on Bun and gained the two test jobs it never had, which is exactly how an order-sensitive assertion had been able to rot unnoticed. A guard script now refuses any return of Node: shebang, package manager call, base image or CI action.",
+      },
+      {
+        t: "note",
+        icon: "scale",
+        text: "Not everything migrates. sharp stays: Bun.Image only resizes with fill or inside, with no compositing, no raw pixel access and no multi-frame decoding, so neither the animated summon compositing nor the GIF frame extraction can be expressed with it. Application Redis traffic did move to Bun's native client, which speaks RESP without going through the node:net compatibility layer.",
       },
       { t: "h", text: "What the metrics actually said", icon: "gauge" },
       {

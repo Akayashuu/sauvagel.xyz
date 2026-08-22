@@ -51,6 +51,10 @@ export interface ProjectMeta {
   // iframes live qui rendaient ~5 sites entiers en parallèle (gros lag).
   image?: string;
   ecosystem?: { name: string; url: string; tag: string }[];
+  // Métadonnées factuelles, relevées sur les dépôts eux-mêmes.
+  since?: string;
+  visibility?: "public" | "private";
+  license?: string;
   // Schéma d'architecture des gros projets : les noms de composants sont
   // techniques, donc ils vivent ici et pas dans les fichiers de traduction.
   diagram?: Diagram;
@@ -59,6 +63,8 @@ export interface ProjectMeta {
 export const projectMeta: ProjectMeta[] = [
   {
     slug: "white",
+    since: "2021",
+    visibility: "private",
     tech: [
       "TypeScript",
       "Node.js",
@@ -80,6 +86,8 @@ export const projectMeta: ProjectMeta[] = [
   },
   {
     slug: "enderbot",
+    since: "2017",
+    visibility: "private",
     tech: ["TypeScript", "Node.js", "Discord.js", "Prisma", "PostgreSQL", "SvelteKit", "Tailwind", "Docker", "pnpm"],
     color: "#059669",
     link: "https://github.com/Akayashuu",
@@ -89,6 +97,8 @@ export const projectMeta: ProjectMeta[] = [
   },
   {
     slug: "ganyu",
+    since: "2025",
+    visibility: "private",
     tech: ["TypeScript", "Node.js", "Discord.js", "Svelte", "PostgreSQL", "Prisma", "Grafana", "Docker"],
     color: "#db2777",
     link: "https://github.com/Akayashuu",
@@ -98,6 +108,8 @@ export const projectMeta: ProjectMeta[] = [
   },
   {
     slug: "takt",
+    since: "2026",
+    visibility: "private",
     tech: ["Go", "ClickHouse", "PostgreSQL", "NATS", "SvelteKit", "Tailwind", "Docker", "Grafana", "OpenTelemetry"],
     color: "#0284c7",
     link: "https://github.com/orgs/vskstudio/repositories?q=takt",
@@ -166,6 +178,9 @@ export const projectMeta: ProjectMeta[] = [
   },
   {
     slug: "naht",
+    since: "2026",
+    visibility: "public",
+    license: "Apache 2.0",
     tech: ["Rust", "Luau", "SQLite", "Svelte"],
     color: "#dc2626",
     link: "https://github.com/vskstudio/naht",
@@ -175,6 +190,9 @@ export const projectMeta: ProjectMeta[] = [
   },
   {
     slug: "herrscher",
+    since: "2026",
+    visibility: "public",
+    license: "MIT",
     tech: ["Go", "Git", "SQLite", "Linux", "Arch", "Docker"],
     color: "#0ea5e9",
     link: "https://github.com/Herrscherd/herrscher",
@@ -240,6 +258,8 @@ export const projectMeta: ProjectMeta[] = [
   },
   {
     slug: "neublox",
+    since: "2026",
+    visibility: "private",
     tech: ["Rust", "Tauri", "Go", "SvelteKit", "TypeScript", "PostgreSQL", "Luau", "Docker", "MCP", "Linux"],
     color: "#8b5cf6",
     link: "https://github.com/orgs/vskstudio/repositories?q=neublox",
@@ -298,6 +318,8 @@ export const projectMeta: ProjectMeta[] = [
   },
   {
     slug: "wesync",
+    since: "2026",
+    visibility: "private",
     tech: ["SvelteKit", "TypeScript", "Tailwind", "PostgreSQL", "Docker", "Vitest", "ESLint"],
     color: "#2563eb",
     link: "https://github.com/orgs/vskstudio/repositories?q=wesync",
@@ -307,6 +329,9 @@ export const projectMeta: ProjectMeta[] = [
   },
   {
     slug: "cryptobar",
+    since: "2026",
+    visibility: "public",
+    license: "MIT",
     tech: ["Rust", "QML", "GTK4", "Wayland", "Hyprland", "Linux", "Arch"],
     color: "#f7931a",
     link: "https://github.com/Akayashuu/cryptobar",

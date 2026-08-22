@@ -8,7 +8,6 @@ export const profile = {
   githubUsername: "Akayashuu",
 };
 
-
 export const skills = [
   {
     category: "Backend",
@@ -44,24 +43,20 @@ export interface ProjectMeta {
   slug: string;
   tech: string[];
   color: string;
-  // Le lien n'existe que si du code est réellement consultable publiquement :
-  // pointer un dépôt privé donne une page 404 au visiteur.
+
   link?: string;
   logos: string[];
   externalUrl?: string;
-  // Capture statique (webp) servie depuis /static — remplace les anciennes
-  // iframes live qui rendaient ~5 sites entiers en parallèle (gros lag).
+
   image?: string;
-  // Vignette carrée du projet (son avatar public), utilisée là où la capture du
-  // site serait trop large : listing du blog, en-tête d'article.
+
   avatar?: string;
   ecosystem?: { name: string; url?: string; tag: string }[];
-  // Métadonnées factuelles, relevées sur les dépôts eux-mêmes.
+
   since?: string;
   visibility?: "public" | "private";
   license?: string;
-  // Schéma d'architecture des gros projets : les noms de composants sont
-  // techniques, donc ils vivent ici et pas dans les fichiers de traduction.
+
   diagram?: Diagram;
 }
 

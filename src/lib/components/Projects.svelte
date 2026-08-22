@@ -21,8 +21,7 @@
 						class="surface surface-hover group flex h-full flex-col overflow-hidden"
 					>
 						<div class="relative aspect-16/10 overflow-hidden border-b border-zinc-800 bg-zinc-950">
-							<!-- Vignette calculée depuis le slug : chaque projet a son propre
-							     dessin, stable d'un déploiement à l'autre, même sans capture. -->
+
 							<GenerativeGrid mode="thumb" seed={meta.slug} step={22} />
 
 							{#if meta.image}

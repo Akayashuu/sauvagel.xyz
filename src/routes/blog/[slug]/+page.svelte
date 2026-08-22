@@ -26,12 +26,8 @@
 		project ? $t.projects.items[projectMeta.indexOf(project)].name : undefined
 	);
 
-	// Les auteurs sont déjà décrits dans le corps : l'en-tête réutilise le même
-	// bloc plutôt que d'entretenir une seconde liste qui pourrait diverger.
 	let authors = $derived(content.body.find((b) => b.t === 'people')?.items ?? []);
 
-	// Le sommaire se déduit des titres du corps : ajouter une section à
-	// l'article suffit, il n'y a pas de liste à tenir en parallèle.
 	let headings = $derived(
 		content.body
 			.filter((b) => b.t === 'h')
@@ -39,8 +35,6 @@
 	);
 	let activeId = $state('');
 
-	// Le nombre de mots et le JSON-LD se déduisent des blocs : un article ajouté
-	// est décrit correctement pour les moteurs sans champ à remplir à la main.
 	let wordCount = $derived(
 		content.body.reduce((n, b) => {
 			const texts: string[] = [];
@@ -93,14 +87,10 @@
 		})
 	);
 
-	// Arriver sur l'article le remet en haut, sauf si l'URL vise une ancre :
-	// sinon un lien de sommaire partagé retombe systématiquement sur le titre.
 	$effect(() => {
 		if (!window.location.hash) window.scrollTo(0, 0);
 	});
 
-	// Sur grand écran, le sommaire indique où on en est : un observateur sur les
-	// titres coûte moins qu'un calcul de position à chaque évènement de scroll.
 	$effect(() => {
 		const ids = headings.map((h) => h.id);
 		const seen = new Map<string, boolean>();
@@ -232,8 +222,6 @@
 				<PostBody body={content.body} />
 			</article>
 
-			<!-- Le sommaire ne sert qu'à partir de la largeur où il ne vole rien au
-			     texte : sous lg, l'article se lit d'un seul fil. -->
 			<aside class="hidden lg:block lg:sticky lg:top-24">
 				<h2 class="section-label">{$t.blog.contents}</h2>
 				<nav class="mt-4 flex flex-col gap-1 border-l border-zinc-800">

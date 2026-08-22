@@ -6,9 +6,6 @@
 
 	const icons = [Server, Code2, Smartphone, Gamepad2];
 
-	// Le texte est découpé en segments plutôt que rendu en {@html} : un bloc HTML
-	// brut posé par le serveur n'est pas repris à l'hydratation, et le paragraphe
-	// restait figé dans la langue du rendu serveur.
 	let parts = $derived(
 		$t.about.description
 			.split(/<\/?strong>/)

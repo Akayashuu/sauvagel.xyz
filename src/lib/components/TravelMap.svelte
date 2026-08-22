@@ -14,15 +14,17 @@
 
 	function toggleFullscreen() {
 		if (!document.fullscreenElement) {
-			mapWrapper.requestFullscreen().then(() => {
-				expanded = true;
-				setTimeout(() => mapInstance?.invalidateSize(), 100);
-			});
+			mapWrapper
+				.requestFullscreen()
+				.then(() => {
+					expanded = true;
+					setTimeout(() => mapInstance?.invalidateSize(), 100);
+				})
+				.catch(() => {
+					expanded = false;
+				});
 		} else {
-			document.exitFullscreen().then(() => {
-				expanded = false;
-				setTimeout(() => mapInstance?.invalidateSize(), 100);
-			});
+			document.exitFullscreen().catch(() => {});
 		}
 	}
 
@@ -49,7 +51,6 @@
 		layover: '✈️',
 	};
 
-	// Tag priority for choosing the main marker icon (first match wins)
 	const tagPriority: string[] = ['lived', 'worked', 'studied', 'layover', 'visited'];
 
 	function primaryTag(tags: string[]): string {

@@ -9,9 +9,7 @@
 </script>
 
 <section id="hero" class="relative flex min-h-screen items-center overflow-hidden">
-	<!-- La grille remplace à elle seule le cube WebGL (708 Ko de Three.js chargés
-	     au premier geste) et la pluie de caractères : un seul fond, en canvas 2D,
-	     sans dépendance et sans travail au chargement. -->
+
 	<GenerativeGrid mode="hero" seed="leo-sauvage" step={30} interactive />
 
 	<div
@@ -88,8 +86,7 @@
 </section>
 
 <style>
-	/* Les boutons du hero sont les seuls éléments à rayon : ils héritent du même
-	   jeton que les cartes pour qu'aucune forme ne sorte du système. */
+
 	:global(#hero [data-magnetic]) {
 		border-radius: var(--radius-card);
 	}

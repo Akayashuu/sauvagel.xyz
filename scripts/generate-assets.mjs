@@ -6,7 +6,6 @@ const VIOLET = "#9b7dfb";
 const TURQ = "#40d6c8";
 const GROUND = "#09090b";
 
-/* ---- monogramme : le carré rangé, le carré déréglé ---- */
 const mark = (stroke = 2.6) => `
   <rect x="5.2" y="5.2" width="13" height="13" fill="none" stroke="${VIOLET}" stroke-width="${stroke}"/>
   <rect x="13.8" y="13.8" width="13" height="13" fill="none" stroke="${TURQ}" stroke-width="${stroke}"
@@ -19,7 +18,6 @@ writeFileSync(
   `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32"><rect width="32" height="32" rx="7" fill="${GROUND}"/>${mark(2.4)}</svg>`
 );
 
-/* ---- grille déréglée, déterministe, partagée par toutes les images ---- */
 function grid({ w, h, step, seedStr, axis = "y" }) {
   let s = 2166136261;
   for (const ch of seedStr) { s ^= ch.charCodeAt(0); s = Math.imul(s, 16777619); }
@@ -89,7 +87,6 @@ for (const p of PROJECTS) {
   render(`og-${p.slug}`, og({ seed: p.slug, eyebrow: "Projet", title: p.title, subtitle: p.sub }), `static/og/${p.slug}.png`);
 }
 
-/* ---- blog ---- */
 render("og-blog", og({ seed: "blog", eyebrow: "Blog", title: "Notes de terrain", subtitle: "Réécritures, profils de perf et décisions défaites" }), "static/og/blog.png");
 
 const POSTS = [
@@ -99,7 +96,6 @@ for (const p of POSTS) {
   render(`og-blog-${p.slug}`, og({ seed: p.slug, eyebrow: "Article", title: p.title, subtitle: p.sub }), `static/og/blog-${p.slug}.png`);
 }
 
-/* ---- icônes d'application ---- */
 const appIcon = (size) =>
   `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="${size}" height="${size}"><rect width="32" height="32" rx="7" fill="${GROUND}"/>${mark(2.4)}</svg>`;
 for (const s of [180, 192, 512]) {

@@ -1,6 +1,4 @@
-// Les articles nomment leurs icônes par chaîne : les données restent lisibles et
-// sérialisables, et seule cette table importe des composants. Toute clé absente
-// se rend sans icône plutôt que de casser le rendu.
+
 import {
   Activity,
   Boxes,

@@ -25,8 +25,7 @@
 {/if}
 
 <style>
-	/* Les logos livrés en noir uni (Rust, Prisma, Symfony…) disparaissent sur le
-	   fond du site. On les repasse en clair sans toucher aux logos en couleur. */
+
 	.lighten {
 		filter: invert(1) brightness(1.35) saturate(0);
 	}

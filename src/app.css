@@ -1,16 +1,10 @@
 @import "tailwindcss";
 
-/* Polices auto-hébergées (subset latin, accents FR inclus) : supprime les 3
-   allers-retours Google Fonts et permet de précharger le woff2 du <h1> LCP.
-   Space Grotesk est une police variable → un seul fichier couvre 400→700. */
 @font-face {
   font-family: "Space Grotesk";
   font-style: normal;
   font-weight: 400 700;
-  /* optional + preload : la police (préchargée, 22 Ko) est prête au 1er paint →
-     le <h1> LCP rend dans la bonne fonte sans swap tardif, donc zéro reflow/CLS.
-     Sur lien lent où elle n'arrive pas à temps, le fallback est conservé pour
-     toute la page (pas de bascule ultérieure → pas de décalage). */
+
   font-display: optional;
   src: url("/fonts/space-grotesk-latin.woff2") format("woff2");
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
@@ -22,7 +16,7 @@
   font-family: "JetBrains Mono";
   font-style: normal;
   font-weight: 400;
-  /* optional : pas de swap tardif sur le texte mono (accents) → pas de reflow/CLS. */
+
   font-display: optional;
   src: url("/fonts/jetbrains-mono-latin.woff2") format("woff2");
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
@@ -49,10 +43,8 @@
   --color-accent-500: oklch(0.68 0.18 190);
   --color-accent-600: oklch(0.58 0.18 190);
 
-  /* Un seul rayon pour toutes les surfaces du site. */
   --radius-card: 6px;
 
-  /* Espacement : quatre valeurs, pas une de plus. */
   --spacing-step: 8px;
 }
 
@@ -71,8 +63,6 @@
   background: oklch(0.5 0.22 280 / 0.3);
 }
 
-/* Surface unique : une seule carte pour tout le site, un seul rayon, une seule
-   bordure. Remplace les trois rayons et les deux styles de bordure d'avant. */
 .surface {
   background: rgb(24 24 27 / 0.55);
   border: 1px solid var(--color-zinc-800);
@@ -87,8 +77,6 @@
   transform: translateY(-3px);
 }
 
-/* Verre dépoli conservé uniquement pour la barre de navigation, qui se superpose
-   au contenu qui défile. Partout ailleurs il coûtait du GPU pour rien. */
 .glass {
   background: rgba(9, 9, 11, 0.72);
   backdrop-filter: blur(10px);
@@ -96,8 +84,6 @@
   border-bottom: 1px solid var(--color-zinc-800);
 }
 
-/* Étiquette de section : mono, capitales, espacée. Seul marqueur hiérarchique
-   au-dessus des titres, à la place des anciens titres en dégradé. */
 .section-label {
   font-family: var(--font-mono);
   font-size: 0.72rem;
@@ -106,8 +92,6 @@
   color: var(--color-primary-300);
 }
 
-/* CSS-driven entrance: runs on first paint, no JS bundle required.
-   Decouples FCP/LCP from JS so prerendered content is visible immediately. */
 @keyframes enter-up {
   from {
     opacity: 0;
@@ -125,8 +109,6 @@
   animation-delay: var(--enter-delay, 0s);
 }
 
-/* Opacity-only variant for elements whose transform is driven by JS
-   (e.g. MagneticButton) — avoids a transform conflict. */
 @keyframes enter-fade {
   from {
     opacity: 0;
@@ -150,12 +132,6 @@
   }
 }
 
-/* Le navigateur saute le layout/paint des sections hors écran jusqu'à ce
-   qu'on s'en approche : au chargement il ne rend que le hero au lieu de toute
-   la page d'un coup → Style&Layout + Rendering effondrés, donc TBT en baisse.
-   #travels exclu : sa carte Leaflet doit mesurer un conteneur réellement rendu.
-   contain-intrinsic-size sert d'estimation de hauteur (évite les sauts de
-   scroll) ; le navigateur mémorise la taille réelle après le 1er rendu. */
 #about,
 #experience,
 #skills,

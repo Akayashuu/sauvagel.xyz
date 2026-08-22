@@ -24,3 +24,4 @@ vite.config.ts.timestamp-*
 
 # Brainstorming visual companion (local mockups)
 .superpowers/
+package-lock.json

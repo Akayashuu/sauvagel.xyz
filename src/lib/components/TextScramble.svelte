@@ -2,46 +2,40 @@
 	import { onMount } from 'svelte';
 
 	let { text, className = '' }: { text: string; className?: string } = $props();
-	let displayText = $state(text);
-	let el: HTMLSpanElement;
+	let scrambled = $state<string | null>(null);
+	let displayText = $derived(scrambled ?? text);
 
-	const chars = '!@#$%^&*()_+-=[]{}|;:,.<>?/~`ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+	const chars =
+		'!@#$%^&*()_+-=[]{}|;:,.<>?/~`ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+	const randomChar = () => chars[Math.floor(Math.random() * chars.length)];
 
 	onMount(() => {
+		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+		const target = text;
+		const totalFrames = target.length * 3;
 		let frame = 0;
-		const totalFrames = text.length * 3;
-		let animId: number;
+		let animId = 0;
 
 		function scramble() {
-			const progress = frame / totalFrames;
-			const revealedCount = Math.floor(progress * text.length);
+			const revealed = Math.floor((frame / totalFrames) * target.length);
 
 			let result = '';
-			for (let i = 0; i < text.length; i++) {
-				if (text[i] === ' ') {
-					result += ' ';
-				} else if (i < revealedCount) {
-					result += text[i];
-				} else if (i < revealedCount + 3) {
-					result += chars[Math.floor(Math.random() * chars.length)];
-				} else {
-					result += chars[Math.floor(Math.random() * chars.length)];
-				}
+			for (let i = 0; i < target.length; i++) {
+				if (target[i] === ' ') result += ' ';
+				else if (i < revealed) result += target[i];
+				else result += randomChar();
 			}
 
-			displayText = result;
+			scrambled = result;
 			frame++;
 
-			if (frame <= totalFrames + 5) {
-				animId = requestAnimationFrame(scramble);
-			} else {
-				displayText = text;
-			}
+			if (frame <= totalFrames + 5) animId = requestAnimationFrame(scramble);
+			else scrambled = target;
 		}
 
-		const timeout = setTimeout(() => {
-			scramble();
-		}, 600);
+		const timeout = setTimeout(scramble, 600);
 
 		return () => {
 			clearTimeout(timeout);
@@ -50,4 +44,4 @@
 	});
 </script>
 
-<span bind:this={el} class={className}>{displayText}</span>
+<span class={className}>{displayText}</span>

@@ -2,8 +2,6 @@
 	import { t } from '$lib/i18n';
 	import { profile } from '$lib/data/profile';
 
-	// Segments plutôt que {@html} : le HTML posé par le serveur n'est pas repris
-	// à l'hydratation et le paragraphe restait dans la langue du rendu serveur.
 	let analyticsParts = $derived(
 		$t.privacy.analytics.split(/<\/?strong>/).map((text, i) => ({ text, strong: i % 2 === 1 }))
 	);

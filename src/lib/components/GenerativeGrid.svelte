@@ -1,16 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 
-	/**
-	 * La grille déréglée : socle graphique unique du site.
-	 *
-	 * - `hero`  : plein écran, désordre croissant vers le bas, apaisée par le pointeur
-	 * - `rail`  : bande de séparation, désordre croissant vers les bords
-	 * - `thumb` : vignette de projet, désordre croissant vers la droite, figée
-	 *
-	 * `hero` est le seul mode animé, et uniquement après une vraie interaction :
-	 * au chargement la page reste statique, donc le LCP ne paie rien.
-	 */
 	type Mode = 'hero' | 'rail' | 'thumb';
 
 	let {
@@ -58,7 +48,6 @@
 			ctx!.setTransform(ratio, 0, 0, ratio, 0, 0);
 		}
 
-		// Bruit déterministe : même graine, même dessin d'une visite à l'autre.
 		let hashState = 2166136261;
 		for (let i = 0; i < seed.length; i++) {
 			hashState ^= seed.charCodeAt(i);
@@ -114,8 +103,7 @@
 		function loop() {
 			tick++;
 			draw();
-			// Mise en veille dès que le pointeur a quitté la zone : plus de pointeur,
-			// plus rien à animer, donc on rend la main au navigateur.
+
 			if (pointerX < -9998) {
 				awake = false;
 				frame = 0;

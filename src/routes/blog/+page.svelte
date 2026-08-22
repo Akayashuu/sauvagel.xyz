@@ -7,23 +7,20 @@
 	import { techIcons } from '$lib/data/tech';
 	import { t, locale } from '$lib/i18n';
 
-	// Six par page : deux colonnes pleines sur un écran large, et assez peu pour
-	// que la pagination reste un confort plutôt qu'un parcours obligé.
 	const PER_PAGE = 6;
-	// Filtrer une liste d'un seul élément n'apprend rien au visiteur : la barre
-	// n'apparaît qu'à partir du moment où elle sert vraiment à trier.
+
 	const CONTROLS_FROM = 2;
 
 	let query = $state('');
-	// Les filtres sont des listes plutôt qu'un choix unique : croiser deux sujets
-	// est le geste naturel quand on cherche un article, et le menu déroulant tient
-	// la place d'une seule ligne quel que soit le nombre d'étiquettes.
+
 	let selectedProjects = $state<string[]>([]);
 	let selectedTags = $state<string[]>([]);
 	let page = $state(1);
 
+	let sorted = $derived([...posts].sort((a, b) => b.meta.date.localeCompare(a.meta.date)));
+
 	let entries = $derived(
-		posts.map((post) => {
+		sorted.map((post) => {
 			const projectIndex = post.meta.project
 				? projectMeta.findIndex((p) => p.slug === post.meta.project)
 				: -1;
@@ -31,11 +28,9 @@
 				meta: post.meta,
 				content: post[$locale],
 				projectName: projectIndex >= 0 ? $t.projects.items[projectIndex].name : undefined,
-				// La vignette du projet identifie l'article d'un coup d'œil, avant même
-				// d'en lire le titre.
+
 				projectAvatar: projectIndex >= 0 ? projectMeta[projectIndex].avatar : undefined,
-				// La date est écrite en ISO dans les données : la locale du visiteur
-				// décide seule de la façon dont elle se lit.
+
 				formatted: new Date(post.meta.date).toLocaleDateString(
 					$locale === 'fr' ? 'fr-FR' : 'en-GB',
 					{ year: 'numeric', month: 'long', day: 'numeric' }
@@ -44,9 +39,6 @@
 		})
 	);
 
-	// Les projets et les technos ne se filtrent pas de la même façon : un projet
-	// est un fil continu, une techno est un sujet. Les deux familles restent donc
-	// séparées dans la barre plutôt que mélangées en un seul nuage de mots.
 	let projectFacets = $derived(
 		[...new Set(posts.map((p) => p.meta.project).filter((s): s is string => !!s))].map((slug) => ({
 			slug,
@@ -68,9 +60,6 @@
 	let filtered = $derived.by(() => {
 		const needle = query.trim().toLowerCase();
 		return entries.filter((entry) => {
-			// À l'intérieur d'une famille les choix s'additionnent (l'un ou l'autre),
-			// entre familles ils se croisent : cocher deux sujets élargit, cocher un
-			// projet et un sujet resserre.
 			if (
 				selectedProjects.length &&
 				(!entry.meta.project || !selectedProjects.includes(entry.meta.project))
@@ -94,8 +83,7 @@
 	let isBrowsing = $derived(
 		selectedProjects.length === 0 && selectedTags.length === 0 && query.trim() === ''
 	);
-	// L'article le plus récent est mis en avant tant que le visiteur n'a pas pris
-	// la main : dès qu'il filtre ou cherche, tout revient au même format.
+
 	let featured = $derived(isBrowsing && page === 1 ? filtered[0] : undefined);
 	let listed = $derived(featured ? filtered.slice(1) : filtered);
 	let pageCount = $derived(Math.max(1, Math.ceil(listed.length / PER_PAGE)));
@@ -113,8 +101,6 @@
 		page = 1;
 	}
 
-	// Les deux menus s'excluent : en ouvrir un referme l'autre, et un clic
-	// ailleurs referme tout.
 	let openMenu = $state<'project' | 'tag' | null>(null);
 
 	function closeOnOutside(event: MouseEvent) {
@@ -126,8 +112,6 @@
 		document.getElementById('articles')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 	}
 
-	// Le listing est décrit en Blog + ItemList : les moteurs voient la liste des
-	// articles sans avoir à visiter chaque page.
 	let jsonLd = $derived(
 		JSON.stringify({
 			'@context': 'https://schema.org',

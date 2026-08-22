@@ -15,9 +15,6 @@
 	<meta name="description" content="{$locale === 'fr' ? 'Léo Sauvage — Développeur Full Stack spécialisé TypeScript, Node.js, Svelte et systèmes distribués.' : 'Léo Sauvage — Full Stack Developer specializing in TypeScript, Node.js, Svelte and distributed systems.'}" />
 </svelte:head>
 
-
-<!-- Analytics sans cookie (autocapture uniquement). RGPD : ne JAMAIS passer de donnée
-	 personnelle (email, nom, id…) dans les props d'un track() — cf. /privacy. -->
 <Takt domain="sauvagel.xyz" endpoint="/_takt/api/event" outbound files />
 
 <Navbar />

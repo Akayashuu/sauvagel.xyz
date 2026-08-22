@@ -1,7 +1,3 @@
-// Les articles vivent en données plutôt qu'en markdown : le corps est une suite
-// de blocs typés, donc un paragraphe, un tableau de mesures et un encart ne
-// peuvent pas dériver visuellement d'un article à l'autre, et les deux langues
-// partagent exactement la même structure.
 
 import type { Diagram } from "./profile";
 import type { PostIcon } from "./post-icons";
@@ -9,10 +5,9 @@ import type { PostIcon } from "./post-icons";
 export type Block =
   | { t: "p"; text: string }
   | { t: "h"; text: string; icon?: PostIcon }
-  // Les points saillants en tête d'article : ce que retient un lecteur qui ne
-  // descendra pas jusqu'au bout.
+
   | { t: "tldr"; items: { icon: PostIcon; title: string; text: string }[] }
-  // Une grille de faits courts, là où une phrase énumérerait six chiffres.
+
   | { t: "facts"; items: { icon: PostIcon; value: string; label: string }[] }
   | {
       t: "compare";
@@ -37,8 +32,7 @@ export type Block =
       t: "timeline";
       items: { date: string; title: string; text: string; tone?: "revert" | "ship" }[];
     }
-  // Une barre dit une magnitude que trois chiffres alignés ne disent pas, et
-  // elle tient dans la largeur d'un téléphone là où un tableau déborde.
+
   | {
       t: "bars";
       caption?: string;
@@ -1045,8 +1039,6 @@ const enderbotGateway: Post = {
 
 export const posts: Post[] = [enderbotGateway];
 
-// Les titres servent d'ancres et de sommaire : l'identifiant est dérivé du
-// texte pour rester stable sans champ supplémentaire à tenir à jour.
 export function headingId(text: string): string {
   return text
     .normalize("NFD")

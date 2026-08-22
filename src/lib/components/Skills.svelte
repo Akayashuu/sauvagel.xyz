@@ -5,9 +5,6 @@
 	import SectionHeader from './SectionHeader.svelte';
 	import TechLogo from './TechLogo.svelte';
 
-	// Un fait vérifiable à la place d'une note sur cinq : le nombre de projets
-	// publiés qui utilisent la techno, compté sur les projets eux-mêmes. Le
-	// chiffre reste juste tout seul quand un projet est ajouté ou retiré.
 	const usage = new Map<string, number>();
 	for (const project of projectMeta) {
 		for (const tech of project.tech) {

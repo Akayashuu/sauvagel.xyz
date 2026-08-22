@@ -1,7 +1,5 @@
 import { posts } from "$lib/data/posts";
 
-// Le flux est prérendu comme le reste du site : un fichier statique de plus
-// dans build/, pas de serveur à faire tourner pour le servir.
 export const prerender = true;
 
 const SITE = "https://sauvagel.xyz";

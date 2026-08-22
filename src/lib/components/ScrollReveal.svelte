@@ -6,8 +6,7 @@
 	let { children, delay = 0, y = 40 }: { children: Snippet; delay?: number; y?: number } = $props();
 	let el: HTMLDivElement;
 	let visible = $state(false);
-	// Le contenu ne doit jamais dépendre de l'animation pour être lisible : si le
-	// visiteur demande moins de mouvement, tout est affiché tout de suite.
+
 	let reduced = $state(false);
 
 	onMount(() => {

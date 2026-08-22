@@ -27,8 +27,7 @@
 				{block.text}
 			</h2>
 		{:else if block.t === 'tldr'}
-			<!-- L'essentiel avant le récit : quatre points pour qui ne lira pas les
-			     trois mille mots qui suivent. -->
+
 			<div
 				class="not-prose overflow-hidden border border-zinc-800"
 				style="border-radius: var(--radius-card)"
@@ -93,8 +92,7 @@
 				{/each}
 			</ul>
 		{:else if block.t === 'stats'}
-			<!-- Les chiffres relevés en production sortent du fil du texte : ce sont
-			     eux qu'on revient chercher, pas la phrase qui les entoure. -->
+
 			<div class="not-prose grid gap-3 sm:grid-cols-3">
 				{#each block.items as stat (stat.label)}
 					{@const Icon = stat.icon ? postIcons[stat.icon] : null}
@@ -143,8 +141,7 @@
 				</table>
 			</div>
 		{:else if block.t === 'people'}
-			<!-- L'attribution est une carte par personne plutôt qu'une phrase dans le
-			     texte : qui a fait quoi doit se lire sans relire le paragraphe. -->
+
 			<div class="not-prose grid gap-3 sm:grid-cols-2">
 				{#each block.items as person (person.handle)}
 					<a
@@ -194,14 +191,12 @@
 				<figcaption class="font-mono text-[11px] text-zinc-600">{block.caption}</figcaption>
 			</figure>
 		{:else if block.t === 'diagram'}
-			<!-- Le schéma est la pièce qui gagne le plus à la largeur : il déborde de
-			     la colonne de texte dès qu'il y a de la place autour. -->
+
 			<div class="not-prose lg:-mx-4 xl:-mx-8">
 				<ArchitectureDiagram diagram={block.diagram} caption={block.caption} />
 			</div>
 		{:else if block.t === 'timeline'}
-			<!-- Une chronologie plutôt qu'un paragraphe de dates : la bascule, son
-			     retour arrière et la suppression se lisent d'un coup d'oeil. -->
+
 			<ol class="not-prose relative flex flex-col gap-6 border-l border-zinc-800 pl-6">
 				{#each block.items as step, si (si)}
 					<li class="relative">
@@ -265,8 +260,7 @@
 </div>
 
 <style>
-	/* La mise en forme du corps vit ici plutôt qu'en classes sur chaque bloc :
-	   un article ne doit pas pouvoir dériver du suivant. */
+
 	.post-body {
 		display: flex;
 		flex-direction: column;
@@ -298,8 +292,7 @@
 			line-height: 1.8;
 		}
 	}
-	/* Le texte garde sa largeur de lecture, les blocs de données prennent toute
-	   la colonne : c'est là que la place gagnée sur grand écran sert. */
+
 	@media (min-width: 1024px) {
 		.post-body :global(p),
 		.post-body :global(ul) {

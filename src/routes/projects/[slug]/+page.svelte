@@ -15,7 +15,6 @@
 		(meta.externalUrl ?? '').replace(/^https?:\/\//, '').replace(/\/+$/, '')
 	);
 
-	// Les voisins bouclent : une fiche ne doit jamais être un cul-de-sac.
 	let prev = $derived({
 		meta: projectMeta[(data.index - 1 + projectMeta.length) % projectMeta.length],
 		name: $t.projects.items[(data.index - 1 + projectMeta.length) % projectMeta.length].name
@@ -52,8 +51,7 @@
 </svelte:head>
 
 <section class="relative pt-24 pb-16 sm:pt-32 sm:pb-20">
-	<!-- La grille du projet, calculée sur son slug : la même image que sa vignette
-	     sur la page d'accueil, en plein écran. -->
+
 	<div class="pointer-events-none absolute inset-x-0 top-0 h-[70vh] overflow-hidden">
 		<GenerativeGrid mode="hero" seed={meta.slug} step={30} />
 		<div class="absolute inset-0 bg-linear-to-b from-zinc-950/60 via-zinc-950/80 to-zinc-950"></div>
@@ -87,8 +85,6 @@
 				</div>
 			</div>
 
-			<!-- Une ligne de faits relevés sur le dépôt lui-même, plutôt qu'un
-			     adjectif : l'année, qui peut lire le code, et sa taille réelle. -->
 			<dl
 				class="mt-7 flex flex-wrap items-center gap-x-6 gap-y-3 border-y border-zinc-800/80 py-4 font-mono text-xs text-zinc-500"
 			>
@@ -164,8 +160,7 @@
 				<div
 					class="surface overflow-hidden transition-transform duration-500 group-hover/preview:-translate-y-1"
 				>
-					<!-- La barre d'adresse n'a de sens que pour un projet qui a un site en
-					     ligne ; un outil de bureau garde juste le cadre et sa capture. -->
+
 					{#if meta.externalUrl}
 						<div class="flex items-center gap-3 border-b border-zinc-800 bg-zinc-900/80 px-4 py-2.5">
 							<div class="flex gap-1.5" aria-hidden="true">
@@ -220,8 +215,7 @@
 				{#if project.details?.features}
 					<div class="surface mt-4 p-6 sm:p-8">
 						<h2 class="section-label">{$t.projectPage.features}</h2>
-						<!-- Numérotées et sur deux colonnes : une liste de neuf puces
-						     identiques se lisait comme un paragraphe haché. -->
+
 						<ol class="mt-5 grid gap-x-8 gap-y-5 sm:grid-cols-2">
 							{#each project.details.features as feature, fi (fi)}
 								<li class="flex gap-3 text-sm leading-relaxed text-zinc-400">
@@ -270,7 +264,7 @@
 										<span class="text-[10px] text-zinc-500">{pkg.tag}</span>
 									</a>
 								{:else}
-									<!-- Dépôt privé : le nom reste, le lien mènerait à une 404. -->
+
 									<span
 										class="flex items-center gap-1.5 border border-zinc-800/60 px-2.5 py-1 text-xs text-zinc-400"
 										style="border-radius: var(--radius-card)"
@@ -288,8 +282,7 @@
 		</div>
 
 		{#if meta.diagram}
-			<!-- Le schéma a besoin de la largeur de la page : dans la colonne de
-			     texte, ses quatre bords se réduisaient à une bande à faire défiler. -->
+
 			<section class="mt-12">
 				<h2 class="section-label">{$t.projectPage.architecture}</h2>
 				<div class="mt-4">

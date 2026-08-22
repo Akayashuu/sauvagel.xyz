@@ -5,11 +5,16 @@
 
 	let { diagram, caption }: { diagram: Diagram; caption: string } = $props();
 
-	// Le schéma est déclaré en données (colonnes, noeuds, flux) et sa géométrie
-	// calculée ici : un SVG écrit à la main par projet aurait vieilli à chaque
-	// changement d'archi, et une lib de graphes pèserait plus que la page.
-	// La géométrie est serrée volontairement : à largeur de page constante, un
-	// schéma plus compact rend un texte plus gros une fois mis à l'échelle.
+	let arrowId = $derived.by(() => {
+		const key = diagram.columns.map((c) => c.title).join('|') + caption;
+		let hash = 2166136261;
+		for (let i = 0; i < key.length; i++) {
+			hash ^= key.charCodeAt(i);
+			hash = Math.imul(hash, 16777619);
+		}
+		return `arrow-${(hash >>> 0).toString(36)}`;
+	});
+
 	const COL_W = 188;
 	const COL_GAP = 114;
 	const NODE_H = 58;
@@ -42,9 +47,6 @@
 			const from = boxes.get(edge.from)!;
 			const to = boxes.get(edge.to)!;
 
-			// Deux noeuds de la même colonne se suivent verticalement : tirée
-			// d'un bord droit à l'autre, la flèche sortait de la colonne et
-			// repassait par-dessus le texte du noeud d'à côté.
 			if (from.x === to.x) {
 				const x = from.x + COL_W / 2;
 				const y1 = from.y + NODE_H;
@@ -77,8 +79,7 @@
 </script>
 
 <figure class="m-0">
-	<!-- Le schéma garde une largeur minimale pour rester lisible : sur téléphone
-	     il se parcourt donc à l'horizontale, ce qui doit se voir. -->
+
 	<div class="surface relative overflow-x-auto p-5 sm:p-7">
 		<svg
 			viewBox="0 0 {layout.width} {layout.height}"
@@ -89,7 +90,7 @@
 		>
 			<defs>
 				<marker
-					id="arrow"
+					id={arrowId}
 					viewBox="0 0 8 8"
 					refX="7"
 					refY="4"
@@ -107,7 +108,7 @@
 					fill="none"
 					stroke="var(--color-zinc-700)"
 					stroke-width="1"
-					marker-end="url(#arrow)"
+					marker-end="url(#{arrowId})"
 					class="text-zinc-600"
 				/>
 				{#if edge.label}

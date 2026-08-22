@@ -1,14 +1,9 @@
 export interface TechIcon {
 	src: string;
-	/** Logo monochrome sombre : invisible tel quel sur le fond zinc-950. */
+
 	lighten?: boolean;
 }
 
-/**
- * Logos auto-hébergés dans /static/tech. Ils venaient de jsdelivr et de
- * cdn.simpleicons.org, soit deux domaines tiers contactés à chaque visite,
- * avec l'adresse IP du visiteur au passage.
- */
 export const techIcons: Record<string, TechIcon> = {
 	"TypeScript": { src: "/tech/typescript.svg" },
 	"JavaScript": { src: "/tech/javascript.svg" },

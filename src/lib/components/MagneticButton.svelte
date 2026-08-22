@@ -24,7 +24,6 @@
 		return () => { if (rafId) cancelAnimationFrame(rafId); };
 	});
 
-	// Throttle au rythme de l'écran : un reflow max par frame au survol.
 	function handleMouseMove(e: MouseEvent) {
 		if (isTouch) return;
 		lastX = e.clientX;

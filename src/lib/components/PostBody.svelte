@@ -1,5 +1,7 @@
 <script lang="ts">
 	import ArchitectureDiagram from '$lib/components/ArchitectureDiagram.svelte';
+	import { ArrowRight } from 'lucide-svelte';
+	import { postIcons } from '$lib/data/post-icons';
 	import type { Block } from '$lib/data/posts';
 
 	let { body }: { body: Block[] } = $props();
@@ -10,7 +12,71 @@
 		{#if block.t === 'p'}
 			<p>{block.text}</p>
 		{:else if block.t === 'h'}
-			<h2>{block.text}</h2>
+			{@const Icon = block.icon ? postIcons[block.icon] : null}
+			<h2 class="flex items-center gap-3">
+				{#if Icon}
+					<span
+						class="flex h-8 w-8 shrink-0 items-center justify-center border border-zinc-800 bg-zinc-900/60 text-primary-300"
+						style="border-radius: var(--radius-card)"
+						aria-hidden="true"
+					>
+						<Icon size={16} />
+					</span>
+				{/if}
+				{block.text}
+			</h2>
+		{:else if block.t === 'tldr'}
+			<!-- L'essentiel avant le récit : quatre points pour qui ne lira pas les
+			     trois mille mots qui suivent. -->
+			<div class="not-prose grid gap-3 sm:grid-cols-2">
+				{#each block.items as item (item.title)}
+					{@const Icon = postIcons[item.icon]}
+					<div class="surface flex gap-3.5 p-5">
+						<span class="mt-0.5 shrink-0 text-accent-400" aria-hidden="true">
+							<Icon size={18} />
+						</span>
+						<div class="min-w-0">
+							<div class="font-semibold text-zinc-100">{item.title}</div>
+							<p class="mt-1.5 text-sm leading-relaxed text-zinc-400">{item.text}</p>
+						</div>
+					</div>
+				{/each}
+			</div>
+		{:else if block.t === 'facts'}
+			<div class="not-prose grid grid-cols-2 gap-px overflow-hidden bg-zinc-800 sm:grid-cols-3"
+				style="border-radius: var(--radius-card)">
+				{#each block.items as fact (fact.label)}
+					{@const Icon = postIcons[fact.icon]}
+					<div class="flex flex-col gap-1 bg-zinc-900/70 p-4">
+						<span class="text-zinc-600" aria-hidden="true"><Icon size={15} /></span>
+						<span class="font-mono text-xl font-bold text-zinc-100 tabular-nums">{fact.value}</span>
+						<span class="text-xs leading-snug text-zinc-500">{fact.label}</span>
+					</div>
+				{/each}
+			</div>
+		{:else if block.t === 'compare'}
+			<div class="not-prose surface flex flex-col divide-y divide-zinc-800">
+				{#each block.items as row (row.label)}
+					{@const Icon = postIcons[row.icon]}
+					<div class="flex flex-wrap items-center gap-x-4 gap-y-2 p-4 sm:p-5">
+						<span class="flex min-w-0 flex-1 items-center gap-2.5">
+							<span class="shrink-0 text-zinc-600" aria-hidden="true"><Icon size={15} /></span>
+							<span class="truncate font-mono text-xs text-zinc-300">{row.label}</span>
+						</span>
+						<span class="flex items-center gap-2 font-mono text-sm tabular-nums">
+							<span class="text-zinc-500 line-through decoration-zinc-700">{row.before}</span>
+							<ArrowRight size={13} class="text-zinc-600" />
+							<span class="text-zinc-100">{row.after}</span>
+						</span>
+						<span
+							class="border border-accent-500/40 px-2 py-0.5 font-mono text-xs text-accent-400 tabular-nums"
+							style="border-radius: var(--radius-card)"
+						>
+							{row.delta}
+						</span>
+					</div>
+				{/each}
+			</div>
 		{:else if block.t === 'list'}
 			<ul>
 				{#each block.items as item, ii (ii)}
@@ -22,8 +88,12 @@
 			     eux qu'on revient chercher, pas la phrase qui les entoure. -->
 			<div class="not-prose grid gap-3 sm:grid-cols-3">
 				{#each block.items as stat (stat.label)}
+					{@const Icon = stat.icon ? postIcons[stat.icon] : null}
 					<div class="surface p-5">
-						<div class="font-mono text-2xl font-bold text-primary-300 tabular-nums">
+						{#if Icon}
+							<span class="text-zinc-600" aria-hidden="true"><Icon size={16} /></span>
+						{/if}
+						<div class="mt-2 font-mono text-2xl font-bold text-primary-300 tabular-nums">
 							{stat.value}
 						</div>
 						<div class="mt-1 text-sm text-zinc-300">{stat.label}</div>
@@ -145,9 +215,20 @@
 						{/if}
 					</div>
 				{/each}
+				{#if block.caption}
+					<p class="mt-1 font-mono text-[11px] text-zinc-600">{block.caption}</p>
+				{/if}
 			</div>
 		{:else if block.t === 'note'}
-			<aside class="not-prose border-l-2 border-accent-500/60 bg-zinc-900/40 py-4 pr-5 pl-5">
+			{@const Icon = block.icon ? postIcons[block.icon] : null}
+			<aside
+				class="not-prose flex gap-3.5 border-l-2 border-accent-500/60 bg-zinc-900/40 py-4 pr-5 pl-5"
+			>
+				{#if Icon}
+					<span class="mt-0.5 shrink-0 text-accent-400" aria-hidden="true">
+						<Icon size={17} />
+					</span>
+				{/if}
 				<p class="text-sm leading-relaxed text-zinc-300">{block.text}</p>
 			</aside>
 		{:else if block.t === 'code'}

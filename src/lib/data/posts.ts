@@ -4,12 +4,22 @@
 // partagent exactement la même structure.
 
 import type { Diagram } from "./profile";
+import type { PostIcon } from "./post-icons";
 
 export type Block =
   | { t: "p"; text: string }
-  | { t: "h"; text: string }
+  | { t: "h"; text: string; icon?: PostIcon }
+  // Les points saillants en tête d'article : ce que retient un lecteur qui ne
+  // descendra pas jusqu'au bout.
+  | { t: "tldr"; items: { icon: PostIcon; title: string; text: string }[] }
+  // Une grille de faits courts, là où une phrase énumérerait six chiffres.
+  | { t: "facts"; items: { icon: PostIcon; value: string; label: string }[] }
+  | {
+      t: "compare";
+      items: { icon: PostIcon; label: string; before: string; after: string; delta: string }[];
+    }
   | { t: "list"; items: string[] }
-  | { t: "stats"; items: { value: string; label: string; note?: string }[] }
+  | { t: "stats"; items: { icon?: PostIcon; value: string; label: string; note?: string }[] }
   | { t: "table"; head: string[]; rows: string[][] }
   | {
       t: "people";
@@ -29,8 +39,12 @@ export type Block =
     }
   // Une barre dit une magnitude que trois chiffres alignés ne disent pas, et
   // elle tient dans la largeur d'un téléphone là où un tableau déborde.
-  | { t: "bars"; items: { label: string; value: number; display: string; note?: string }[] }
-  | { t: "note"; text: string }
+  | {
+      t: "bars";
+      caption?: string;
+      items: { label: string; value: number; display: string; note?: string }[];
+    }
+  | { t: "note"; text: string; icon?: PostIcon }
   | { t: "code"; lang: string; text: string };
 
 export interface PostContent {
@@ -71,7 +85,32 @@ const enderbotGateway: Post = {
         t: "p",
         text: "Enderbot est un jeu qui se joue dans Discord : un monorepo TypeScript où un cœur applicatif, un site SvelteKit et un client passerelle se parlent en protobuf par dessus RabbitMQ, avec Postgres, Redis et Prometheus derrière. Le client passerelle, c'est la partie qui tient la connexion à Discord, encaisse les évènements et pousse les messages. C'était historiquement du discord.js, un process Node par shard. Ça ne l'est plus.",
       },
-      { t: "h", text: "Qui a fait quoi" },
+      {
+        t: "tldr",
+        items: [
+          {
+            icon: "boxes",
+            title: "Un process au lieu de seize",
+            text: "Le client Discord passe de discord.js, un process Node par shard, à un binaire Go qui tient les seize shards à lui seul.",
+          },
+          {
+            icon: "network",
+            title: "Le contrat de fil n'a pas bougé",
+            text: "Mêmes messages protobuf, mêmes clés Redis, mêmes métriques : le cœur applicatif tourne sans une ligne modifiée.",
+          },
+          {
+            icon: "memory",
+            title: "2,2 Go de RSS expliqués",
+            text: "Des caches sans plafond retenaient environ 2,7 Go par jour, et une métrique à 40 295 s ne mesurait qu'un sleep attendu par erreur.",
+          },
+          {
+            icon: "rollback",
+            title: "Un retour arrière utilisé pour de vrai",
+            text: "La bascule du 9 août a été annulée le jour même. Sept jours de correctifs plus tard, le client JS a pu être supprimé.",
+          },
+        ],
+      },
+      { t: "h", text: "Qui a fait quoi", icon: "split" },
       {
         t: "p",
         text: "Le travail décrit ici s'est joué à deux, sur deux terrains distincts, et le log git tranche sans ambiguïté : sur les deux mille commits de la fenêtre, la passerelle est d'un côté, le cœur de l'autre.",
@@ -97,7 +136,7 @@ const enderbotGateway: Post = {
           },
         ],
       },
-      { t: "h", text: "Pourquoi sortir discord.js" },
+      { t: "h", text: "Pourquoi sortir discord.js", icon: "boxes" },
       {
         t: "p",
         text: "Un process par shard, c'est un cache mémoire par shard, un heap par shard et un watchdog maison pour relancer ceux qui décrochent. À seize shards, la facture mémoire du client rivalisait avec celle du cœur alors qu'il ne fait que du relais. Le calcul métier vit ailleurs, donc la passerelle n'avait aucune raison de rester dans le même langage que lui.",
@@ -106,7 +145,18 @@ const enderbotGateway: Post = {
         t: "p",
         text: "Le remplaçant, écrit par EnderSpirit, s'appelle discord-go : un module Go bâti sur disgo, un seul process qui tient tous les shards, le nombre de shards résolu tout seul depuis /gateway/bot. Cent vingt six fichiers Go, une trentaine de milliers de lignes, et un démarrage à froid d'environ quatre vingt dix secondes à seize shards, imposé par la limite d'identify de Discord.",
       },
-      { t: "h", text: "Le contrat de fil comme point fixe" },
+      {
+        t: "facts",
+        items: [
+          { icon: "file", value: "126", label: "fichiers Go" },
+          { icon: "layers", value: "30 257", label: "lignes écrites" },
+          { icon: "flask", value: "94 %", label: "de couverture" },
+          { icon: "server", value: "16", label: "shards, un seul process" },
+          { icon: "clock", value: "~90 s", label: "de démarrage à froid" },
+          { icon: "shield", value: "0", label: "ligne changée dans le cœur" },
+        ],
+      },
+      { t: "h", text: "Le contrat de fil comme point fixe", icon: "network" },
       {
         t: "p",
         text: "La règle qu'il s'est fixée, et qui a rendu la réécriture tenable : ne rien changer de ce qui traverse le réseau. Les mêmes messages protobuf sur les files client-to-core et core-to-client-{shardId}, les mêmes clés Redis status-discord-*, les mêmes métriques enderbot_discord_*. Le cœur tourne sans une ligne modifiée, et les tableaux de bord Grafana continuent d'afficher les mêmes séries.",
@@ -162,9 +212,10 @@ const enderbotGateway: Post = {
       },
       {
         t: "note",
+        icon: "network",
         text: "Un contrat sérialisé stable, c'est ce qui transforme une réécriture en remplacement de pièce plutôt qu'en refonte : les deux clients peuvent tourner en parallèle et se relayer sans que le reste du système sache lequel répond.",
       },
-      { t: "h", text: "La parité se joue sur le comportement, pas sur l'API" },
+      { t: "h", text: "La parité se joue sur le comportement, pas sur l'API", icon: "shield" },
       {
         t: "p",
         text: "La partie longue n'a pas été de reproduire les appels, mais les habitudes de discord.js. Elles ont occupé une journée entière de correctifs, le 11 août, tous signés EnderSpirit. Une bibliothèque de ce calibre transporte des décisions non écrites, et chacune se paie en bug de production si on ne la rejoue pas :",
@@ -184,7 +235,7 @@ const enderbotGateway: Post = {
         t: "p",
         text: "Les paquets faits main sont montés à 94 % de couverture, et une revue adversariale dédiée a servi à chercher les écarts de parité restants plutôt qu'à relire du style.",
       },
-      { t: "h", text: "Bascule, retour arrière, bascule" },
+      { t: "h", text: "Bascule, retour arrière, bascule", icon: "rollback" },
       {
         t: "p",
         text: "Le passage en production n'a pas été un interrupteur. Les deux clients ont tourné en double, pilotés par un drapeau Redis discord-client-active, avec un mode veille froide des deux côtés : le process boote passif, sonde le drapeau toutes les deux secondes, et l'activation recrée entièrement le client disgo. Fermer un client disgo bloque ses seaux REST et la réouverture devient impossible, donc on le reconstruit.",
@@ -221,7 +272,7 @@ const enderbotGateway: Post = {
         t: "p",
         text: "Depuis, un échec d'activation fait sortir le process, et Docker le relance.",
       },
-      { t: "h", text: "Ce que disaient réellement les métriques" },
+      { t: "h", text: "Ce que disaient réellement les métriques", icon: "gauge" },
       {
         t: "p",
         text: "Une fois la passerelle stabilisée, c'est mon terrain qui passe à la question. J'ai profilé le cœur en production plutôt que de deviner. Relevé sur une fenêtre de 4993 secondes d'uptime :",
@@ -229,9 +280,9 @@ const enderbotGateway: Post = {
       {
         t: "stats",
         items: [
-          { value: "2,2 Go", label: "RSS", note: "heap 903 Mo" },
-          { value: "352 ms", label: "lag event loop max", note: "p99 11,8 ms" },
-          { value: "21 %", label: "d'un cœur CPU", note: "1061 s sur 4993 s" },
+          { icon: "memory", value: "2,2 Go", label: "RSS", note: "heap 903 Mo" },
+          { icon: "timer", value: "352 ms", label: "lag event loop max", note: "p99 11,8 ms" },
+          { icon: "cpu", value: "21 %", label: "d'un cœur CPU", note: "1061 s sur 4993 s" },
         ],
       },
       {
@@ -240,6 +291,7 @@ const enderbotGateway: Post = {
       },
       {
         t: "bars",
+        caption: "Temps cumulé par point chaud, sur la même fenêtre de 4993 s.",
         items: [
           { label: "guildMemberInformationUpdate", value: 40295, display: "40 295 s", note: "un sommeil de 30 s attendu par le handler" },
           { label: "read guild", value: 762, display: "762 s", note: "96 ms × 7916 appels" },
@@ -248,7 +300,7 @@ const enderbotGateway: Post = {
         ],
       },
 
-      { t: "h", text: "Ce qui a été corrigé" },
+      { t: "h", text: "Ce qui a été corrigé", icon: "zap" },
       {
         t: "p",
         text: "Les 40 295 secondes de guildMemberInformationUpdate n'étaient pas du travail : le handler RabbitMQ attendait un debounce de trente secondes qui existait « au cas où d'autres informations arrivent ». Le rafraîchissement part désormais sans être attendu, ses erreurs journalisées, et la métrique se referme tout de suite.",
@@ -272,7 +324,16 @@ const enderbotGateway: Post = {
           "les quantiles de latence Redis relabellisés par opération, avec des buckets qui commencent sous la milliseconde au lieu de cinq",
         ],
       },
-      { t: "h", text: "Vingt crons pour une seule seconde" },
+      { t: "h", text: "Vingt crons pour une seule seconde", icon: "timer" },
+      {
+        t: "facts",
+        items: [
+          { icon: "repeat", value: "44", label: "tâches planifiées" },
+          { icon: "warn", value: "20", label: "sur la même seconde" },
+          { icon: "shield", value: "3", label: "protégées de la ré-entrance" },
+          { icon: "clock", value: "3,5 s", label: "sur 5,5 s de démarrage" },
+        ],
+      },
       {
         t: "p",
         text: "Sur quarante quatre tâches planifiées, vingt partageaient la seconde HH:00:00 et se disputaient le pool Prisma une fois par heure. Un décalage stable est maintenant dérivé du hash du couple module:job, borné sous la minute pour qu'aucune tâche ne sorte de la minute pour laquelle elle était planifiée. Au passage, la garde de ré-entrance couvrait trois jobs sur quarante quatre via des drapeaux écrits à la main : elle vaut désormais pour tous, et le fuseau UTC que plusieurs schedules documentaient en commentaire est enfin garanti par le code.",
@@ -281,21 +342,34 @@ const enderbotGateway: Post = {
         t: "p",
         text: "Autre boucle qui n'additionnait que des allers-retours réseau : le balayage de démarrage parcourait les 141 structures une par une, chacune avec son verrou Redis et sa transaction. Il pesait 3,5 s sur les 5,5 s qui séparent le lancement du process de la mise en service du serveur web.",
       },
-      { t: "h", text: "Le poids des images" },
+      { t: "h", text: "Le poids des images", icon: "container" },
       {
         t: "p",
         text: "Pendant que je faisais passer le monorepo sous Bun, EnderSpirit s'attaquait aux images Docker : base slim, installations filtrées par service, séparation build et runtime, polices Noto dégraissées. Puis les deux couches qui coûtaient le plus cher. Un chown -R des node_modules vivait dans son propre RUN, ce qui fait réécrire chaque fichier dans une nouvelle couche : le node_modules existait deux fois dans l'image. Bun installe par ailleurs les deux variantes libc des binaires natifs alors que l'image est glibc.",
       },
       {
-        t: "bars",
+        t: "compare",
         items: [
-          { label: "enderbot-core", value: 1440, display: "1,44 Go", note: "2,59 Go avant" },
-          { label: "enderbot-web-dev", value: 899, display: "899 Mo", note: "1,6 Go avant" },
-          { label: "enderbot-web-preview", value: 851, display: "851 Mo", note: "898 Mo avant" },
+          { icon: "container", label: "enderbot-core", before: "2,59 Go", after: "1,44 Go", delta: "-44 %" },
+          { icon: "container", label: "enderbot-web-dev", before: "1,6 Go", after: "899 Mo", delta: "-44 %" },
+          { icon: "container", label: "enderbot-web-preview", before: "898 Mo", after: "851 Mo", delta: "-5 %" },
         ],
       },
 
-      { t: "h", text: "Ce qui reste" },
+      {
+        t: "p",
+        text: "Le mois a aussi été celui d'une remise à plat de l'outillage, côté EnderSpirit : montée sur le TypeScript 7 natif et sur Vite 8, dépendances mortes évacuées, et un plugin de lint maison branché pour traquer le code sans intention.",
+      },
+      {
+        t: "facts",
+        items: [
+          { icon: "zap", value: "7×", label: "vérification de types plus rapide" },
+          { icon: "rocket", value: "2×", label: "build du site plus rapide" },
+          { icon: "package", value: "45", label: "dépendances mortes retirées" },
+          { icon: "down", value: "3678", label: "défauts de lint résorbés" },
+        ],
+      },
+      { t: "h", text: "Ce qui reste", icon: "activity" },
       {
         t: "p",
         text: "read guild à 762 secondes cumulées est le prochain gros morceau : la lecture charge systématiquement salons, rôles et emojis, même quand l'appelant ne veut que le préfixe ou la langue. Un chemin « guilde nue » demande de trier les appelants un par un. buttonClick à 1587 ms est une métrique agrégée sur tous les boutons : il faut d'abord la labelliser par customId pour savoir lesquels sont lents.",
@@ -315,7 +389,32 @@ const enderbotGateway: Post = {
         t: "p",
         text: "Enderbot is a game played inside Discord: a TypeScript monorepo where an application core, a SvelteKit site and a gateway client talk protobuf over RabbitMQ, with Postgres, Redis and Prometheus behind them. The gateway client is the part holding the connection to Discord, absorbing events and pushing messages. It used to be discord.js, one Node process per shard. It no longer is.",
       },
-      { t: "h", text: "Who did what" },
+      {
+        t: "tldr",
+        items: [
+          {
+            icon: "boxes",
+            title: "One process instead of sixteen",
+            text: "The Discord client goes from discord.js, one Node process per shard, to a Go binary holding all sixteen shards on its own.",
+          },
+          {
+            icon: "network",
+            title: "The wire contract never moved",
+            text: "Same protobuf messages, same Redis keys, same metrics: the application core runs with not a single line changed.",
+          },
+          {
+            icon: "memory",
+            title: "2.2 GB of RSS accounted for",
+            text: "Unbounded caches were retaining about 2.7 GB a day, and a metric reading 40,295 s was only measuring an awaited sleep.",
+          },
+          {
+            icon: "rollback",
+            title: "A rollback that was actually used",
+            text: "The 9 August switch was undone the same day. Seven days of fixes later, the JS client could be deleted.",
+          },
+        ],
+      },
+      { t: "h", text: "Who did what", icon: "split" },
       {
         t: "p",
         text: "The work described here happened between two people, on two distinct fronts, and the git log settles it without ambiguity: across the two thousand commits in this window, the gateway sits on one side and the core on the other.",
@@ -341,7 +440,7 @@ const enderbotGateway: Post = {
           },
         ],
       },
-      { t: "h", text: "Why discord.js had to go" },
+      { t: "h", text: "Why discord.js had to go", icon: "boxes" },
       {
         t: "p",
         text: "One process per shard means one memory cache per shard, one heap per shard, and a homegrown watchdog to respawn the ones that drop. At sixteen shards, the client's memory bill rivalled the core's while doing nothing but relaying. The game logic lives elsewhere, so the gateway had no reason to stay in the same language as it.",
@@ -350,7 +449,18 @@ const enderbotGateway: Post = {
         t: "p",
         text: "The replacement, written by EnderSpirit, is discord-go: a Go module built on disgo, a single process holding every shard, shard count resolved on its own from /gateway/bot. A hundred and twenty six Go files, roughly thirty thousand lines, and a cold start of about ninety seconds at sixteen shards, dictated by Discord's identify rate limit.",
       },
-      { t: "h", text: "The wire contract as the fixed point" },
+      {
+        t: "facts",
+        items: [
+          { icon: "file", value: "126", label: "Go files" },
+          { icon: "layers", value: "30,257", label: "lines written" },
+          { icon: "flask", value: "94%", label: "test coverage" },
+          { icon: "server", value: "16", label: "shards, one process" },
+          { icon: "clock", value: "~90 s", label: "cold start" },
+          { icon: "shield", value: "0", label: "lines changed in the core" },
+        ],
+      },
+      { t: "h", text: "The wire contract as the fixed point", icon: "network" },
       {
         t: "p",
         text: "The rule he set himself, and what made the rewrite tractable: change nothing that crosses the network. Same protobuf messages on the client-to-core and core-to-client-{shardId} queues, same status-discord-* Redis keys, same enderbot_discord_* metrics. The core runs with not a single line changed, and the Grafana dashboards keep plotting the same series.",
@@ -406,9 +516,10 @@ const enderbotGateway: Post = {
       },
       {
         t: "note",
+        icon: "network",
         text: "A stable serialized contract is what turns a rewrite into a part swap rather than an overhaul: both clients can run side by side and hand over without the rest of the system knowing which one answered.",
       },
-      { t: "h", text: "Parity is about behaviour, not the API" },
+      { t: "h", text: "Parity is about behaviour, not the API", icon: "shield" },
       {
         t: "p",
         text: "The long part was not reproducing the calls, it was reproducing discord.js habits. They took up a full day of fixes on 11 August, every one of them signed EnderSpirit. A library that size carries unwritten decisions, and every one of them costs a production bug if you fail to replay it:",
@@ -428,7 +539,7 @@ const enderbotGateway: Post = {
         t: "p",
         text: "The hand-written packages were brought to 94% coverage, and a dedicated adversarial review was spent hunting remaining parity gaps rather than reviewing style.",
       },
-      { t: "h", text: "Switch, roll back, switch" },
+      { t: "h", text: "Switch, roll back, switch", icon: "rollback" },
       {
         t: "p",
         text: "Going to production was not a single switch. Both clients ran side by side, driven by a discord-client-active Redis flag, with cold standby on both sides: the process boots passive, polls the flag every two seconds, and activation recreates the disgo client entirely. Closing a disgo client deadlocks its REST buckets and reopening becomes impossible, so it gets rebuilt instead.",
@@ -465,7 +576,7 @@ const enderbotGateway: Post = {
         t: "p",
         text: "Since then, a failed activation exits the process and Docker restarts it.",
       },
-      { t: "h", text: "What the metrics actually said" },
+      { t: "h", text: "What the metrics actually said", icon: "gauge" },
       {
         t: "p",
         text: "Once the gateway was stable, my own side came under the microscope. I profiled the core in production instead of guessing. Sampled over a 4993 second uptime window:",
@@ -473,9 +584,9 @@ const enderbotGateway: Post = {
       {
         t: "stats",
         items: [
-          { value: "2.2 GB", label: "RSS", note: "903 MB heap" },
-          { value: "352 ms", label: "max event loop lag", note: "p99 11.8 ms" },
-          { value: "21%", label: "of one CPU core", note: "1061 s out of 4993 s" },
+          { icon: "memory", value: "2.2 GB", label: "RSS", note: "903 MB heap" },
+          { icon: "timer", value: "352 ms", label: "max event loop lag", note: "p99 11.8 ms" },
+          { icon: "cpu", value: "21%", label: "of one CPU core", note: "1061 s out of 4993 s" },
         ],
       },
       {
@@ -484,6 +595,7 @@ const enderbotGateway: Post = {
       },
       {
         t: "bars",
+        caption: "Cumulative time per hot spot, over the same 4993 s window.",
         items: [
           { label: "guildMemberInformationUpdate", value: 40295, display: "40,295 s", note: "a 30 s sleep the handler was awaiting" },
           { label: "read guild", value: 762, display: "762 s", note: "96 ms × 7916 calls" },
@@ -492,7 +604,7 @@ const enderbotGateway: Post = {
         ],
       },
 
-      { t: "h", text: "What got fixed" },
+      { t: "h", text: "What got fixed", icon: "zap" },
       {
         t: "p",
         text: "Those 40,295 seconds on guildMemberInformationUpdate were not work: the RabbitMQ handler was awaiting a thirty second debounce that existed in case more information showed up. The refresh now fires without being awaited, with its errors logged, and the metric closes immediately.",
@@ -516,7 +628,16 @@ const enderbotGateway: Post = {
           "Redis latency quantiles relabelled per operation, with buckets starting below the millisecond instead of at five",
         ],
       },
-      { t: "h", text: "Twenty crons on a single second" },
+      { t: "h", text: "Twenty crons on a single second", icon: "timer" },
+      {
+        t: "facts",
+        items: [
+          { icon: "repeat", value: "44", label: "scheduled jobs" },
+          { icon: "warn", value: "20", label: "on the same second" },
+          { icon: "shield", value: "3", label: "guarded against re-entrancy" },
+          { icon: "clock", value: "3.5 s", label: "of a 5.5 s boot" },
+        ],
+      },
       {
         t: "p",
         text: "Out of forty four scheduled jobs, twenty shared the HH:00:00 second and fought over the Prisma pool once an hour. A stable offset is now derived from the hash of the module:job pair, bounded below one minute so no job leaves the minute it was scheduled for. Along the way, the re-entrancy guard covered three jobs out of forty four through hand-written flags: it now applies to all of them, and the UTC timezone several schedules documented in a comment is finally enforced by code.",
@@ -525,21 +646,34 @@ const enderbotGateway: Post = {
         t: "p",
         text: "Another loop that only added up round trips: the boot sweep walked all 141 structures one by one, each with its own Redis lock and transaction. It accounted for 3.5 s of the 5.5 s between process launch and the web server accepting traffic.",
       },
-      { t: "h", text: "Image weight" },
+      { t: "h", text: "Image weight", icon: "container" },
       {
         t: "p",
         text: "While I was moving the monorepo onto Bun, EnderSpirit went after the Docker images: slim base, per-service filtered installs, split build and runtime stages, trimmed Noto fonts. Then the two layers that cost the most. A chown -R on node_modules lived in its own RUN, which makes Docker rewrite every file into a new layer: node_modules existed twice in the image. Bun also installs both libc variants of native binaries while the image is glibc.",
       },
       {
-        t: "bars",
+        t: "compare",
         items: [
-          { label: "enderbot-core", value: 1440, display: "1.44 GB", note: "2.59 GB before" },
-          { label: "enderbot-web-dev", value: 899, display: "899 MB", note: "1.6 GB before" },
-          { label: "enderbot-web-preview", value: 851, display: "851 MB", note: "898 MB before" },
+          { icon: "container", label: "enderbot-core", before: "2.59 GB", after: "1.44 GB", delta: "-44%" },
+          { icon: "container", label: "enderbot-web-dev", before: "1.6 GB", after: "899 MB", delta: "-44%" },
+          { icon: "container", label: "enderbot-web-preview", before: "898 MB", after: "851 MB", delta: "-5%" },
         ],
       },
 
-      { t: "h", text: "What is left" },
+      {
+        t: "p",
+        text: "The month was also a tooling reset on EnderSpirit's side: moving to native TypeScript 7 and to Vite 8, clearing out dead dependencies, and wiring in a custom lint plugin to hunt down code written without intent.",
+      },
+      {
+        t: "facts",
+        items: [
+          { icon: "zap", value: "7×", label: "faster type checking" },
+          { icon: "rocket", value: "2×", label: "faster site build" },
+          { icon: "package", value: "45", label: "dead dependencies removed" },
+          { icon: "down", value: "3678", label: "lint defects cleared" },
+        ],
+      },
+      { t: "h", text: "What is left", icon: "activity" },
       {
         t: "p",
         text: "read guild at 762 cumulative seconds is the next big one: the read always loads channels, roles and emojis, even when the caller only wants the prefix or the language. A bare guild path means sorting through the callers one by one. buttonClick at 1587 ms is aggregated over every button: it has to be labelled per customId before anyone can tell which ones are slow.",

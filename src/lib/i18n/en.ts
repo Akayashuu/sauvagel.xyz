@@ -34,7 +34,7 @@ export const en = {
       },
       {
         title: "Side projects",
-        desc: "Discord bots, a text MMORPG, aeroclub management apps — I like to ship stuff",
+        desc: "Discord bots, a text MMORPG, web analytics — I like to ship stuff",
       },
     ],
   },
@@ -118,38 +118,6 @@ export const en = {
             "SvelteKit + Tailwind dashboard with logs, leaderboard, library, and server stats",
             "Public API at ender.gg, deployed with Docker",
             "pnpm monorepo architecture with Prisma and PostgreSQL",
-          ],
-        },
-      },
-      {
-        name: "Aeroclub Electron",
-        tagline: "Desktop app — Electron + Symfony",
-        description:
-          "Desktop application combining an Electron frontend with a Symfony backend. Manages aeroclub members, flights and aircraft with a native-feel interface powered by PHP.",
-        details: {
-          features: [
-            "Electron desktop app wrapping a full Symfony backend",
-            "Member management, flight tracking, and aircraft registry",
-            "PostgreSQL database for persistent data",
-            "Twig templates for server-side rendering inside Electron",
-            "Based on the electron-symfony framework",
-            "98 commits — archived project",
-          ],
-        },
-      },
-      {
-        name: "Aeroclub Symfony",
-        tagline: "Web app for an aeroclub",
-        description:
-          "Symfony web application for managing an aviation club. Member management, flight logs, and admin dashboard with Twig templates and PostgreSQL.",
-        details: {
-          features: [
-            "Full Symfony web application for aeroclub management",
-            "Member registration and management system",
-            "Flight logging and aircraft tracking",
-            "Admin dashboard with role-based access",
-            "Webpack Encore for asset bundling",
-            "PostgreSQL database — 2 releases (latest v2.0.0)",
           ],
         },
       },

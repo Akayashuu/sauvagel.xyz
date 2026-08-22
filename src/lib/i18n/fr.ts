@@ -34,7 +34,7 @@ export const fr = {
       },
       {
         title: "Side projects",
-        desc: "Bots Discord, un MMORPG textuel, des apps de gestion d'aéroclub — j'aime shipper",
+        desc: "Bots Discord, un MMORPG textuel, de l'analytics web — j'aime shipper",
       },
     ],
   },
@@ -118,38 +118,6 @@ export const fr = {
             "Dashboard SvelteKit + Tailwind avec logs, classement, bibliothèque et stats serveur",
             "API publique sur ender.gg, déployée en Docker",
             "Architecture monorepo pnpm avec Prisma et PostgreSQL",
-          ],
-        },
-      },
-      {
-        name: "Aeroclub Electron",
-        tagline: "App desktop — Electron + Symfony",
-        description:
-          "Application desktop combinant un frontend Electron avec un backend Symfony. Gestion des membres, des vols et des avions de l'aéroclub avec une interface native propulsée par PHP.",
-        details: {
-          features: [
-            "App desktop Electron embarquant un backend Symfony complet",
-            "Gestion des membres, suivi des vols et registre des avions",
-            "Base de données PostgreSQL pour la persistance",
-            "Templates Twig pour le rendu côté serveur dans Electron",
-            "Basé sur le framework electron-symfony",
-            "98 commits — projet archivé",
-          ],
-        },
-      },
-      {
-        name: "Aeroclub Symfony",
-        tagline: "App web pour un aéroclub",
-        description:
-          "Application web Symfony pour la gestion d'un aéroclub. Gestion des membres, journaux de vol et dashboard admin avec templates Twig et PostgreSQL.",
-        details: {
-          features: [
-            "Application web Symfony complète pour la gestion d'un aéroclub",
-            "Système d'inscription et de gestion des membres",
-            "Journaux de vol et suivi des avions",
-            "Dashboard admin avec gestion des rôles",
-            "Webpack Encore pour le bundling des assets",
-            "Base PostgreSQL — 2 releases (dernière : v2.0.0)",
           ],
         },
       },

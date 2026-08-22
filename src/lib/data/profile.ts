@@ -139,22 +139,6 @@ export const projectMeta: ProjectMeta[] = [
     image: "/projects/enderbot.webp",
   },
   {
-    slug: "aeroclub-electron",
-    tech: ["Symfony", "PHP", "Electron", "Node.js", "Twig", "PostgreSQL"],
-    gradient: "from-amber-600 to-orange-800",
-    color: "#d97706",
-    link: "https://github.com/Akayashuu/Aeroclub-Symfony-Electron",
-    logos: ["Electron", "Symfony", "PHP", "PostgreSQL"],
-  },
-  {
-    slug: "aeroclub-symfony",
-    tech: ["Symfony", "PHP", "Twig", "Webpack", "Composer", "PostgreSQL"],
-    gradient: "from-cyan-600 to-blue-800",
-    color: "#0891b2",
-    link: "https://github.com/Akayashuu/Aeroclub-Symfony",
-    logos: ["Symfony", "PHP", "PostgreSQL"],
-  },
-  {
     slug: "ganyu",
     tech: ["TypeScript", "Node.js", "Discord.js", "Svelte", "PostgreSQL", "Prisma", "Grafana", "Docker"],
     gradient: "from-pink-600 to-rose-800",

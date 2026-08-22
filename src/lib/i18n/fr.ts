@@ -322,6 +322,7 @@ export const fr = {
   },
   ui: {
     scrollHint: "Faites glisser le schéma pour le parcourir",
+    essentials: "L'essentiel",
   },
   blog: {
     label: "Blog",
@@ -331,6 +332,7 @@ export const fr = {
     back: "Retour au blog",
     minutes: "min de lecture",
     read: "Lire",
+    contents: "Sommaire",
   },
   footer: {
     privacy: "Confidentialité",

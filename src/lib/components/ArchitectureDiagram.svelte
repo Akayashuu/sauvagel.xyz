@@ -8,11 +8,13 @@
 	// Le schéma est déclaré en données (colonnes, noeuds, flux) et sa géométrie
 	// calculée ici : un SVG écrit à la main par projet aurait vieilli à chaque
 	// changement d'archi, et une lib de graphes pèserait plus que la page.
-	const COL_W = 190;
-	const COL_GAP = 116;
-	const NODE_H = 54;
+	// La géométrie est serrée volontairement : à largeur de page constante, un
+	// schéma plus compact rend un texte plus gros une fois mis à l'échelle.
+	const COL_W = 188;
+	const COL_GAP = 114;
+	const NODE_H = 58;
 	const NODE_GAP = 16;
-	const HEAD_H = 34;
+	const HEAD_H = 38;
 	const PAD = 12;
 
 	let layout = $derived.by(() => {
@@ -80,7 +82,7 @@
 	<div class="surface relative overflow-x-auto p-5 sm:p-7">
 		<svg
 			viewBox="0 0 {layout.width} {layout.height}"
-			class="h-auto w-full min-w-160"
+			class="h-auto w-full min-w-140"
 			preserveAspectRatio="xMinYMin meet"
 			role="img"
 			aria-label={caption}
@@ -114,7 +116,10 @@
 						y={edge.ly - 6}
 						text-anchor={edge.anchor}
 						class="fill-zinc-500 font-mono"
-						font-size="8.5"
+						font-size="10"
+						stroke="var(--color-zinc-950)"
+						stroke-width="3.5"
+						paint-order="stroke"
 					>
 						{edge.label}
 					</text>
@@ -122,7 +127,7 @@
 			{/each}
 
 			{#each layout.columns as col, ci (ci)}
-				<text x={col.x} y="12" class="fill-zinc-500 font-mono" font-size="9" letter-spacing="1.2">
+				<text x={col.x} y="12" class="fill-zinc-500 font-mono" font-size="10.5" letter-spacing="1.2">
 					{col.title.toUpperCase()}
 				</text>
 				<line
@@ -147,14 +152,14 @@
 					/>
 					<text
 						x={node.x + 14}
-						y={node.note ? node.y + 22 : node.y + 31}
+						y={node.note ? node.y + 24 : node.y + 34}
 						class="fill-zinc-100 font-mono"
-						font-size="12"
+						font-size="14"
 					>
 						{node.label}
 					</text>
 					{#if node.note}
-						<text x={node.x + 14} y={node.y + 38} class="fill-zinc-500" font-size="10">
+						<text x={node.x + 14} y={node.y + 42} class="fill-zinc-500" font-size="11.5">
 							{node.note}
 						</text>
 					{/if}

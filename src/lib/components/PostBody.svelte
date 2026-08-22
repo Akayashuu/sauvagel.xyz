@@ -2,7 +2,8 @@
 	import ArchitectureDiagram from '$lib/components/ArchitectureDiagram.svelte';
 	import { ArrowRight } from 'lucide-svelte';
 	import { postIcons } from '$lib/data/post-icons';
-	import type { Block } from '$lib/data/posts';
+	import { headingId, type Block } from '$lib/data/posts';
+	import { t } from '$lib/i18n';
 
 	let { body }: { body: Block[] } = $props();
 </script>
@@ -13,7 +14,7 @@
 			<p>{block.text}</p>
 		{:else if block.t === 'h'}
 			{@const Icon = block.icon ? postIcons[block.icon] : null}
-			<h2 class="flex items-center gap-3">
+			<h2 id={headingId(block.text)} class="flex items-center gap-3">
 				{#if Icon}
 					<span
 						class="flex h-8 w-8 shrink-0 items-center justify-center border border-zinc-800 bg-zinc-900/60 text-primary-300"
@@ -28,22 +29,30 @@
 		{:else if block.t === 'tldr'}
 			<!-- L'essentiel avant le récit : quatre points pour qui ne lira pas les
 			     trois mille mots qui suivent. -->
-			<div class="not-prose grid gap-3 sm:grid-cols-2">
-				{#each block.items as item (item.title)}
-					{@const Icon = postIcons[item.icon]}
-					<div class="surface flex gap-3.5 p-5">
-						<span class="mt-0.5 shrink-0 text-accent-400" aria-hidden="true">
-							<Icon size={18} />
-						</span>
-						<div class="min-w-0">
-							<div class="font-semibold text-zinc-100">{item.title}</div>
-							<p class="mt-1.5 text-sm leading-relaxed text-zinc-400">{item.text}</p>
+			<div
+				class="not-prose overflow-hidden border border-zinc-800"
+				style="border-radius: var(--radius-card)"
+			>
+				<div class="border-b border-zinc-800 bg-zinc-900/60 px-5 py-3">
+					<span class="section-label">{$t.ui.essentials}</span>
+				</div>
+				<div class="grid gap-px bg-zinc-800 sm:grid-cols-2">
+					{#each block.items as item (item.title)}
+						{@const Icon = postIcons[item.icon]}
+						<div class="bg-zinc-950 p-5">
+							<div class="flex items-center gap-2.5">
+								<span class="shrink-0 text-accent-400" aria-hidden="true">
+									<Icon size={16} />
+								</span>
+								<span class="font-semibold text-zinc-100">{item.title}</span>
+							</div>
+							<p class="mt-2.5 text-sm leading-relaxed text-zinc-400">{item.text}</p>
 						</div>
-					</div>
-				{/each}
+					{/each}
+				</div>
 			</div>
 		{:else if block.t === 'facts'}
-			<div class="not-prose grid grid-cols-2 gap-px overflow-hidden bg-zinc-800 sm:grid-cols-3"
+			<div class="not-prose grid grid-cols-2 gap-px overflow-hidden bg-zinc-800 sm:grid-cols-3 lg:grid-cols-6"
 				style="border-radius: var(--radius-card)">
 				{#each block.items as fact (fact.label)}
 					{@const Icon = postIcons[fact.icon]}
@@ -170,8 +179,24 @@
 					</a>
 				{/each}
 			</div>
+		{:else if block.t === 'image'}
+			<figure class="not-prose flex flex-col gap-2.5">
+				<img
+					src={block.src}
+					alt={block.alt}
+					width={block.width}
+					height={block.height}
+					loading="lazy"
+					decoding="async"
+					class="w-full border border-zinc-800 object-cover"
+					style="border-radius: var(--radius-card)"
+				/>
+				<figcaption class="font-mono text-[11px] text-zinc-600">{block.caption}</figcaption>
+			</figure>
 		{:else if block.t === 'diagram'}
-			<div class="not-prose">
+			<!-- Le schéma est la pièce qui gagne le plus à la largeur : il déborde de
+			     la colonne de texte dès qu'il y a de la place autour. -->
+			<div class="not-prose lg:-mx-4 xl:-mx-8">
 				<ArchitectureDiagram diagram={block.diagram} caption={block.caption} />
 			</div>
 		{:else if block.t === 'timeline'}
@@ -249,6 +274,7 @@
 	}
 	.post-body :global(h2) {
 		margin-top: 1.75rem;
+		scroll-margin-top: 6rem;
 		font-size: 1.3rem;
 		font-weight: 700;
 		letter-spacing: -0.02em;
@@ -272,6 +298,14 @@
 			line-height: 1.8;
 		}
 	}
+	/* Le texte garde sa largeur de lecture, les blocs de données prennent toute
+	   la colonne : c'est là que la place gagnée sur grand écran sert. */
+	@media (min-width: 1024px) {
+		.post-body :global(p),
+		.post-body :global(ul) {
+			max-width: 72ch;
+		}
+	}
 	.post-body :global(ul) {
 		display: flex;
 		max-width: 68ch;
@@ -280,13 +314,13 @@
 		padding-left: 0;
 		list-style: none;
 	}
-	.post-body :global(li) {
+	.post-body :global(ul > li) {
 		position: relative;
 		padding-left: 1.4rem;
 		line-height: 1.75;
 		color: var(--color-zinc-400);
 	}
-	.post-body :global(li::before) {
+	.post-body :global(ul > li::before) {
 		position: absolute;
 		left: 0;
 		top: 0.68em;

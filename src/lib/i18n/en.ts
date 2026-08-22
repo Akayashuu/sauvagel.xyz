@@ -322,6 +322,7 @@ export const en = {
   },
   ui: {
     scrollHint: "Swipe the diagram to explore it",
+    essentials: "The essentials",
   },
   blog: {
     label: "Blog",
@@ -331,6 +332,7 @@ export const en = {
     back: "Back to the blog",
     minutes: "min read",
     read: "Read",
+    contents: "Contents",
   },
   footer: {
     privacy: "Privacy",

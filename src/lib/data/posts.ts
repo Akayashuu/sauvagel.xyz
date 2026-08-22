@@ -45,6 +45,7 @@ export type Block =
       items: { label: string; value: number; display: string; note?: string }[];
     }
   | { t: "note"; text: string; icon?: PostIcon }
+  | { t: "image"; src: string; alt: string; caption: string; width: number; height: number }
   | { t: "code"; lang: string; text: string };
 
 export interface PostContent {
@@ -84,6 +85,14 @@ const enderbotGateway: Post = {
       {
         t: "p",
         text: "Enderbot est un jeu qui se joue dans Discord : un monorepo TypeScript où un cœur applicatif, un site SvelteKit et un client passerelle se parlent en protobuf par dessus RabbitMQ, avec Postgres, Redis et Prometheus derrière. Le client passerelle, c'est la partie qui tient la connexion à Discord, encaisse les évènements et pousse les messages. C'était historiquement du discord.js, un process Node par shard. Ça ne l'est plus.",
+      },
+      {
+        t: "image",
+        src: "/projects/enderbot.webp",
+        alt: "Le site d'Enderbot, la partie SvelteKit du monorepo.",
+        caption: "ender.gg, la face visible du monorepo : le cœur, le site et la passerelle partagent les mêmes files.",
+        width: 1280,
+        height: 800,
       },
       {
         t: "tldr",
@@ -269,6 +278,44 @@ const enderbotGateway: Post = {
         ],
       },
       {
+        t: "diagram",
+        caption:
+          "Les deux clients bootent passifs et sondent le même drapeau : basculer, c'est écrire une clé Redis.",
+        diagram: {
+          columns: [
+            {
+              title: "Décision",
+              nodes: [
+                { id: "flag", label: "drapeau Redis", note: "discord-client-active", accent: true },
+                { id: "probe", label: "sonde", note: "toutes les 2 s" },
+              ],
+            },
+            {
+              title: "Clients",
+              nodes: [
+                { id: "sgo", label: "discord-go", note: "actif, 16 shards", accent: true },
+                { id: "sjs", label: "discord.js", note: "veille froide" },
+              ],
+            },
+            {
+              title: "Activation",
+              nodes: [{ id: "build", label: "client disgo recréé", note: "jamais réouvert" }],
+            },
+            {
+              title: "Trafic",
+              nodes: [{ id: "bus", label: "RabbitMQ", note: "client-to-core", accent: true }],
+            },
+          ],
+          edges: [
+            { from: "probe", to: "flag", label: "lecture" },
+            { from: "flag", to: "sgo", label: "actif" },
+            { from: "flag", to: "sjs", label: "passif" },
+            { from: "sgo", to: "build", label: "reconstruction" },
+            { from: "build", to: "bus" },
+          ],
+        },
+      },
+      {
         t: "p",
         text: "Depuis, un échec d'activation fait sortir le process, et Docker le relance.",
       },
@@ -339,6 +386,48 @@ const enderbotGateway: Post = {
         text: "Sur quarante quatre tâches planifiées, vingt partageaient la seconde HH:00:00 et se disputaient le pool Prisma une fois par heure. Un décalage stable est maintenant dérivé du hash du couple module:job, borné sous la minute pour qu'aucune tâche ne sorte de la minute pour laquelle elle était planifiée. Au passage, la garde de ré-entrance couvrait trois jobs sur quarante quatre via des drapeaux écrits à la main : elle vaut désormais pour tous, et le fuseau UTC que plusieurs schedules documentaient en commentaire est enfin garanti par le code.",
       },
       {
+        t: "diagram",
+        caption:
+          "Le décalage est dérivé du hash du job : il est stable d'un redémarrage à l'autre, sans table à tenir.",
+        diagram: {
+          columns: [
+            {
+              title: "Planifié",
+              nodes: [
+                { id: "jobs", label: "44 tâches", note: "20 à HH:00:00" },
+                { id: "sweep", label: "balayage de boot", note: "141 structures" },
+              ],
+            },
+            {
+              title: "Étalement",
+              nodes: [
+                { id: "hash", label: "hash(module:job)", note: "décalage < 1 min", accent: true },
+                { id: "guard", label: "garde de ré-entrance", note: "44 jobs sur 44" },
+              ],
+            },
+            {
+              title: "Ressource",
+              nodes: [{ id: "pool", label: "pool Prisma", note: "PostgreSQL", accent: true }],
+            },
+            {
+              title: "Effet",
+              nodes: [
+                { id: "flat", label: "charge étalée", note: "plus de pic horaire", accent: true },
+                { id: "boot", label: "démarrage", note: "3,5 s repris sur 5,5 s" },
+              ],
+            },
+          ],
+          edges: [
+            { from: "jobs", to: "hash", label: "décalage" },
+            { from: "jobs", to: "guard" },
+            { from: "hash", to: "pool" },
+            { from: "guard", to: "pool" },
+            { from: "pool", to: "flat" },
+            { from: "sweep", to: "boot", label: "regroupé" },
+          ],
+        },
+      },
+      {
         t: "p",
         text: "Autre boucle qui n'additionnait que des allers-retours réseau : le balayage de démarrage parcourait les 141 structures une par une, chacune avec son verrou Redis et sa transaction. Il pesait 3,5 s sur les 5,5 s qui séparent le lancement du process de la mise en service du serveur web.",
       },
@@ -388,6 +477,14 @@ const enderbotGateway: Post = {
       {
         t: "p",
         text: "Enderbot is a game played inside Discord: a TypeScript monorepo where an application core, a SvelteKit site and a gateway client talk protobuf over RabbitMQ, with Postgres, Redis and Prometheus behind them. The gateway client is the part holding the connection to Discord, absorbing events and pushing messages. It used to be discord.js, one Node process per shard. It no longer is.",
+      },
+      {
+        t: "image",
+        src: "/projects/enderbot.webp",
+        alt: "The Enderbot website, the SvelteKit part of the monorepo.",
+        caption: "ender.gg, the visible face of the monorepo: core, site and gateway share the same queues.",
+        width: 1280,
+        height: 800,
       },
       {
         t: "tldr",
@@ -573,6 +670,44 @@ const enderbotGateway: Post = {
         ],
       },
       {
+        t: "diagram",
+        caption:
+          "Both clients boot passive and poll the same flag: switching means writing one Redis key.",
+        diagram: {
+          columns: [
+            {
+              title: "Decision",
+              nodes: [
+                { id: "flag", label: "Redis flag", note: "discord-client-active", accent: true },
+                { id: "probe", label: "probe", note: "every 2 s" },
+              ],
+            },
+            {
+              title: "Clients",
+              nodes: [
+                { id: "sgo", label: "discord-go", note: "active, 16 shards", accent: true },
+                { id: "sjs", label: "discord.js", note: "cold standby" },
+              ],
+            },
+            {
+              title: "Activation",
+              nodes: [{ id: "build", label: "disgo client rebuilt", note: "never reopened" }],
+            },
+            {
+              title: "Traffic",
+              nodes: [{ id: "bus", label: "RabbitMQ", note: "client-to-core", accent: true }],
+            },
+          ],
+          edges: [
+            { from: "probe", to: "flag", label: "read" },
+            { from: "flag", to: "sgo", label: "active" },
+            { from: "flag", to: "sjs", label: "passive" },
+            { from: "sgo", to: "build", label: "rebuild" },
+            { from: "build", to: "bus" },
+          ],
+        },
+      },
+      {
         t: "p",
         text: "Since then, a failed activation exits the process and Docker restarts it.",
       },
@@ -643,6 +778,48 @@ const enderbotGateway: Post = {
         text: "Out of forty four scheduled jobs, twenty shared the HH:00:00 second and fought over the Prisma pool once an hour. A stable offset is now derived from the hash of the module:job pair, bounded below one minute so no job leaves the minute it was scheduled for. Along the way, the re-entrancy guard covered three jobs out of forty four through hand-written flags: it now applies to all of them, and the UTC timezone several schedules documented in a comment is finally enforced by code.",
       },
       {
+        t: "diagram",
+        caption:
+          "The offset is derived from the job hash: stable across restarts, with no table to maintain.",
+        diagram: {
+          columns: [
+            {
+              title: "Scheduled",
+              nodes: [
+                { id: "jobs", label: "44 jobs", note: "20 at HH:00:00" },
+                { id: "sweep", label: "boot sweep", note: "141 structures" },
+              ],
+            },
+            {
+              title: "Spread",
+              nodes: [
+                { id: "hash", label: "hash(module:job)", note: "offset < 1 min", accent: true },
+                { id: "guard", label: "re-entrancy guard", note: "44 jobs of 44" },
+              ],
+            },
+            {
+              title: "Resource",
+              nodes: [{ id: "pool", label: "Prisma pool", note: "PostgreSQL", accent: true }],
+            },
+            {
+              title: "Effect",
+              nodes: [
+                { id: "flat", label: "flat load", note: "no hourly spike", accent: true },
+                { id: "boot", label: "startup", note: "3.5 s back of 5.5 s" },
+              ],
+            },
+          ],
+          edges: [
+            { from: "jobs", to: "hash", label: "offset" },
+            { from: "jobs", to: "guard" },
+            { from: "hash", to: "pool" },
+            { from: "guard", to: "pool" },
+            { from: "pool", to: "flat" },
+            { from: "sweep", to: "boot", label: "batched" },
+          ],
+        },
+      },
+      {
         t: "p",
         text: "Another loop that only added up round trips: the boot sweep walked all 141 structures one by one, each with its own Redis lock and transaction. It accounted for 3.5 s of the 5.5 s between process launch and the web server accepting traffic.",
       },
@@ -687,6 +864,17 @@ const enderbotGateway: Post = {
 };
 
 export const posts: Post[] = [enderbotGateway];
+
+// Les titres servent d'ancres et de sommaire : l'identifiant est dérivé du
+// texte pour rester stable sans champ supplémentaire à tenir à jour.
+export function headingId(text: string): string {
+  return text
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+}
 
 export function postBySlug(slug: string): Post | undefined {
   return posts.find((p) => p.meta.slug === slug);

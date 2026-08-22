@@ -51,12 +51,18 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://sauvagel.xyz/privacy</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
     <loc>https://sauvagel.xyz/blog</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://sauvagel.xyz/blog/enderbot-passerelle-go</loc>
+    <lastmod>2026-08-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>

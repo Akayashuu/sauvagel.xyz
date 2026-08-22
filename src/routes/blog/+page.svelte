@@ -16,6 +16,28 @@
 			)
 		}))
 	);
+
+	// Le listing est décrit en Blog + ItemList : les moteurs voient la liste des
+	// articles sans avoir à visiter chaque page.
+	let jsonLd = $derived(
+		JSON.stringify({
+			'@context': 'https://schema.org',
+			'@type': 'Blog',
+			name: $t.blog.title,
+			description: $t.blog.subtitle,
+			url: 'https://sauvagel.xyz/blog',
+			inLanguage: $locale === 'fr' ? 'fr-FR' : 'en-GB',
+			author: { '@type': 'Person', name: 'Léo Sauvage', url: 'https://sauvagel.xyz' },
+			blogPost: entries.map((entry) => ({
+				'@type': 'BlogPosting',
+				headline: entry.content.title,
+				description: entry.content.excerpt,
+				datePublished: entry.meta.date,
+				keywords: entry.meta.tags.join(', '),
+				url: `https://sauvagel.xyz/blog/${entry.meta.slug}`
+			}))
+		})
+	);
 </script>
 
 <svelte:head>
@@ -29,6 +51,13 @@
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:image" content="https://sauvagel.xyz/og/blog.png" />
 	<link rel="canonical" href="https://sauvagel.xyz/blog" />
+	<link
+		rel="alternate"
+		type="application/rss+xml"
+		title="Léo Sauvage"
+		href="https://sauvagel.xyz/rss.xml"
+	/>
+	{@html `<script type="application/ld+json">${jsonLd}${'<'}/script>`}
 </svelte:head>
 
 <section class="relative min-h-screen pt-24 pb-20 sm:pt-32">

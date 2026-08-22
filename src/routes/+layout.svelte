@@ -3,10 +3,12 @@
 	import Navbar from '$lib/components/Navbar.svelte';
 	import { Takt } from '@vskstudio/takt-svelte';
 	import { t, locale } from '$lib/i18n';
+	import { onMount, tick } from 'svelte';
 	let { children } = $props();
 
-	$effect(() => {
-		document.documentElement.lang = $locale;
+	onMount(async () => {
+		await tick();
+		document.documentElement.classList.remove('i18n-pending');
 	});
 </script>
 

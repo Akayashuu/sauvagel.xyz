@@ -53,6 +53,30 @@
       type="font/woff2"
       crossorigin
     />
+    <style>
+      html.i18n-pending body { visibility: hidden; }
+    </style>
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem("locale");
+          var lang =
+            stored === "fr" || stored === "en"
+              ? stored
+              : navigator.language.slice(0, 2) === "fr"
+                ? "fr"
+                : "en";
+          if (lang !== "fr") {
+            var root = document.documentElement;
+            root.lang = lang;
+            root.classList.add("i18n-pending");
+            setTimeout(function () {
+              root.classList.remove("i18n-pending");
+            }, 1500);
+          }
+        } catch (e) {}
+      })();
+    </script>
     %sveltekit.head%
   </head>
   <body

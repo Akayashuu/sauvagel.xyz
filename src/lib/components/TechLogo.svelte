@@ -4,8 +4,9 @@
 	let {
 		name,
 		size = 20,
+		eager = false,
 		class: className = ''
-	}: { name: string; size?: number; class?: string } = $props();
+	}: { name: string; size?: number; eager?: boolean; class?: string } = $props();
 
 	const icon = $derived(techIcons[name]);
 </script>
@@ -16,7 +17,7 @@
 		alt=""
 		width={size}
 		height={size}
-		loading="lazy"
+		loading={eager ? 'eager' : 'lazy'}
 		decoding="async"
 		class="{icon.lighten ? 'lighten' : ''} {className}"
 		style="width: {size}px; height: {size}px"

@@ -72,4 +72,6 @@ export const techIcons: Record<string, TechIcon> = {
 	"Wayland": { src: "/tech/wayland.svg" },
 	"Tauri": { src: "/tech/tauri.svg" },
 	"MCP": { src: "/tech/mcp.svg" },
+	"Bun": { src: "/tech/bun.svg", lighten: true },
+	"Discord": { src: "/tech/discord.svg" },
 };

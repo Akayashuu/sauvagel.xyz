@@ -8,6 +8,7 @@ export const en = {
     education: "Education",
     travels: "Travels",
     contact: "Contact",
+    blog: "Blog",
   },
   hero: {
     greeting: "Hey, I'm",
@@ -318,6 +319,15 @@ export const en = {
     prev: "Previous project",
     ecosystem: "Open-source ecosystem",
     ecosystemNote: "The core is private, but every SDK and integration is open-source.",
+  },
+  blog: {
+    label: "Blog",
+    title: "Field notes",
+    subtitle:
+      "What I learn in production: rewrites, performance profiles, and the decisions that had to be undone.",
+    back: "Back to the blog",
+    minutes: "min read",
+    read: "Read",
   },
   footer: {
     privacy: "Privacy",

@@ -8,6 +8,7 @@ export const fr = {
     education: "Formation",
     travels: "Voyages",
     contact: "Contact",
+    blog: "Blog",
   },
   hero: {
     greeting: "Salut, moi c'est",
@@ -318,6 +319,15 @@ export const fr = {
     prev: "Projet précédent",
     ecosystem: "Écosystème open-source",
     ecosystemNote: "Le cœur est privé, mais tous les SDK et intégrations sont open-source.",
+  },
+  blog: {
+    label: "Blog",
+    title: "Notes de terrain",
+    subtitle:
+      "Ce que j'apprends en production : réécritures, profils de performance et décisions qu'il a fallu défaire.",
+    back: "Retour au blog",
+    minutes: "min de lecture",
+    read: "Lire",
   },
   footer: {
     privacy: "Confidentialité",

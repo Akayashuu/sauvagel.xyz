@@ -89,6 +89,16 @@ for (const p of PROJECTS) {
   render(`og-${p.slug}`, og({ seed: p.slug, eyebrow: "Projet", title: p.title, subtitle: p.sub }), `static/og/${p.slug}.png`);
 }
 
+/* ---- blog ---- */
+render("og-blog", og({ seed: "blog", eyebrow: "Blog", title: "Notes de terrain", subtitle: "Réécritures, profils de perf et décisions défaites" }), "static/og/blog.png");
+
+const POSTS = [
+  { slug: "enderbot-passerelle-go", title: "Passerelle Go", sub: "Enderbot · discord.js -> disgo · profil de perf" },
+];
+for (const p of POSTS) {
+  render(`og-blog-${p.slug}`, og({ seed: p.slug, eyebrow: "Article", title: p.title, subtitle: p.sub }), `static/og/blog-${p.slug}.png`);
+}
+
 /* ---- icônes d'application ---- */
 const appIcon = (size) =>
   `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="${size}" height="${size}"><rect width="32" height="32" rx="7" fill="${GROUND}"/>${mark(2.4)}</svg>`;

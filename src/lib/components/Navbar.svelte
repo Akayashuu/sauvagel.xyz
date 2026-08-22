@@ -14,6 +14,7 @@
 		{ key: 'projects' as const, href: '/#projects' },
 		{ key: 'education' as const, href: '/#education' },
 		{ key: 'travels' as const, href: '/#travels' },
+		{ key: 'blog' as const, href: '/blog' },
 		{ key: 'contact' as const, href: '/#contact' },
 	];
 

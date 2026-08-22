@@ -74,7 +74,7 @@ const enderbotGateway: Post = {
   fr: {
     title: "Enderbot : la passerelle Discord réécrite en Go, puis la chasse aux millisecondes",
     excerpt:
-      "Six semaines et deux mille commits pour sortir discord.js de la production, remplacer le client par un binaire Go qui parle le même protobuf, faire passer le monorepo sous Bun, puis aller chercher dans les métriques les 2,2 Go de RSS que personne n'avait vus.",
+      "Six semaines pour sortir discord.js de la production, remplacer le client par un binaire Go qui parle le même protobuf, faire passer le monorepo sous Bun, puis aller chercher dans les métriques les 2,2 Go de RSS que personne n'avait vus.",
     body: [
       {
         t: "p",
@@ -126,7 +126,7 @@ const enderbotGateway: Post = {
       { t: "h", text: "Qui a fait quoi", icon: "split" },
       {
         t: "p",
-        text: "Le travail décrit ici s'est joué à deux, sur deux terrains distincts, et le log git tranche sans ambiguïté : sur les deux mille commits de la fenêtre, la passerelle est d'un côté, le cœur de l'autre.",
+        text: "Le travail décrit ici s'est joué à deux, sur deux terrains nettement séparés. La passerelle est entièrement l'œuvre d'EnderSpirit : le constat de départ, la proposition de repartir sur du Go, le choix de la bibliothèque, l'écriture du module, la bascule en production et jusqu'à la suppression du client JS. Je n'ai pas écrit une ligne du Go dont parle cet article, je le raconte depuis l'autre bout du monorepo. De mon côté j'ai pris le cœur : son runtime, sa mesure en production et les correctifs qui en sortent.",
       },
       {
         t: "people",
@@ -137,7 +137,7 @@ const enderbotGateway: Post = {
             url: "https://github.com/EnderSpirit",
             avatar: "/people/enderspirit.webp",
             role: "La passerelle et l'outillage",
-            scope: "Réécriture Go du client Discord, du premier paquet à la suppression du client JS. Aussi la cure de dépendances du monorepo, le passage à TypeScript 7 et Vite 8, et le dégraissage des images Docker.",
+            scope: "Le constat, la proposition de réécrire en Go, puis la réécriture entière du client Discord, du premier paquet à la suppression du client JS. Aussi la cure de dépendances du monorepo, le passage à TypeScript 7 et Vite 8, et le dégraissage des images Docker.",
           },
           {
             name: "Léo Sauvage",
@@ -152,7 +152,7 @@ const enderbotGateway: Post = {
       { t: "h", text: "Pourquoi sortir discord.js", icon: "boxes" },
       {
         t: "p",
-        text: "Un process par shard, c'est un cache mémoire par shard, un heap par shard et un watchdog maison pour relancer ceux qui décrochent. À seize shards, la facture mémoire du client rivalisait avec celle du cœur alors qu'il ne fait que du relais. Le calcul métier vit ailleurs, donc la passerelle n'avait aucune raison de rester dans le même langage que lui.",
+        text: "Le raisonnement est celui d'EnderSpirit, qui tenait la passerelle et voyait la facture de près. Un process par shard, c'est un cache mémoire par shard, un heap par shard et un watchdog maison pour relancer ceux qui décrochent. À seize shards, la facture mémoire du client rivalisait avec celle du cœur alors qu'il ne fait que du relais. Le calcul métier vit ailleurs, donc la passerelle n'avait aucune raison de rester dans le même langage que lui.",
       },
       {
         t: "p",
@@ -251,7 +251,7 @@ const enderbotGateway: Post = {
       { t: "h", text: "Bascule, retour arrière, bascule", icon: "rollback" },
       {
         t: "p",
-        text: "Le passage en production n'a pas été un interrupteur. Les deux clients ont tourné en double, pilotés par un drapeau Redis discord-client-active, avec un mode veille froide des deux côtés : le process boote passif, sonde le drapeau toutes les deux secondes, et l'activation recrée entièrement le client disgo. Fermer un client disgo bloque ses seaux REST et la réouverture devient impossible, donc on le reconstruit.",
+        text: "Le passage en production n'a pas été un interrupteur, et il a été piloté du même côté que le reste de la passerelle. Les deux clients ont tourné en double, pilotés par un drapeau Redis discord-client-active, avec un mode veille froide des deux côtés : le process boote passif, sonde le drapeau toutes les deux secondes, et l'activation recrée entièrement le client disgo. Fermer un client disgo bloque ses seaux REST et la réouverture devient impossible, donc on le reconstruit.",
       },
       {
         t: "timeline",
@@ -556,7 +556,7 @@ const enderbotGateway: Post = {
   en: {
     title: "Enderbot: rewriting the Discord gateway in Go, then hunting milliseconds",
     excerpt:
-      "Six weeks and two thousand commits to get discord.js out of production, replace the client with a Go binary speaking the same protobuf, move the monorepo onto Bun, then dig into the metrics for the 2.2 GB of RSS nobody had noticed.",
+      "Six weeks to get discord.js out of production, replace the client with a Go binary speaking the same protobuf, move the monorepo onto Bun, then dig into the metrics for the 2.2 GB of RSS nobody had noticed.",
     body: [
       {
         t: "p",
@@ -608,7 +608,7 @@ const enderbotGateway: Post = {
       { t: "h", text: "Who did what", icon: "split" },
       {
         t: "p",
-        text: "The work described here happened between two people, on two distinct fronts, and the git log settles it without ambiguity: across the two thousand commits in this window, the gateway sits on one side and the core on the other.",
+        text: "The work described here happened between two people, on two clearly separated fronts. The gateway is entirely EnderSpirit's work: the initial diagnosis, the proposal to start over in Go, the choice of library, writing the module, the production cutover, all the way to deleting the JS client. I did not write a line of the Go this article talks about, I am telling it from the other end of the monorepo. My side was the core: its runtime, its measurement in production and the fixes that came out of it.",
       },
       {
         t: "people",
@@ -619,7 +619,7 @@ const enderbotGateway: Post = {
             url: "https://github.com/EnderSpirit",
             avatar: "/people/enderspirit.webp",
             role: "The gateway and the tooling",
-            scope: "The Go rewrite of the Discord client, from the first package to deleting the JS one. Also the monorepo dependency cleanup, the move to TypeScript 7 and Vite 8, and slimming down the Docker images.",
+            scope: "The diagnosis, the proposal to rewrite in Go, then the entire rewrite of the Discord client, from the first package to deleting the JS one. Also the monorepo dependency cleanup, the move to TypeScript 7 and Vite 8, and slimming down the Docker images.",
           },
           {
             name: "Léo Sauvage",
@@ -634,7 +634,7 @@ const enderbotGateway: Post = {
       { t: "h", text: "Why discord.js had to go", icon: "boxes" },
       {
         t: "p",
-        text: "One process per shard means one memory cache per shard, one heap per shard, and a homegrown watchdog to respawn the ones that drop. At sixteen shards, the client's memory bill rivalled the core's while doing nothing but relaying. The game logic lives elsewhere, so the gateway had no reason to stay in the same language as it.",
+        text: "The reasoning is EnderSpirit's, coming from the person holding the gateway and watching the bill up close. One process per shard means one memory cache per shard, one heap per shard, and a homegrown watchdog to respawn the ones that drop. At sixteen shards, the client's memory bill rivalled the core's while doing nothing but relaying. The game logic lives elsewhere, so the gateway had no reason to stay in the same language as it.",
       },
       {
         t: "p",
@@ -733,7 +733,7 @@ const enderbotGateway: Post = {
       { t: "h", text: "Switch, roll back, switch", icon: "rollback" },
       {
         t: "p",
-        text: "Going to production was not a single switch. Both clients ran side by side, driven by a discord-client-active Redis flag, with cold standby on both sides: the process boots passive, polls the flag every two seconds, and activation recreates the disgo client entirely. Closing a disgo client deadlocks its REST buckets and reopening becomes impossible, so it gets rebuilt instead.",
+        text: "Going to production was not a single switch, and it was driven from the same side as the rest of the gateway. Both clients ran side by side, driven by a discord-client-active Redis flag, with cold standby on both sides: the process boots passive, polls the flag every two seconds, and activation recreates the disgo client entirely. Closing a disgo client deadlocks its REST buckets and reopening becomes impossible, so it gets rebuilt instead.",
       },
       {
         t: "timeline",

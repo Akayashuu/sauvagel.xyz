@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { ArrowLeftRight } from 'lucide-svelte';
+	import { t } from '$lib/i18n';
 	import type { Diagram } from '$lib/data/profile';
 
 	let { diagram, caption }: { diagram: Diagram; caption: string } = $props();
@@ -73,7 +75,9 @@
 </script>
 
 <figure class="m-0">
-	<div class="surface overflow-x-auto p-5 sm:p-7">
+	<!-- Le schéma garde une largeur minimale pour rester lisible : sur téléphone
+	     il se parcourt donc à l'horizontale, ce qui doit se voir. -->
+	<div class="surface relative overflow-x-auto p-5 sm:p-7">
 		<svg
 			viewBox="0 0 {layout.width} {layout.height}"
 			class="h-auto w-full min-w-160"
@@ -158,5 +162,9 @@
 			{/each}
 		</svg>
 	</div>
+	<p class="mt-2 flex items-center gap-1.5 font-mono text-[11px] text-zinc-600 sm:hidden">
+		<ArrowLeftRight size={12} />
+		{$t.ui.scrollHint}
+	</p>
 	<figcaption class="mt-3 font-mono text-xs text-zinc-600">{caption}</figcaption>
 </figure>

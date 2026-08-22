@@ -320,6 +320,9 @@ export const en = {
     ecosystem: "Open-source ecosystem",
     ecosystemNote: "The core is private, but every SDK and integration is open-source.",
   },
+  ui: {
+    scrollHint: "Swipe the diagram to explore it",
+  },
   blog: {
     label: "Blog",
     title: "Field notes",

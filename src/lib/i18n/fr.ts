@@ -320,6 +320,9 @@ export const fr = {
     ecosystem: "Écosystème open-source",
     ecosystemNote: "Le cœur est privé, mais tous les SDK et intégrations sont open-source.",
   },
+  ui: {
+    scrollHint: "Faites glisser le schéma pour le parcourir",
+  },
   blog: {
     label: "Blog",
     title: "Notes de terrain",

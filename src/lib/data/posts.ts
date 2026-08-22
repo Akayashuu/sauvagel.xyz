@@ -3,6 +3,8 @@
 // peuvent pas dériver visuellement d'un article à l'autre, et les deux langues
 // partagent exactement la même structure.
 
+import type { Diagram } from "./profile";
+
 export type Block =
   | { t: "p"; text: string }
   | { t: "h"; text: string }
@@ -11,8 +13,23 @@ export type Block =
   | { t: "table"; head: string[]; rows: string[][] }
   | {
       t: "people";
-      items: { name: string; handle: string; url: string; role: string; scope: string }[];
+      items: {
+        name: string;
+        handle: string;
+        url: string;
+        avatar: string;
+        role: string;
+        scope: string;
+      }[];
     }
+  | { t: "diagram"; caption: string; diagram: Diagram }
+  | {
+      t: "timeline";
+      items: { date: string; title: string; text: string; tone?: "revert" | "ship" }[];
+    }
+  // Une barre dit une magnitude que trois chiffres alignés ne disent pas, et
+  // elle tient dans la largeur d'un téléphone là où un tableau déborde.
+  | { t: "bars"; items: { label: string; value: number; display: string; note?: string }[] }
   | { t: "note"; text: string }
   | { t: "code"; lang: string; text: string };
 
@@ -66,6 +83,7 @@ const enderbotGateway: Post = {
             name: "EnderSpirit",
             handle: "@EnderSpirit",
             url: "https://github.com/EnderSpirit",
+            avatar: "/people/enderspirit.webp",
             role: "La passerelle et l'outillage",
             scope: "Réécriture Go du client Discord, du premier paquet à la suppression du client JS. Aussi la cure de dépendances du monorepo, le passage à TypeScript 7 et Vite 8, et le dégraissage des images Docker.",
           },
@@ -73,6 +91,7 @@ const enderbotGateway: Post = {
             name: "Léo Sauvage",
             handle: "@Akayashuu",
             url: "https://github.com/Akayashuu",
+            avatar: "/people/akayashuu.webp",
             role: "Le cœur et sa mesure",
             scope: "Migration du monorepo vers Bun, profil de performance en production et les correctifs qui en sortent : N+1, caches bornés, encodage d'images, crons, index Postgres, observabilité Redis.",
           },
@@ -95,6 +114,46 @@ const enderbotGateway: Post = {
       {
         t: "p",
         text: "Concrètement, les types Go sont générés depuis les mêmes .proto que le TypeScript. Les numéros de champ sont le contrat, jamais édités à la main.",
+      },
+      {
+        t: "diagram",
+        caption:
+          "Le client est la seule pièce remplacée : tout ce qui traverse le réseau reste identique.",
+        diagram: {
+          columns: [
+            { title: "Discord", nodes: [{ id: "gw", label: "Gateway", note: "16 shards" }] },
+            {
+              title: "Client passerelle",
+              nodes: [
+                { id: "go", label: "discord-go", note: "1 process, disgo", accent: true },
+                { id: "js", label: "discord.js", note: "1 process par shard, retiré" },
+              ],
+            },
+            {
+              title: "Contrat de fil",
+              nodes: [
+                { id: "mq", label: "RabbitMQ", note: "protobuf", accent: true },
+                { id: "redis", label: "Redis", note: "status-discord-*" },
+                { id: "prom", label: "Prometheus", note: "enderbot_discord_*" },
+              ],
+            },
+            {
+              title: "Applicatif",
+              nodes: [
+                { id: "core", label: "core", note: "TypeScript, Bun", accent: true },
+                { id: "pg", label: "PostgreSQL", note: "Prisma" },
+              ],
+            },
+          ],
+          edges: [
+            { from: "gw", to: "go", label: "évènements" },
+            { from: "go", to: "mq", label: "client-to-core" },
+            { from: "go", to: "redis", label: "état" },
+            { from: "go", to: "prom", label: "métriques" },
+            { from: "mq", to: "core", label: "core-to-client" },
+            { from: "core", to: "pg" },
+          ],
+        },
       },
       {
         t: "code",
@@ -131,8 +190,36 @@ const enderbotGateway: Post = {
         text: "Le passage en production n'a pas été un interrupteur. Les deux clients ont tourné en double, pilotés par un drapeau Redis discord-client-active, avec un mode veille froide des deux côtés : le process boote passif, sonde le drapeau toutes les deux secondes, et l'activation recrée entièrement le client disgo. Fermer un client disgo bloque ses seaux REST et la réouverture devient impossible, donc on le reconstruit.",
       },
       {
+        t: "timeline",
+        items: [
+          {
+            date: "9 août",
+            title: "Le client Go passe par défaut",
+            text: "discord-go entre dans le compose de base, le client JS recule derrière un profil Docker prévu pour le retour arrière.",
+            tone: "ship",
+          },
+          {
+            date: "9 août",
+            title: "Retour arrière le jour même",
+            text: "Le client JS reprend la main. Le chemin de repli n'était pas décoratif, il a servi en quelques heures.",
+            tone: "revert",
+          },
+          {
+            date: "10 au 13 août",
+            title: "Veille froide et parité",
+            text: "Drapeau Redis discord-client-active des deux côtés, sonde toutes les deux secondes, et la longue série de correctifs de comportement.",
+          },
+          {
+            date: "16 août",
+            title: "Le client JS est supprimé",
+            text: "Avec lui partent le système de bascule, le service de compose, l'onglet d'administration et ses cinq locales.",
+            tone: "ship",
+          },
+        ],
+      },
+      {
         t: "p",
-        text: "Le 9 août, le client Go passe par défaut. Le jour même, retour arrière : le client JS reprend la main et le Go repart derrière un profil Docker. Le 16 août, le module discord/ est supprimé, avec tout le système de bascule, le service de compose, l'onglet d'administration et les cinq locales qui allaient avec. Un échec d'activation fait maintenant sortir le process, et Docker le relance.",
+        text: "Depuis, un échec d'activation fait sortir le process, et Docker le relance.",
       },
       { t: "h", text: "Ce que disaient réellement les métriques" },
       {
@@ -152,16 +239,15 @@ const enderbotGateway: Post = {
         text: "L'hypothèse de départ était mauvaise. Je cherchais des lectures disque synchrones et du crypto bloquant ; il n'y en avait quasiment pas, et passer à Bun.file ou Bun.hash n'aurait rien gagné de mesurable. Le temps était ailleurs.",
       },
       {
-        t: "table",
-        head: ["Point chaud", "Mesure en production"],
-        rows: [
-          ["commande summon", "2648 ms de moyenne sur 58 appels"],
-          ["read guild (Postgres)", "96 ms × 7916, soit 762 s cumulées"],
-          ["guildMemberInformationUpdate", "40 295 s cumulées, artefact de mesure"],
-          ["buttonClick", "1587 ms de moyenne"],
-          ["structure:vote-period-check", "685 ms toutes les minutes"],
+        t: "bars",
+        items: [
+          { label: "guildMemberInformationUpdate", value: 40295, display: "40 295 s", note: "un sommeil de 30 s attendu par le handler" },
+          { label: "read guild", value: 762, display: "762 s", note: "96 ms × 7916 appels" },
+          { label: "commande summon", value: 154, display: "153,6 s", note: "2648 ms de moyenne sur 58 appels" },
+          { label: "structure:vote-period-check", value: 41, display: "685 ms/min", note: "un verrou et une transaction par guilde" },
         ],
       },
+
       { t: "h", text: "Ce qui a été corrigé" },
       {
         t: "p",
@@ -201,14 +287,14 @@ const enderbotGateway: Post = {
         text: "Pendant que je faisais passer le monorepo sous Bun, EnderSpirit s'attaquait aux images Docker : base slim, installations filtrées par service, séparation build et runtime, polices Noto dégraissées. Puis les deux couches qui coûtaient le plus cher. Un chown -R des node_modules vivait dans son propre RUN, ce qui fait réécrire chaque fichier dans une nouvelle couche : le node_modules existait deux fois dans l'image. Bun installe par ailleurs les deux variantes libc des binaires natifs alors que l'image est glibc.",
       },
       {
-        t: "table",
-        head: ["Image", "Avant", "Après"],
-        rows: [
-          ["enderbot-core", "2,59 Go", "1,44 Go"],
-          ["enderbot-web-dev", "1,6 Go", "899 Mo"],
-          ["enderbot-web-preview", "898 Mo", "851 Mo"],
+        t: "bars",
+        items: [
+          { label: "enderbot-core", value: 1440, display: "1,44 Go", note: "2,59 Go avant" },
+          { label: "enderbot-web-dev", value: 899, display: "899 Mo", note: "1,6 Go avant" },
+          { label: "enderbot-web-preview", value: 851, display: "851 Mo", note: "898 Mo avant" },
         ],
       },
+
       { t: "h", text: "Ce qui reste" },
       {
         t: "p",
@@ -241,6 +327,7 @@ const enderbotGateway: Post = {
             name: "EnderSpirit",
             handle: "@EnderSpirit",
             url: "https://github.com/EnderSpirit",
+            avatar: "/people/enderspirit.webp",
             role: "The gateway and the tooling",
             scope: "The Go rewrite of the Discord client, from the first package to deleting the JS one. Also the monorepo dependency cleanup, the move to TypeScript 7 and Vite 8, and slimming down the Docker images.",
           },
@@ -248,6 +335,7 @@ const enderbotGateway: Post = {
             name: "Léo Sauvage",
             handle: "@Akayashuu",
             url: "https://github.com/Akayashuu",
+            avatar: "/people/akayashuu.webp",
             role: "The core and its measurement",
             scope: "Migrating the monorepo to Bun, profiling performance in production and the fixes that came out of it: N+1 queries, bounded caches, image encoding, crons, Postgres indexes, Redis observability.",
           },
@@ -270,6 +358,46 @@ const enderbotGateway: Post = {
       {
         t: "p",
         text: "In practice the Go types are generated from the same .proto files as the TypeScript ones. Field numbers are the contract, never hand-edited.",
+      },
+      {
+        t: "diagram",
+        caption:
+          "The client is the only part swapped: everything crossing the network stays identical.",
+        diagram: {
+          columns: [
+            { title: "Discord", nodes: [{ id: "gw", label: "Gateway", note: "16 shards" }] },
+            {
+              title: "Gateway client",
+              nodes: [
+                { id: "go", label: "discord-go", note: "1 process, disgo", accent: true },
+                { id: "js", label: "discord.js", note: "1 process per shard, retired" },
+              ],
+            },
+            {
+              title: "Wire contract",
+              nodes: [
+                { id: "mq", label: "RabbitMQ", note: "protobuf", accent: true },
+                { id: "redis", label: "Redis", note: "status-discord-*" },
+                { id: "prom", label: "Prometheus", note: "enderbot_discord_*" },
+              ],
+            },
+            {
+              title: "Application",
+              nodes: [
+                { id: "core", label: "core", note: "TypeScript, Bun", accent: true },
+                { id: "pg", label: "PostgreSQL", note: "Prisma" },
+              ],
+            },
+          ],
+          edges: [
+            { from: "gw", to: "go", label: "events" },
+            { from: "go", to: "mq", label: "client-to-core" },
+            { from: "go", to: "redis", label: "state" },
+            { from: "go", to: "prom", label: "metrics" },
+            { from: "mq", to: "core", label: "core-to-client" },
+            { from: "core", to: "pg" },
+          ],
+        },
       },
       {
         t: "code",
@@ -306,8 +434,36 @@ const enderbotGateway: Post = {
         text: "Going to production was not a single switch. Both clients ran side by side, driven by a discord-client-active Redis flag, with cold standby on both sides: the process boots passive, polls the flag every two seconds, and activation recreates the disgo client entirely. Closing a disgo client deadlocks its REST buckets and reopening becomes impossible, so it gets rebuilt instead.",
       },
       {
+        t: "timeline",
+        items: [
+          {
+            date: "9 August",
+            title: "The Go client becomes the default",
+            text: "discord-go enters the base compose file, the JS client steps back behind a Docker profile kept for rollback.",
+            tone: "ship",
+          },
+          {
+            date: "9 August",
+            title: "Rolled back the same day",
+            text: "The JS client takes over again. The fallback path was not decorative, it was used within hours.",
+            tone: "revert",
+          },
+          {
+            date: "10 to 13 August",
+            title: "Cold standby and parity",
+            text: "A discord-client-active Redis flag on both sides, polled every two seconds, and the long run of behaviour fixes.",
+          },
+          {
+            date: "16 August",
+            title: "The JS client is deleted",
+            text: "It takes the switching system, the compose service, the admin tab and its five locales with it.",
+            tone: "ship",
+          },
+        ],
+      },
+      {
         t: "p",
-        text: "On 9 August the Go client became the default. It was rolled back the same day: the JS client took over and the Go one moved behind a Docker profile. On 16 August the discord/ module was deleted, along with the whole switching system, the compose service, the admin tab and the five locales that came with it. A failed activation now exits the process, and Docker restarts it.",
+        text: "Since then, a failed activation exits the process and Docker restarts it.",
       },
       { t: "h", text: "What the metrics actually said" },
       {
@@ -327,16 +483,15 @@ const enderbotGateway: Post = {
         text: "My starting hypothesis was wrong. I was looking for synchronous disk reads and blocking crypto; there was almost none, and moving to Bun.file or Bun.hash would have gained nothing measurable. The time was somewhere else.",
       },
       {
-        t: "table",
-        head: ["Hot spot", "Production measurement"],
-        rows: [
-          ["summon command", "2648 ms average over 58 calls"],
-          ["read guild (Postgres)", "96 ms × 7916, i.e. 762 s cumulative"],
-          ["guildMemberInformationUpdate", "40,295 s cumulative, a measurement artefact"],
-          ["buttonClick", "1587 ms average"],
-          ["structure:vote-period-check", "685 ms every minute"],
+        t: "bars",
+        items: [
+          { label: "guildMemberInformationUpdate", value: 40295, display: "40,295 s", note: "a 30 s sleep the handler was awaiting" },
+          { label: "read guild", value: 762, display: "762 s", note: "96 ms × 7916 calls" },
+          { label: "summon command", value: 154, display: "153.6 s", note: "2648 ms average over 58 calls" },
+          { label: "structure:vote-period-check", value: 41, display: "685 ms/min", note: "one lock and one transaction per guild" },
         ],
       },
+
       { t: "h", text: "What got fixed" },
       {
         t: "p",
@@ -376,14 +531,14 @@ const enderbotGateway: Post = {
         text: "While I was moving the monorepo onto Bun, EnderSpirit went after the Docker images: slim base, per-service filtered installs, split build and runtime stages, trimmed Noto fonts. Then the two layers that cost the most. A chown -R on node_modules lived in its own RUN, which makes Docker rewrite every file into a new layer: node_modules existed twice in the image. Bun also installs both libc variants of native binaries while the image is glibc.",
       },
       {
-        t: "table",
-        head: ["Image", "Before", "After"],
-        rows: [
-          ["enderbot-core", "2.59 GB", "1.44 GB"],
-          ["enderbot-web-dev", "1.6 GB", "899 MB"],
-          ["enderbot-web-preview", "898 MB", "851 MB"],
+        t: "bars",
+        items: [
+          { label: "enderbot-core", value: 1440, display: "1.44 GB", note: "2.59 GB before" },
+          { label: "enderbot-web-dev", value: 899, display: "899 MB", note: "1.6 GB before" },
+          { label: "enderbot-web-preview", value: 851, display: "851 MB", note: "898 MB before" },
         ],
       },
+
       { t: "h", text: "What is left" },
       {
         t: "p",

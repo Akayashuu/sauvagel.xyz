@@ -73,7 +73,7 @@ const enderbotGateway: Post = {
   meta: {
     slug: "enderbot-passerelle-go",
     date: "2026-08-22",
-    readingMinutes: 14,
+    readingMinutes: 16,
     tags: ["Go", "TypeScript", "Bun", "Discord", "Performance", "PostgreSQL"],
     project: "enderbot",
   },
@@ -190,7 +190,7 @@ const enderbotGateway: Post = {
           "Le client est la seule pièce remplacée : tout ce qui traverse le réseau reste identique.",
         diagram: {
           columns: [
-            { title: "Discord", nodes: [{ id: "gw", label: "Gateway", note: "16 shards" }] },
+            { title: "Discord", nodes: [{ id: "gw", label: "Gateway", note: "15 shards" }] },
             {
               title: "Client passerelle",
               nodes: [
@@ -303,7 +303,7 @@ const enderbotGateway: Post = {
             {
               title: "Clients",
               nodes: [
-                { id: "sgo", label: "discord-go", note: "actif, 16 shards", accent: true },
+                { id: "sgo", label: "discord-go", note: "actif, 15 shards", accent: true },
                 { id: "sjs", label: "discord.js", note: "veille froide" },
               ],
             },
@@ -511,6 +511,43 @@ const enderbotGateway: Post = {
           { icon: "down", value: "3678", label: "défauts de lint résorbés" },
         ],
       },
+      { t: "h", text: "Ce que la production a mesuré", icon: "gauge" },
+      {
+        t: "p",
+        text: "Les chiffres précédents viennent d'un profil ponctuel. Le Prometheus de production garde quinze jours, ce qui couvre exactement les trois bascules : la passerelle Go qui prend les quinze shards le 13 août, la suppression du client JS le 16, et le passage à Bun dans la nuit du 22. La charge n'a pas bougé sur la fenêtre, environ 15 490 serveurs Discord, donc l'avant et l'après se comparent honnêtement.",
+      },
+      {
+        t: "compare",
+        items: [
+          { icon: "boxes", label: "processus de passerelle", before: "16", after: "1", delta: "un seul" },
+          { icon: "memory", label: "mémoire résidente passerelle", before: "4,3 à 9,0 Go", after: "1,0 à 1,6 Go", delta: "4x moins" },
+          { icon: "server", label: "mémoire de la machine", before: "10 à 16 Go", after: "7,5 à 10,7 Go", delta: "plafond tenu" },
+          { icon: "network", label: "latence WebSocket Discord", before: "106 ms", after: "106 ms", delta: "inchangée" },
+        ],
+      },
+      {
+        t: "note",
+        icon: "cpu",
+        text: "Le gain n'est pas gratuit. Le CPU de la machine est monté d'environ 8 % à environ 13 % : un processus Go qui tient tout le cache travaille en continu là où seize processus Node se partageaient un état découpé. La ressource contrainte était la mémoire, pas le CPU, donc l'échange valait le coup.",
+      },
+      {
+        t: "p",
+        text: "Le passage à Bun se lit tout aussi nettement sur le cœur, redémarré en Bun 1.4.0 le 22 août au matin :",
+      },
+      {
+        t: "compare",
+        items: [
+          { icon: "memory", label: "RSS du cœur", before: "4,5 à 5,7 Go", after: "2,4 à 3,8 Go", delta: "40 % de moins" },
+          { icon: "timer", label: "lag event loop p99", before: "11 à 16 ms", after: "6 à 9 ms", delta: "divisé par deux" },
+          { icon: "gauge", label: "p95 des commandes", before: "1,94 s", after: "1,44 s", delta: "500 ms" },
+          { icon: "cpu", label: "CPU du cœur", before: "0,33 cœur", after: "0,35 cœur", delta: "stable" },
+        ],
+      },
+      {
+        t: "p",
+        text: "Le p95 des commandes reste haut, et c'est attendu : il inclut les allers et retours vers Discord ainsi que les attentes volontaires de certains handlers. Ce qui compte, c'est que la même charge passe maintenant avec deux gigaoctets de moins et un event loop deux fois plus calme.",
+      },
+
       { t: "h", text: "Ce qui reste", icon: "activity" },
       {
         t: "p",
@@ -635,7 +672,7 @@ const enderbotGateway: Post = {
           "The client is the only part swapped: everything crossing the network stays identical.",
         diagram: {
           columns: [
-            { title: "Discord", nodes: [{ id: "gw", label: "Gateway", note: "16 shards" }] },
+            { title: "Discord", nodes: [{ id: "gw", label: "Gateway", note: "15 shards" }] },
             {
               title: "Gateway client",
               nodes: [
@@ -748,7 +785,7 @@ const enderbotGateway: Post = {
             {
               title: "Clients",
               nodes: [
-                { id: "sgo", label: "discord-go", note: "active, 16 shards", accent: true },
+                { id: "sgo", label: "discord-go", note: "active, 15 shards", accent: true },
                 { id: "sjs", label: "discord.js", note: "cold standby" },
               ],
             },
@@ -956,6 +993,43 @@ const enderbotGateway: Post = {
           { icon: "down", value: "3678", label: "lint defects cleared" },
         ],
       },
+      { t: "h", text: "What production actually measured", icon: "gauge" },
+      {
+        t: "p",
+        text: "The numbers above come from a one off profile. Production Prometheus keeps fifteen days, which covers all three switches: the Go gateway taking the fifteen shards on 13 August, the JS client being deleted on the 16th, and the Bun move overnight on the 22nd. Load stayed flat across that window, roughly 15,490 Discord guilds, so before and after compare honestly.",
+      },
+      {
+        t: "compare",
+        items: [
+          { icon: "boxes", label: "gateway processes", before: "16", after: "1", delta: "just one" },
+          { icon: "memory", label: "gateway resident memory", before: "4.3 to 9.0 GB", after: "1.0 to 1.6 GB", delta: "4x less" },
+          { icon: "server", label: "host memory in use", before: "10 to 16 GB", after: "7.5 to 10.7 GB", delta: "ceiling held" },
+          { icon: "network", label: "Discord WebSocket latency", before: "106 ms", after: "106 ms", delta: "unchanged" },
+        ],
+      },
+      {
+        t: "note",
+        icon: "cpu",
+        text: "The win is not free. Host CPU went from roughly 8% to roughly 13%: one Go process holding the whole cache works continuously where sixteen Node processes each held a slice. Memory was the constrained resource, not CPU, so the trade was worth taking.",
+      },
+      {
+        t: "p",
+        text: "The Bun move reads just as clearly on the core, restarted on Bun 1.4.0 on the morning of 22 August:",
+      },
+      {
+        t: "compare",
+        items: [
+          { icon: "memory", label: "core RSS", before: "4.5 to 5.7 GB", after: "2.4 to 3.8 GB", delta: "40% less" },
+          { icon: "timer", label: "event loop lag p99", before: "11 to 16 ms", after: "6 to 9 ms", delta: "halved" },
+          { icon: "gauge", label: "command p95", before: "1.94 s", after: "1.44 s", delta: "500 ms" },
+          { icon: "cpu", label: "core CPU", before: "0.33 core", after: "0.35 core", delta: "flat" },
+        ],
+      },
+      {
+        t: "p",
+        text: "Command p95 is still high, and that is expected: it includes round trips to Discord and the deliberate waits some handlers perform. What matters is that the same load now runs on two gigabytes less memory with an event loop twice as calm.",
+      },
+
       { t: "h", text: "What is left", icon: "activity" },
       {
         t: "p",

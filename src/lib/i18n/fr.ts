@@ -18,11 +18,11 @@ export const fr = {
     label: "À propos",
     title: "En quelques mots",
     description:
-      "Je fais du web, du mobile, et parfois des trucs juste pour le fun. J'écris surtout du <strong>TypeScript</strong> et je câble des <strong>systèmes distribués</strong> — mais je suis aussi à l'aise sur un frontend ou pour déployer des containers. Je tiens à la qualité du code (Biome, ESLint, typage strict) et j'aime quand c'est bien structuré.",
+      "Je fais du web, du mobile, et parfois des trucs juste pour le fun. J'écris surtout du <strong>TypeScript</strong> et je câble des <strong>systèmes distribués</strong>, et je suis aussi à l'aise sur un frontend ou pour déployer des containers. Je tiens à la qualité du code (Biome, ESLint, typage strict) et j'aime quand c'est bien structuré.",
     highlights: [
       {
         title: "Backend d'abord",
-        desc: "Node.js, message queues, microservices — j'aime la partie invisible",
+        desc: "Node.js, message queues, microservices. J'aime la partie invisible",
       },
       {
         title: "Frontend aussi",
@@ -34,7 +34,7 @@ export const fr = {
       },
       {
         title: "Side projects",
-        desc: "Bots Discord, un MMORPG textuel, de l'analytics web — j'aime shipper",
+        desc: "Bots Discord, un MMORPG textuel, de l'analytics web. J'aime shipper",
       },
     ],
   },
@@ -81,6 +81,9 @@ export const fr = {
   skills: {
     label: "Stack",
     title: "Ce que j'utilise",
+    usedSingular: "projet publié",
+    usedPlural: "projets publiés",
+    note: "Le compte se calcule sur les projets ci-dessous, pas sur une note que je m'attribue.",
   },
   projects: {
     label: "Projets",
@@ -94,7 +97,7 @@ export const fr = {
         details: {
           features: [
             "Gameplay MMORPG textuel directement dans Discord",
-            "Architecture microservices — chaque service communique via RabbitMQ",
+            "Architecture microservices : chaque service communique via RabbitMQ",
             "Sharding du bot pour la scalabilité multi-serveurs",
             "Drizzle ORM avec PostgreSQL pour l'état persistant du jeu",
             "Redis pour le cache et les files d'attente temps réel",
@@ -105,7 +108,7 @@ export const fr = {
       },
       {
         name: "Enderbot",
-        tagline: "Bot RPG Discord — 6000+ cartes",
+        tagline: "Bot RPG Discord, 6000+ cartes",
         description:
           "Un bot RPG Discord avancé combinant exploration, collection de cartes (6000+ cartes de jeux vidéo, anime et manga), économie, craft et guerres multijoueur. Architecture monorepo pnpm en TypeScript avec Prisma sur PostgreSQL, et un dashboard web SvelteKit + Tailwind. Free-to-play, actif depuis 2017.",
         details: {
@@ -113,7 +116,7 @@ export const fr = {
             "Plus de 6 000 cartes collectibles issues de jeux vidéo, anime et manga",
             "Mécaniques RPG : leveling de héros, craft d'objets, système de construction",
             "Exploration à travers plusieurs lieux et biomes",
-            "Système d'organisations — formez une équipe et affrontez d'autres joueurs dans les classements",
+            "Système d'organisations : formez une équipe et affrontez d'autres joueurs dans les classements",
             "Économie, carte de guerre et classements compétitifs",
             "Dashboard SvelteKit + Tailwind avec logs, classement, bibliothèque et stats serveur",
             "API publique sur ender.gg, déployée en Docker",
@@ -125,10 +128,10 @@ export const fr = {
         name: "Ganyu.fr",
         tagline: "Bot communautaire Discord",
         description:
-          "Un bot Discord pour la gestion de communauté, écrit en TypeScript avec Discord.js, Prisma et PostgreSQL — leveling (100+ niveaux avec rôles automatiques), économie avec récompenses quotidiennes/horaires et gacha avec système de pitié, mini-jeux, modération et messages de bienvenue personnalisés. Dashboard Svelte et API publique, le tout déployé en Docker.",
+          "Un bot Discord pour la gestion de communauté, écrit en TypeScript avec Discord.js, Prisma et PostgreSQL : leveling (100+ niveaux avec rôles automatiques), économie avec récompenses quotidiennes/horaires et gacha avec système de pitié, mini-jeux, modération et messages de bienvenue personnalisés. Dashboard Svelte et API publique, le tout déployé en Docker.",
         details: {
           features: [
-            "Système de leveling avec 100+ niveaux — XP via texte et vocal",
+            "Système de leveling avec 100+ niveaux, XP via texte et vocal",
             "Attribution automatique de rôles aux paliers de niveau",
             "Économie avec récompenses quotidiennes/horaires et classements serveur",
             "Système de gacha avec pitié garantie pour des rôles et récompenses exclusifs",
@@ -143,10 +146,10 @@ export const fr = {
         name: "Takt",
         tagline: "Analytics web privacy-friendly, self-hosted",
         description:
-          "Une plateforme d'analytics web privacy-friendly et self-hosted — notre alternative à Plausible. Cœur en Go avec ClickHouse pour les events et Postgres pour le relationnel, pipeline d'ingestion NATS JetStream et dashboard SvelteKit. Sans cookies, sans données personnelles, conforme RGPD sans bannière. Le cœur est privé, mais tout l'écosystème (SDK, intégrations framework, MCP) est open-source.",
+          "Une plateforme d'analytics web privacy-friendly et self-hosted, notre alternative à Plausible. Cœur en Go avec ClickHouse pour les events et Postgres pour le relationnel, pipeline d'ingestion NATS JetStream et dashboard SvelteKit. Sans cookies, sans données personnelles, conforme RGPD sans bannière. Le cœur est privé, mais tout l'écosystème (SDK, intégrations framework, MCP) est open-source.",
         details: {
           features: [
-            "Privacy by design — pas de cookies, pas de PII, RGPD sans bannière de consentement",
+            "Privacy by design : pas de cookies, pas de PII, RGPD sans bannière de consentement",
             "Script de tracking < 6 Ko, enrichissement 100 % côté serveur",
             "Cœur Go : ingestion HTTP → NATS JetStream → worker → ClickHouse",
             "Postgres + Ent pour le relationnel, organisations & RBAC, auth sessions + OAuth/OIDC (Argon2id)",
@@ -164,9 +167,9 @@ export const fr = {
           "Un outil Rust de synchronisation de fichiers pour Roblox Studio : il garde ton code sur le disque et ta session Studio alignés dans les deux sens à la fois, et quand les deux côtés modifient le même script il fait un vrai merge 3-way au lieu d'écraser ton travail. Une alternative repensée à Rojo et Argon, construite autour de leurs modes de défaillance.",
         details: {
           features: [
-            "Synchronisation bidirectionnelle au cœur du design — un écrit qui échoue met une voie en pause, ne tue jamais la session",
+            "Synchronisation bidirectionnelle au cœur du design : un écrit qui échoue met une voie en pause, ne tue jamais la session",
             "Vrai merge 3-way avec base persistée ; les conflits non fusionnables sont marqués façon git et gèlent le chemin jusqu'à résolution",
-            "État de dernière synchro persisté en SQLite — restarts et reconnexions re-diffent sans tout réécraser",
+            "État de dernière synchro persisté en SQLite : restarts et reconnexions re-diffent sans tout réécraser",
             "Convention plutôt que configuration ; naht init --from-rojo migre un projet existant",
             "Propriétés non synchronisables (CSG, terrain, MeshId…) détectées et signalées, jamais perdues silencieusement",
             "Démon localhost + protocole MessagePack, CLI, plugin Studio en Luau",
@@ -232,8 +235,6 @@ export const fr = {
     ecosystemNote: "Le cœur est privé, mais tous les SDK et intégrations sont open-source.",
   },
   footer: {
-    madeWith: "Fait avec",
-    and: "& SvelteKit",
     privacy: "Confidentialité",
   },
   privacy: {
@@ -249,7 +250,7 @@ export const fr = {
     analytics:
       "La fréquentation est mesurée avec <strong>Takt</strong>, une solution d'analytics sans cookie et auto-hébergée. Aucun cookie ni identifiant n'est déposé sur votre appareil, et aucun suivi entre différents sites n'est possible.",
     ip:
-      "Votre adresse IP sert uniquement, de façon transitoire, à déterminer le pays et à calculer un identifiant de visite anonyme (haché avec une clé renouvelée chaque jour), puis elle est immédiatement supprimée — jamais stockée. Le signal « Do Not Track » de votre navigateur est respecté.",
+      "Votre adresse IP sert uniquement, de façon transitoire, à déterminer le pays et à calculer un identifiant de visite anonyme (haché avec une clé renouvelée chaque jour), puis elle est immédiatement supprimée, jamais stockée. Le signal « Do Not Track » de votre navigateur est respecté.",
     rightsTitle: "Contact & droits",
     rights:
       "Pour toute question ou pour exercer vos droits (accès, rectification, effacement), écrivez-moi à",

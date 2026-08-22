@@ -1,0 +1,67 @@
+export interface TechIcon {
+	src: string;
+	/** Logo monochrome sombre : invisible tel quel sur le fond zinc-950. */
+	lighten?: boolean;
+}
+
+/**
+ * Logos auto-hébergés dans /static/tech. Ils venaient de jsdelivr et de
+ * cdn.simpleicons.org, soit deux domaines tiers contactés à chaque visite,
+ * avec l'adresse IP du visiteur au passage.
+ */
+export const techIcons: Record<string, TechIcon> = {
+	"TypeScript": { src: "/tech/typescript.svg" },
+	"JavaScript": { src: "/tech/javascript.svg" },
+	"Discord.js": { src: "/tech/discord-js.svg" },
+	"RabbitMQ": { src: "/tech/rabbitmq.svg" },
+	"Docker": { src: "/tech/docker.svg" },
+	"PostgreSQL": { src: "/tech/postgresql.svg" },
+	"Grafana": { src: "/tech/grafana.svg" },
+	"Prometheus": { src: "/tech/prometheus.svg" },
+	"Prisma": { src: "/tech/prisma.svg", lighten: true },
+	"pnpm": { src: "/tech/pnpm.svg" },
+	"Symfony": { src: "/tech/symfony.svg", lighten: true },
+	"PHP": { src: "/tech/php.svg" },
+	"Electron": { src: "/tech/electron.svg" },
+	"Webpack": { src: "/tech/webpack.svg" },
+	"Svelte": { src: "/tech/svelte.svg" },
+	"Vite": { src: "/tech/vite.svg" },
+	"Node.js": { src: "/tech/node-js.svg" },
+	"Composer": { src: "/tech/composer.svg" },
+	"Python": { src: "/tech/python.svg" },
+	"Java": { src: "/tech/java.svg" },
+	"Rust": { src: "/tech/rust.svg", lighten: true },
+	"Go": { src: "/tech/go.svg" },
+	"SQLite": { src: "/tech/sqlite.svg" },
+	"React": { src: "/tech/react.svg" },
+	"Vue.js": { src: "/tech/vue-js.svg" },
+	"Tailwind": { src: "/tech/tailwind.svg" },
+	"React Native": { src: "/tech/react-native.svg" },
+	"MySQL": { src: "/tech/mysql.svg", lighten: true },
+	"Sequelize": { src: "/tech/sequelize.svg" },
+	"Git": { src: "/tech/git.svg" },
+	"ESLint": { src: "/tech/eslint.svg" },
+	"Linux": { src: "/tech/linux.svg" },
+	"Nginx": { src: "/tech/nginx.svg" },
+	"Redis": { src: "/tech/redis.svg" },
+	"SvelteKit": { src: "/tech/sveltekit.svg" },
+	"Kotlin": { src: "/tech/kotlin.svg" },
+	"WordPress": { src: "/tech/wordpress.svg", lighten: true },
+	"Arch": { src: "/tech/arch.svg" },
+	"C++": { src: "/tech/cplusplus.svg" },
+	"C": { src: "/tech/c.svg" },
+	"Twig": { src: "/tech/twig.svg" },
+	"Drizzle": { src: "/tech/drizzle.svg" },
+	"Biome": { src: "/tech/biome.svg" },
+	"Shopify": { src: "/tech/shopify.svg" },
+	"Liquid": { src: "/tech/liquid.svg" },
+	"PrestaShop": { src: "/tech/prestashop.svg", lighten: true },
+	"i18next": { src: "/tech/i18next.svg" },
+	"Cloudflare": { src: "/tech/cloudflare.svg" },
+	"Vitest": { src: "/tech/vitest.svg" },
+	"Loki": { src: "/tech/loki.svg" },
+	"ClickHouse": { src: "/tech/clickhouse.svg" },
+	"NATS": { src: "/tech/nats.svg" },
+	"OpenTelemetry": { src: "/tech/opentelemetry.svg" },
+	"Luau": { src: "/tech/luau.svg", lighten: true },
+	"Roblox": { src: "/tech/roblox.svg" },};

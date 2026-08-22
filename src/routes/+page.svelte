@@ -7,13 +7,17 @@
 	import Education from '$lib/components/Education.svelte';
 	import Contact from '$lib/components/Contact.svelte';
 	import TravelMap from '$lib/components/TravelMap.svelte';
+	import SectionRail from '$lib/components/SectionRail.svelte';
 </script>
 
 <Hero />
 <About />
+<SectionRail seed="experience" />
 <Experience />
 <Skills />
+<SectionRail seed="projects" />
 <Projects />
 <Education />
 <TravelMap />
+<SectionRail seed="contact" />
 <Contact />

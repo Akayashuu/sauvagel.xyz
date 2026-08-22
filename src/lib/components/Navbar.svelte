@@ -35,13 +35,17 @@
 </script>
 
 <nav
-	class="fixed top-0 left-0 right-0 z-50 transition-all duration-500 {scrolled
-		? 'border-b border-zinc-800/40 bg-zinc-950/85 shadow-lg shadow-primary-500/5'
-		: 'bg-transparent'}"
+	class="fixed top-0 right-0 left-0 z-50 transition-colors duration-300 {scrolled
+		? 'glass'
+		: 'border-b border-transparent bg-transparent'}"
 >
 	<div class="mx-auto max-w-7xl px-6 2xl:max-w-400">
 		<div class="flex h-16 items-center justify-between">
-			<a href="/#hero" class="font-mono text-sm font-bold tracking-wider text-zinc-300 transition-colors hover:text-primary-400">
+			<a
+				href="/#hero"
+				class="flex items-center gap-2.5 font-mono text-sm font-bold tracking-wider text-zinc-300 transition-colors hover:text-accent-400"
+			>
+				<img src="/logo.svg" alt="" width="22" height="22" />
 				sauvagel.xyz
 			</a>
 
@@ -49,7 +53,7 @@
 				{#each linkKeys as link (link.key)}
 					<a
 						href={link.href}
-						class="rounded-lg px-3 py-2 text-sm text-zinc-400 transition-all hover:bg-zinc-800/50 hover:text-primary-400"
+						class="px-3 py-2 text-sm text-zinc-400 transition-colors hover:text-accent-400"
 					>
 						{$t.nav[link.key]}
 					</a>
@@ -57,7 +61,7 @@
 
 				<button
 					onclick={toggleLocale}
-					class="ml-2 flex items-center gap-1.5 rounded-lg border border-zinc-700/50 px-2.5 py-1.5 text-xs font-medium text-zinc-400 transition-all hover:border-primary-500/30 hover:text-primary-400"
+					class="ml-2 flex items-center gap-1.5 border border-zinc-800 px-2.5 py-1.5 font-mono text-xs text-zinc-400 transition-colors hover:border-accent-500/50 hover:text-accent-400" style="border-radius: var(--radius-card)"
 					aria-label="Switch language"
 				>
 					<Globe size={14} />
@@ -68,14 +72,14 @@
 			<div class="flex items-center gap-2 md:hidden">
 				<button
 					onclick={toggleLocale}
-					class="flex items-center gap-1 rounded-lg border border-zinc-700/50 px-2 py-1.5 text-xs font-medium text-zinc-400 transition-all hover:text-primary-400"
+					class="flex items-center gap-1 border border-zinc-800 px-2 py-1.5 font-mono text-xs text-zinc-400 transition-colors hover:text-accent-400" style="border-radius: var(--radius-card)"
 					aria-label="Switch language"
 				>
 					<Globe size={14} />
 					{$locale === 'fr' ? 'EN' : 'FR'}
 				</button>
 				<button
-					class="rounded-lg p-2 text-zinc-400 transition-colors hover:bg-zinc-800/50 hover:text-white"
+					class="p-2 text-zinc-400 transition-colors hover:text-white"
 					onclick={() => (mobileOpen = !mobileOpen)}
 					aria-label="Menu"
 				>
@@ -90,12 +94,12 @@
 	</div>
 
 	{#if mobileOpen}
-		<div class="glass border-t border-zinc-800/50 md:hidden">
+		<div class="glass border-t border-zinc-800 md:hidden">
 			<div class="space-y-1 px-6 py-4">
 				{#each linkKeys as link (link.key)}
 					<a
 						href={link.href}
-						class="block rounded-lg px-3 py-2 text-sm text-zinc-400 transition-colors hover:bg-zinc-800/50 hover:text-primary-400"
+						class="block px-3 py-2 text-sm text-zinc-400 transition-colors hover:text-accent-400"
 						onclick={handleClick}
 					>
 						{$t.nav[link.key]}

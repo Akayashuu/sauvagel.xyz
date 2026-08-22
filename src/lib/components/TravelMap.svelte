@@ -5,6 +5,7 @@
 	import { cities } from '$lib/data/cities';
 	import { Maximize2, Minimize2 } from 'lucide-svelte';
 	import ScrollReveal from './ScrollReveal.svelte';
+	import SectionHeader from './SectionHeader.svelte';
 
 	let mapContainer: HTMLDivElement;
 	let mapWrapper: HTMLDivElement;
@@ -149,32 +150,22 @@
 	});
 </script>
 
-<section id="travels" class="relative py-32 2xl:py-40">
-	<div class="mx-auto max-w-5xl px-6 2xl:max-w-6xl">
-		<ScrollReveal>
-			<div class="mb-16 text-center">
-				<span class="mb-4 inline-block font-mono text-sm tracking-widest text-primary-400 uppercase 2xl:text-base">
-					{$t.travels.label}
-				</span>
-				<h2 class="text-4xl font-bold sm:text-5xl 2xl:text-6xl">
-					<span class="bg-linear-to-r from-zinc-100 to-zinc-400 bg-clip-text text-transparent">
-						{$t.travels.title}
-					</span>
-				</h2>
-			</div>
-		</ScrollReveal>
+<section id="travels" class="relative py-28 2xl:py-36">
+	<div class="mx-auto max-w-7xl px-6 2xl:max-w-400">
+		<SectionHeader label={$t.travels.label} title={$t.travels.title} />
 
 		<ScrollReveal delay={0.15}>
 			<div
 				bind:this={mapWrapper}
-				class="glass overflow-hidden rounded-2xl transition-all duration-300 hover:border-primary-500/30 hover:shadow-lg hover:shadow-primary-500/5"
+				class="surface surface-hover overflow-hidden"
 			>
 				<div class="relative">
 					<div bind:this={mapContainer} class="h-[450px] w-full sm:h-[500px] 2xl:h-[550px]"></div>
 
 					<button
 						onclick={toggleFullscreen}
-						class="absolute top-3 right-3 z-[1000] flex h-9 w-9 items-center justify-center rounded-lg border border-zinc-700/50 bg-zinc-900/80 text-zinc-400 backdrop-blur-sm transition-all hover:border-primary-500/30 hover:text-primary-400"
+						class="absolute top-3 right-3 z-[1000] flex h-9 w-9 items-center justify-center border border-zinc-700 bg-zinc-950/85 text-zinc-400 transition-colors hover:border-accent-500/60 hover:text-accent-400"
+						style="border-radius: var(--radius-card)"
 						aria-label={expanded ? 'Exit fullscreen' : 'Fullscreen'}
 					>
 						{#if expanded}
@@ -185,7 +176,7 @@
 					</button>
 				</div>
 
-				<div class="flex flex-wrap items-center justify-center gap-4 border-t border-zinc-800/50 px-6 py-4">
+				<div class="flex flex-wrap items-center gap-4 border-t border-zinc-800 px-6 py-4">
 					{#each Object.entries(tagIcons) as [tag, icon] (tag)}
 						<div class="flex items-center gap-2 text-sm text-zinc-400">
 							<span>{icon}</span>

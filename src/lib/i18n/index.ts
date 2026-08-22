@@ -7,7 +7,9 @@ export type Locale = "fr" | "en";
 const translations = { fr, en } as const;
 
 function getBrowserLocale(): Locale {
-  if (typeof window === "undefined") return "en";
+  // Le site est écrit en français d'abord, et le document sort du serveur en
+  // lang="fr" : le rendu serveur doit dire la même chose que la balise.
+  if (typeof window === "undefined") return "fr";
   const lang = navigator.language.slice(0, 2);
   return lang === "fr" ? "fr" : "en";
 }

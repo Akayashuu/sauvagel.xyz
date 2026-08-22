@@ -1,6 +1,12 @@
 <script lang="ts">
 	import { t } from '$lib/i18n';
 	import { profile } from '$lib/data/profile';
+
+	// Segments plutôt que {@html} : le HTML posé par le serveur n'est pas repris
+	// à l'hydratation et le paragraphe restait dans la langue du rendu serveur.
+	let analyticsParts = $derived(
+		$t.privacy.analytics.split(/<\/?strong>/).map((text, i) => ({ text, strong: i % 2 === 1 }))
+	);
 </script>
 
 <svelte:head>
@@ -25,8 +31,11 @@
 	<p class="mt-3 text-zinc-400 leading-relaxed">{$t.privacy.cookies}</p>
 
 	<h2 class="mt-10 text-xl font-semibold text-zinc-200">{$t.privacy.analyticsTitle}</h2>
-	<!-- eslint-disable-next-line svelte/no-at-html-tags — contenu i18n statique, pas d'entrée utilisateur -->
-	<p class="mt-3 text-zinc-400 leading-relaxed">{@html $t.privacy.analytics}</p>
+	<p class="mt-3 text-zinc-400 leading-relaxed">
+		{#each analyticsParts as part, i (i)}{#if part.strong}<strong class="font-medium text-zinc-200"
+					>{part.text}</strong
+				>{:else}{part.text}{/if}{/each}
+	</p>
 	<p class="mt-3 text-zinc-400 leading-relaxed">{$t.privacy.ip}</p>
 
 	<h2 class="mt-10 text-xl font-semibold text-zinc-200">{$t.privacy.rightsTitle}</h2>

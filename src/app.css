@@ -48,6 +48,12 @@
   --color-accent-400: oklch(0.78 0.15 190);
   --color-accent-500: oklch(0.68 0.18 190);
   --color-accent-600: oklch(0.58 0.18 190);
+
+  /* Un seul rayon pour toutes les surfaces du site. */
+  --radius-card: 6px;
+
+  /* Espacement : quatre valeurs, pas une de plus. */
+  --spacing-step: 8px;
 }
 
 ::-webkit-scrollbar {
@@ -65,51 +71,39 @@
   background: oklch(0.5 0.22 280 / 0.3);
 }
 
+/* Surface unique : une seule carte pour tout le site, un seul rayon, une seule
+   bordure. Remplace les trois rayons et les deux styles de bordure d'avant. */
+.surface {
+  background: rgb(24 24 27 / 0.55);
+  border: 1px solid var(--color-zinc-800);
+  border-radius: var(--radius-card);
+  transition:
+    border-color 0.25s ease,
+    transform 0.25s ease;
+}
+
+.surface-hover:hover {
+  border-color: color-mix(in oklch, var(--color-primary-400) 45%, transparent);
+  transform: translateY(-3px);
+}
+
+/* Verre dépoli conservé uniquement pour la barre de navigation, qui se superpose
+   au contenu qui défile. Partout ailleurs il coûtait du GPU pour rien. */
 .glass {
-  background: rgba(24, 24, 27, 0.6);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(63, 63, 70, 0.3);
+  background: rgba(9, 9, 11, 0.72);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--color-zinc-800);
 }
 
-.glow-text {
-  text-shadow:
-    0 0 20px oklch(0.68 0.17 280 / 0.5),
-    0 0 40px oklch(0.68 0.17 280 / 0.2);
-}
-
-.gradient-border {
-  position: relative;
-}
-.gradient-border::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  padding: 1px;
-  border-radius: inherit;
-  background: linear-gradient(
-    135deg,
-    oklch(0.68 0.17 280),
-    oklch(0.78 0.15 190),
-    oklch(0.68 0.17 280)
-  );
-  background-size: 200% 200%;
-  animation: gradient-shift 4s ease infinite;
-  -webkit-mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-}
-
-@keyframes gradient-shift {
-  0%,
-  100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
+/* Étiquette de section : mono, capitales, espacée. Seul marqueur hiérarchique
+   au-dessus des titres, à la place des anciens titres en dégradé. */
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-primary-300);
 }
 
 /* CSS-driven entrance: runs on first paint, no JS bundle required.

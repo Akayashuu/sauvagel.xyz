@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ArrowRight, Clock, Hash, Rss, Search, X } from 'lucide-svelte';
+	import { ArrowRight, Check, ChevronDown, Clock, Hash, Rss, Search, X } from 'lucide-svelte';
 	import GenerativeGrid from '$lib/components/GenerativeGrid.svelte';
 	import TechLogo from '$lib/components/TechLogo.svelte';
 	import { posts } from '$lib/data/posts';
@@ -15,15 +15,12 @@
 	const CONTROLS_FROM = 2;
 
 	let query = $state('');
-	let filter = $state<{ kind: 'all' | 'project' | 'tag'; value: string }>({
-		kind: 'all',
-		value: ''
-	});
+	// Les filtres sont des listes plutôt qu'un choix unique : croiser deux sujets
+	// est le geste naturel quand on cherche un article, et le menu déroulant tient
+	// la place d'une seule ligne quel que soit le nombre d'étiquettes.
+	let selectedProjects = $state<string[]>([]);
+	let selectedTags = $state<string[]>([]);
 	let page = $state(1);
-	// Huit sujets tiennent sur deux lignes ; au delà la barre devient un mur, donc
-	// le reste attend un clic.
-	const TAGS_SHOWN = 8;
-	let allTags = $state(false);
 
 	let entries = $derived(
 		posts.map((post) => {
@@ -34,6 +31,9 @@
 				meta: post.meta,
 				content: post[$locale],
 				projectName: projectIndex >= 0 ? $t.projects.items[projectIndex].name : undefined,
+				// La vignette du projet identifie l'article d'un coup d'œil, avant même
+				// d'en lire le titre.
+				projectAvatar: projectIndex >= 0 ? projectMeta[projectIndex].avatar : undefined,
 				// La date est écrite en ISO dans les données : la locale du visiteur
 				// décide seule de la façon dont elle se lit.
 				formatted: new Date(post.meta.date).toLocaleDateString(
@@ -68,8 +68,16 @@
 	let filtered = $derived.by(() => {
 		const needle = query.trim().toLowerCase();
 		return entries.filter((entry) => {
-			if (filter.kind === 'project' && entry.meta.project !== filter.value) return false;
-			if (filter.kind === 'tag' && !entry.meta.tags.includes(filter.value)) return false;
+			// À l'intérieur d'une famille les choix s'additionnent (l'un ou l'autre),
+			// entre familles ils se croisent : cocher deux sujets élargit, cocher un
+			// projet et un sujet resserre.
+			if (
+				selectedProjects.length &&
+				(!entry.meta.project || !selectedProjects.includes(entry.meta.project))
+			)
+				return false;
+			if (selectedTags.length && !entry.meta.tags.some((tag) => selectedTags.includes(tag)))
+				return false;
 			if (!needle) return true;
 			const haystack = [
 				entry.content.title,
@@ -83,7 +91,9 @@
 		});
 	});
 
-	let isBrowsing = $derived(filter.kind === 'all' && query.trim() === '');
+	let isBrowsing = $derived(
+		selectedProjects.length === 0 && selectedTags.length === 0 && query.trim() === ''
+	);
 	// L'article le plus récent est mis en avant tant que le visiteur n'a pas pris
 	// la main : dès qu'il filtre ou cherche, tout revient au même format.
 	let featured = $derived(isBrowsing && page === 1 ? filtered[0] : undefined);
@@ -91,14 +101,24 @@
 	let pageCount = $derived(Math.max(1, Math.ceil(listed.length / PER_PAGE)));
 	let paged = $derived(listed.slice((page - 1) * PER_PAGE, page * PER_PAGE));
 
-	function select(kind: 'all' | 'project' | 'tag', value = '') {
-		filter = { kind, value };
+	function toggle(list: string[], value: string): string[] {
 		page = 1;
+		return list.includes(value) ? list.filter((v) => v !== value) : [...list, value];
 	}
 
 	function reset() {
 		query = '';
-		select('all');
+		selectedProjects = [];
+		selectedTags = [];
+		page = 1;
+	}
+
+	// Les deux menus s'excluent : en ouvrir un referme l'autre, et un clic
+	// ailleurs referme tout.
+	let openMenu = $state<'project' | 'tag' | null>(null);
+
+	function closeOnOutside(event: MouseEvent) {
+		if (!(event.target as HTMLElement)?.closest('[data-menu]')) openMenu = null;
 	}
 
 	function goto(next: number) {
@@ -128,6 +148,8 @@
 		})
 	);
 </script>
+
+<svelte:window onclick={closeOnOutside} onkeydown={(e) => e.key === 'Escape' && (openMenu = null)} />
 
 <svelte:head>
 	<title>{$t.blog.title} | Léo Sauvage</title>
@@ -169,7 +191,7 @@
 		<div class="absolute inset-0 bg-linear-to-b from-zinc-950/60 via-zinc-950/80 to-zinc-950"></div>
 	</div>
 
-	<div class="relative mx-auto max-w-6xl px-6 lg:px-10">
+	<div class="relative mx-auto max-w-7xl px-6 lg:px-10">
 		<h1 class="section-label">{$t.blog.label}</h1>
 		<div class="mt-4 flex flex-wrap items-end justify-between gap-6">
 			<div>
@@ -209,68 +231,113 @@
 					{/if}
 				</label>
 
-				<div class="flex flex-wrap items-center gap-2">
-					<button
-						type="button"
-						onclick={() => select('all')}
-						aria-pressed={filter.kind === 'all'}
-						class="border px-3 py-1.5 font-mono text-xs transition-colors {filter.kind === 'all'
-							? 'border-accent-500/50 bg-accent-500/10 text-accent-300'
-							: 'border-zinc-800 text-zinc-400 hover:border-zinc-700 hover:text-zinc-200'}"
-						style="border-radius: var(--radius-card)"
-					>
-						{$t.blog.all}
-						<span class="ml-1.5 text-zinc-600 tabular-nums">{posts.length}</span>
-					</button>
+				<div class="flex flex-wrap items-center gap-3">
+					{#snippet facetMenu(
+						kind: 'project' | 'tag',
+						label: string,
+						options: { value: string; name: string; count: number }[],
+						selected: string[],
+						onpick: (value: string) => void
+					)}
+						<div class="relative" data-menu>
+							<button
+								type="button"
+								onclick={() => (openMenu = openMenu === kind ? null : kind)}
+								aria-expanded={openMenu === kind}
+								class="flex items-center gap-2 border px-3.5 py-2 font-mono text-xs transition-colors {selected.length
+									? 'border-accent-500/50 bg-accent-500/10 text-accent-300'
+									: 'border-zinc-800 text-zinc-400 hover:border-zinc-700 hover:text-zinc-200'}"
+								style="border-radius: var(--radius-card)"
+							>
+								{label}
+								{#if selected.length}
+									<span class="tabular-nums">{selected.length}</span>
+								{/if}
+								<ChevronDown
+									size={13}
+									class="text-zinc-600 transition-transform {openMenu === kind ? 'rotate-180' : ''}"
+								/>
+							</button>
 
-					{#each projectFacets as facet (facet.slug)}
-						<button
-							type="button"
-							onclick={() => select('project', facet.slug)}
-							aria-pressed={filter.kind === 'project' && filter.value === facet.slug}
-							class="border px-3 py-1.5 font-mono text-xs transition-colors {filter.kind ===
-								'project' && filter.value === facet.slug
-								? 'border-accent-500/50 bg-accent-500/10 text-accent-300'
-								: 'border-zinc-800 text-zinc-400 hover:border-zinc-700 hover:text-zinc-200'}"
-							style="border-radius: var(--radius-card)"
-						>
-							{facet.name}
-							<span class="ml-1.5 text-zinc-600 tabular-nums">{facet.count}</span>
-						</button>
-					{/each}
-
-					<span class="mx-1 hidden h-4 w-px bg-zinc-800 sm:block"></span>
-
-					{#each allTags ? tagFacets : tagFacets.slice(0, TAGS_SHOWN) as facet (facet.tag)}
-						<button
-							type="button"
-							onclick={() => select('tag', facet.tag)}
-							aria-pressed={filter.kind === 'tag' && filter.value === facet.tag}
-							class="flex items-center gap-1.5 border px-3 py-1.5 font-mono text-xs transition-colors {filter.kind ===
-								'tag' && filter.value === facet.tag
-								? 'border-accent-500/50 bg-accent-500/10 text-accent-300'
-								: 'border-zinc-800 text-zinc-400 hover:border-zinc-700 hover:text-zinc-200'}"
-							style="border-radius: var(--radius-card)"
-						>
-							{#if techIcons[facet.tag]}
-								<TechLogo name={facet.tag} size={16} eager />
-							{:else}
-								<Hash size={12} class="text-zinc-600" />
+							{#if openMenu === kind}
+								<div
+									class="surface absolute z-20 mt-2 max-h-80 w-64 overflow-y-auto p-1.5 shadow-2xl shadow-zinc-950"
+								>
+									{#each options as option (option.value)}
+										{@const active = selected.includes(option.value)}
+										<button
+											type="button"
+											onclick={() => onpick(option.value)}
+											aria-pressed={active}
+											class="flex w-full items-center gap-2.5 px-2.5 py-2 text-left font-mono text-xs transition-colors {active
+												? 'text-accent-300'
+												: 'text-zinc-400 hover:text-zinc-100'}"
+											style="border-radius: var(--radius-card)"
+										>
+											<span
+												class="flex size-4 shrink-0 items-center justify-center border {active
+													? 'border-accent-500/60 bg-accent-500/20'
+													: 'border-zinc-700'}"
+												style="border-radius: 4px"
+											>
+												{#if active}<Check size={11} />{/if}
+											</span>
+											{#if kind === 'tag'}
+												{#if techIcons[option.value]}
+													<TechLogo name={option.value} size={15} eager />
+												{:else}
+													<Hash size={13} class="text-zinc-600" />
+												{/if}
+											{/if}
+											<span class="min-w-0 flex-1 truncate">{option.name}</span>
+											<span class="text-zinc-600 tabular-nums">{option.count}</span>
+										</button>
+									{/each}
+								</div>
 							{/if}
-							{facet.tag}
-							<span class="text-zinc-600 tabular-nums">{facet.count}</span>
-						</button>
-					{/each}
+						</div>
+					{/snippet}
 
-					{#if tagFacets.length > TAGS_SHOWN}
+					{@render facetMenu(
+						'project',
+						$t.blog.project,
+						projectFacets.map((f) => ({ value: f.slug, name: f.name, count: f.count })),
+						selectedProjects,
+						(value) => (selectedProjects = toggle(selectedProjects, value))
+					)}
+					{@render facetMenu(
+						'tag',
+						$t.blog.topics,
+						tagFacets.map((f) => ({ value: f.tag, name: f.tag, count: f.count })),
+						selectedTags,
+						(value) => (selectedTags = toggle(selectedTags, value))
+					)}
+
+					{#each selectedProjects as slug (slug)}
 						<button
 							type="button"
-							onclick={() => (allTags = !allTags)}
-							class="px-2 py-1.5 font-mono text-xs text-zinc-500 transition-colors hover:text-accent-400"
+							onclick={() => (selectedProjects = toggle(selectedProjects, slug))}
+							class="flex items-center gap-1.5 border border-accent-500/40 bg-accent-500/5 px-2.5 py-1.5 font-mono text-xs text-accent-300 transition-colors hover:border-accent-400"
+							style="border-radius: var(--radius-card)"
 						>
-							{allTags ? $t.blog.less : `+${tagFacets.length - TAGS_SHOWN}`}
+							{projectFacets.find((f) => f.slug === slug)?.name ?? slug}
+							<X size={12} />
 						</button>
-					{/if}
+					{/each}
+					{#each selectedTags as tag (tag)}
+						<button
+							type="button"
+							onclick={() => (selectedTags = toggle(selectedTags, tag))}
+							class="flex items-center gap-1.5 border border-accent-500/40 bg-accent-500/5 px-2.5 py-1.5 font-mono text-xs text-accent-300 transition-colors hover:border-accent-400"
+							style="border-radius: var(--radius-card)"
+						>
+							{#if techIcons[tag]}
+								<TechLogo name={tag} size={14} eager />
+							{/if}
+							{tag}
+							<X size={12} />
+						</button>
+					{/each}
 				</div>
 			</div>
 		{/if}
@@ -302,6 +369,18 @@
 				class="surface surface-hover group mt-8 block overflow-hidden p-6 sm:p-10"
 			>
 				<div class="flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-xs">
+					{#if featured.projectAvatar}
+						<img
+							src={featured.projectAvatar}
+							alt=""
+							width={24}
+							height={24}
+							loading="lazy"
+							decoding="async"
+							class="size-6 shrink-0 object-cover"
+							style="border-radius: var(--radius-card)"
+						/>
+					{/if}
 					<span class="text-accent-400">{$t.blog.featured}</span>
 					<time datetime={featured.meta.date} class="text-zinc-500">{featured.formatted}</time>
 					<span class="flex items-center gap-1.5 text-zinc-500">
@@ -336,13 +415,25 @@
 		{/if}
 
 		{#if paged.length}
-			<div class="mt-4 grid gap-4 lg:grid-cols-2">
+			<div class="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
 				{#each paged as entry (entry.meta.slug)}
 					<a
 						href="/blog/{entry.meta.slug}"
 						class="surface surface-hover group flex flex-col p-6 sm:p-7"
 					>
 						<div class="flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-xs text-zinc-500">
+							{#if entry.projectAvatar}
+								<img
+									src={entry.projectAvatar}
+									alt=""
+									width={20}
+									height={20}
+									loading="lazy"
+									decoding="async"
+									class="size-5 shrink-0 object-cover"
+									style="border-radius: var(--radius-card)"
+								/>
+							{/if}
 							<time datetime={entry.meta.date}>{entry.formatted}</time>
 							<span class="flex items-center gap-1.5">
 								<Clock size={12} />

@@ -52,6 +52,9 @@ export interface ProjectMeta {
   // Capture statique (webp) servie depuis /static — remplace les anciennes
   // iframes live qui rendaient ~5 sites entiers en parallèle (gros lag).
   image?: string;
+  // Vignette carrée du projet (son avatar public), utilisée là où la capture du
+  // site serait trop large : listing du blog, en-tête d'article.
+  avatar?: string;
   ecosystem?: { name: string; url?: string; tag: string }[];
   // Métadonnées factuelles, relevées sur les dépôts eux-mêmes.
   since?: string;
@@ -94,6 +97,7 @@ export const projectMeta: ProjectMeta[] = [
     logos: ["TypeScript", "Discord.js", "PostgreSQL", "Svelte"],
     externalUrl: "https://ender.gg",
     image: "/projects/enderbot.webp",
+    avatar: "/projects/avatars/enderbot.webp",
   },
   {
     slug: "ganyu",

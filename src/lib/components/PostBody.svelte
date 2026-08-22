@@ -61,6 +61,32 @@
 					</tbody>
 				</table>
 			</div>
+		{:else if block.t === 'people'}
+			<!-- L'attribution est une carte par personne plutôt qu'une phrase dans le
+			     texte : qui a fait quoi doit se lire sans relire le paragraphe. -->
+			<div class="not-prose grid gap-3 sm:grid-cols-2">
+				{#each block.items as person (person.handle)}
+					<a
+						href={person.url}
+						target="_blank"
+						rel="noopener noreferrer"
+						class="surface surface-hover group block p-5"
+					>
+						<div class="flex items-baseline justify-between gap-3">
+							<span class="text-base font-semibold text-zinc-100">{person.name}</span>
+							<span
+								class="font-mono text-xs text-zinc-500 transition-colors group-hover:text-accent-400"
+							>
+								{person.handle}
+							</span>
+						</div>
+						<div class="mt-1 font-mono text-[11px] tracking-wide text-primary-300 uppercase">
+							{person.role}
+						</div>
+						<p class="mt-3 text-sm leading-relaxed text-zinc-400">{person.scope}</p>
+					</a>
+				{/each}
+			</div>
 		{:else if block.t === 'note'}
 			<aside class="not-prose border-l-2 border-accent-500/60 bg-zinc-900/40 py-4 pr-5 pl-5">
 				<p class="text-sm leading-relaxed text-zinc-300">{block.text}</p>

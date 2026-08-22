@@ -9,6 +9,10 @@ export type Block =
   | { t: "list"; items: string[] }
   | { t: "stats"; items: { value: string; label: string; note?: string }[] }
   | { t: "table"; head: string[]; rows: string[][] }
+  | {
+      t: "people";
+      items: { name: string; handle: string; url: string; role: string; scope: string }[];
+    }
   | { t: "note"; text: string }
   | { t: "code"; lang: string; text: string };
 
@@ -50,6 +54,30 @@ const enderbotGateway: Post = {
         t: "p",
         text: "Enderbot est un jeu qui se joue dans Discord : un monorepo TypeScript où un cœur applicatif, un site SvelteKit et un client passerelle se parlent en protobuf par dessus RabbitMQ, avec Postgres, Redis et Prometheus derrière. Le client passerelle, c'est la partie qui tient la connexion à Discord, encaisse les évènements et pousse les messages. C'était historiquement du discord.js, un process Node par shard. Ça ne l'est plus.",
       },
+      { t: "h", text: "Qui a fait quoi" },
+      {
+        t: "p",
+        text: "Le travail décrit ici s'est joué à deux, sur deux terrains distincts, et le log git tranche sans ambiguïté : sur les deux mille commits de la fenêtre, la passerelle est d'un côté, le cœur de l'autre.",
+      },
+      {
+        t: "people",
+        items: [
+          {
+            name: "EnderSpirit",
+            handle: "@EnderSpirit",
+            url: "https://github.com/EnderSpirit",
+            role: "La passerelle et l'outillage",
+            scope: "Réécriture Go du client Discord, du premier paquet à la suppression du client JS. Aussi la cure de dépendances du monorepo, le passage à TypeScript 7 et Vite 8, et le dégraissage des images Docker.",
+          },
+          {
+            name: "Léo Sauvage",
+            handle: "@Akayashuu",
+            url: "https://github.com/Akayashuu",
+            role: "Le cœur et sa mesure",
+            scope: "Migration du monorepo vers Bun, profil de performance en production et les correctifs qui en sortent : N+1, caches bornés, encodage d'images, crons, index Postgres, observabilité Redis.",
+          },
+        ],
+      },
       { t: "h", text: "Pourquoi sortir discord.js" },
       {
         t: "p",
@@ -57,12 +85,12 @@ const enderbotGateway: Post = {
       },
       {
         t: "p",
-        text: "Le remplaçant s'appelle discord-go : un module Go bâti sur disgo, un seul process qui tient tous les shards, le nombre de shards résolu tout seul depuis /gateway/bot. Cent vingt six fichiers Go, une trentaine de milliers de lignes, et un démarrage à froid d'environ quatre vingt dix secondes à seize shards, imposé par la limite d'identify de Discord.",
+        text: "Le remplaçant, écrit par EnderSpirit, s'appelle discord-go : un module Go bâti sur disgo, un seul process qui tient tous les shards, le nombre de shards résolu tout seul depuis /gateway/bot. Cent vingt six fichiers Go, une trentaine de milliers de lignes, et un démarrage à froid d'environ quatre vingt dix secondes à seize shards, imposé par la limite d'identify de Discord.",
       },
       { t: "h", text: "Le contrat de fil comme point fixe" },
       {
         t: "p",
-        text: "La règle qui a rendu la réécriture tenable : ne rien changer de ce qui traverse le réseau. Les mêmes messages protobuf sur les files client-to-core et core-to-client-{shardId}, les mêmes clés Redis status-discord-*, les mêmes métriques enderbot_discord_*. Le cœur tourne sans une ligne modifiée, et les tableaux de bord Grafana continuent d'afficher les mêmes séries.",
+        text: "La règle qu'il s'est fixée, et qui a rendu la réécriture tenable : ne rien changer de ce qui traverse le réseau. Les mêmes messages protobuf sur les files client-to-core et core-to-client-{shardId}, les mêmes clés Redis status-discord-*, les mêmes métriques enderbot_discord_*. Le cœur tourne sans une ligne modifiée, et les tableaux de bord Grafana continuent d'afficher les mêmes séries.",
       },
       {
         t: "p",
@@ -80,7 +108,7 @@ const enderbotGateway: Post = {
       { t: "h", text: "La parité se joue sur le comportement, pas sur l'API" },
       {
         t: "p",
-        text: "La partie longue n'a pas été de reproduire les appels, mais les habitudes de discord.js. Une bibliothèque de ce calibre transporte des décisions non écrites, et chacune se paie en bug de production si on ne la rejoue pas :",
+        text: "La partie longue n'a pas été de reproduire les appels, mais les habitudes de discord.js. Elles ont occupé une journée entière de correctifs, le 11 août, tous signés EnderSpirit. Une bibliothèque de ce calibre transporte des décisions non écrites, et chacune se paie en bug de production si on ne la rejoue pas :",
       },
       {
         t: "list",
@@ -109,7 +137,7 @@ const enderbotGateway: Post = {
       { t: "h", text: "Ce que disaient réellement les métriques" },
       {
         t: "p",
-        text: "Une fois la passerelle stabilisée, j'ai profilé le cœur en production plutôt que de deviner. Relevé sur une fenêtre de 4993 secondes d'uptime :",
+        text: "Une fois la passerelle stabilisée, c'est mon terrain qui passe à la question. J'ai profilé le cœur en production plutôt que de deviner. Relevé sur une fenêtre de 4993 secondes d'uptime :",
       },
       {
         t: "stats",
@@ -170,7 +198,7 @@ const enderbotGateway: Post = {
       { t: "h", text: "Le poids des images" },
       {
         t: "p",
-        text: "Le même mois, la migration vers Bun a été l'occasion de regarder les images Docker. Un chown -R des node_modules vivait dans son propre RUN, ce qui fait réécrire chaque fichier dans une nouvelle couche : le node_modules existait deux fois dans l'image. Bun installe par ailleurs les deux variantes libc des binaires natifs alors que l'image est glibc.",
+        text: "Pendant que je faisais passer le monorepo sous Bun, EnderSpirit s'attaquait aux images Docker : base slim, installations filtrées par service, séparation build et runtime, polices Noto dégraissées. Puis les deux couches qui coûtaient le plus cher. Un chown -R des node_modules vivait dans son propre RUN, ce qui fait réécrire chaque fichier dans une nouvelle couche : le node_modules existait deux fois dans l'image. Bun installe par ailleurs les deux variantes libc des binaires natifs alors que l'image est glibc.",
       },
       {
         t: "table",
@@ -201,6 +229,30 @@ const enderbotGateway: Post = {
         t: "p",
         text: "Enderbot is a game played inside Discord: a TypeScript monorepo where an application core, a SvelteKit site and a gateway client talk protobuf over RabbitMQ, with Postgres, Redis and Prometheus behind them. The gateway client is the part holding the connection to Discord, absorbing events and pushing messages. It used to be discord.js, one Node process per shard. It no longer is.",
       },
+      { t: "h", text: "Who did what" },
+      {
+        t: "p",
+        text: "The work described here happened between two people, on two distinct fronts, and the git log settles it without ambiguity: across the two thousand commits in this window, the gateway sits on one side and the core on the other.",
+      },
+      {
+        t: "people",
+        items: [
+          {
+            name: "EnderSpirit",
+            handle: "@EnderSpirit",
+            url: "https://github.com/EnderSpirit",
+            role: "The gateway and the tooling",
+            scope: "The Go rewrite of the Discord client, from the first package to deleting the JS one. Also the monorepo dependency cleanup, the move to TypeScript 7 and Vite 8, and slimming down the Docker images.",
+          },
+          {
+            name: "Léo Sauvage",
+            handle: "@Akayashuu",
+            url: "https://github.com/Akayashuu",
+            role: "The core and its measurement",
+            scope: "Migrating the monorepo to Bun, profiling performance in production and the fixes that came out of it: N+1 queries, bounded caches, image encoding, crons, Postgres indexes, Redis observability.",
+          },
+        ],
+      },
       { t: "h", text: "Why discord.js had to go" },
       {
         t: "p",
@@ -208,12 +260,12 @@ const enderbotGateway: Post = {
       },
       {
         t: "p",
-        text: "The replacement is discord-go: a Go module built on disgo, a single process holding every shard, shard count resolved on its own from /gateway/bot. A hundred and twenty six Go files, roughly thirty thousand lines, and a cold start of about ninety seconds at sixteen shards, dictated by Discord's identify rate limit.",
+        text: "The replacement, written by EnderSpirit, is discord-go: a Go module built on disgo, a single process holding every shard, shard count resolved on its own from /gateway/bot. A hundred and twenty six Go files, roughly thirty thousand lines, and a cold start of about ninety seconds at sixteen shards, dictated by Discord's identify rate limit.",
       },
       { t: "h", text: "The wire contract as the fixed point" },
       {
         t: "p",
-        text: "The rule that made the rewrite tractable: change nothing that crosses the network. Same protobuf messages on the client-to-core and core-to-client-{shardId} queues, same status-discord-* Redis keys, same enderbot_discord_* metrics. The core runs with not a single line changed, and the Grafana dashboards keep plotting the same series.",
+        text: "The rule he set himself, and what made the rewrite tractable: change nothing that crosses the network. Same protobuf messages on the client-to-core and core-to-client-{shardId} queues, same status-discord-* Redis keys, same enderbot_discord_* metrics. The core runs with not a single line changed, and the Grafana dashboards keep plotting the same series.",
       },
       {
         t: "p",
@@ -231,7 +283,7 @@ const enderbotGateway: Post = {
       { t: "h", text: "Parity is about behaviour, not the API" },
       {
         t: "p",
-        text: "The long part was not reproducing the calls, it was reproducing discord.js habits. A library that size carries unwritten decisions, and every one of them costs a production bug if you fail to replay it:",
+        text: "The long part was not reproducing the calls, it was reproducing discord.js habits. They took up a full day of fixes on 11 August, every one of them signed EnderSpirit. A library that size carries unwritten decisions, and every one of them costs a production bug if you fail to replay it:",
       },
       {
         t: "list",
@@ -260,7 +312,7 @@ const enderbotGateway: Post = {
       { t: "h", text: "What the metrics actually said" },
       {
         t: "p",
-        text: "Once the gateway was stable, I profiled the core in production instead of guessing. Sampled over a 4993 second uptime window:",
+        text: "Once the gateway was stable, my own side came under the microscope. I profiled the core in production instead of guessing. Sampled over a 4993 second uptime window:",
       },
       {
         t: "stats",
@@ -321,7 +373,7 @@ const enderbotGateway: Post = {
       { t: "h", text: "Image weight" },
       {
         t: "p",
-        text: "The same month, migrating to Bun was a good excuse to look at the Docker images. A chown -R on node_modules lived in its own RUN, which makes Docker rewrite every file into a new layer: node_modules existed twice in the image. Bun also installs both libc variants of native binaries while the image is glibc.",
+        text: "While I was moving the monorepo onto Bun, EnderSpirit went after the Docker images: slim base, per-service filtered installs, split build and runtime stages, trimmed Noto fonts. Then the two layers that cost the most. A chown -R on node_modules lived in its own RUN, which makes Docker rewrite every file into a new layer: node_modules existed twice in the image. Bun also installs both libc variants of native binaries while the image is glibc.",
       },
       {
         t: "table",

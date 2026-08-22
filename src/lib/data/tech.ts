@@ -64,4 +64,10 @@ export const techIcons: Record<string, TechIcon> = {
 	"NATS": { src: "/tech/nats.svg" },
 	"OpenTelemetry": { src: "/tech/opentelemetry.svg" },
 	"Luau": { src: "/tech/luau.svg", lighten: true },
-	"Roblox": { src: "/tech/roblox.svg" },};
+	"Roblox": { src: "/tech/roblox.svg" },
+	"GTK4": { src: "/tech/gtk.svg" },
+	"Qt": { src: "/tech/qt.svg" },
+	"QML": { src: "/tech/qt.svg" },
+	"Hyprland": { src: "/tech/hyprland.svg" },
+	"Wayland": { src: "/tech/wayland.svg" },
+};

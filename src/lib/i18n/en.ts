@@ -177,6 +177,23 @@ export const en = {
           ],
         },
       },
+      {
+        name: "cryptobar",
+        tagline: "Crypto prices in your bar, terminal and desktop",
+        description:
+          "A Rust tool that puts cryptocurrency prices where you are already looking: a module in your Quickshell or Waybar bar, a full braille curve in the terminal, and a GTK4 window to search, watch and configure without ever opening the config file. No API key, no daemon, and the disk cache serves the data for as long as it is fresh, so the bar can tick every five seconds without issuing a single request.",
+        details: {
+          features: [
+            "Four surfaces from one binary: bar module, panel, braille curve in the terminal, GTK4 window",
+            "A Quickshell widget that draws a real curve, a Unicode sparkline on Waybar, scroll to move between coins",
+            "Full JSON output for Ags, Eww and the rest: normalised series, trend, alerts and portfolio as separate fields",
+            "Read-only portfolio from public Bitcoin, Ethereum or Solana addresses, never a private key",
+            "Price alerts by threshold or by change, surfaced in the bar output with nothing to recompute",
+            "A real-time signal refreshes Waybar on scroll instead of waiting for the next interval",
+            "Scripted, idempotent install that backs up what it modifies and never touches your bar configuration",
+          ],
+        },
+      },
     ],
   },
   education: {

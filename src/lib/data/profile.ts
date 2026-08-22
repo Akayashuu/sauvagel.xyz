@@ -115,4 +115,12 @@ export const projectMeta: ProjectMeta[] = [
     externalUrl: "https://naht.dev",
     image: "/projects/naht.webp",
   },
+  {
+    slug: "cryptobar",
+    tech: ["Rust", "QML", "GTK4", "Wayland", "Hyprland", "Linux", "Arch"],
+    color: "#f7931a",
+    link: "https://github.com/Akayashuu/cryptobar",
+    logos: ["Rust", "QML", "GTK4", "Hyprland"],
+    image: "/projects/cryptobar.webp",
+  },
 ];

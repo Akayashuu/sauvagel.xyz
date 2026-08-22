@@ -177,6 +177,23 @@ export const fr = {
           ],
         },
       },
+      {
+        name: "cryptobar",
+        tagline: "Cours crypto dans la barre, le terminal et le bureau",
+        description:
+          "Un outil Rust qui affiche les cours des cryptomonnaies là où tu regardes déjà : le module de ta barre Quickshell ou Waybar, une courbe braille en plein terminal, et une fenêtre GTK4 pour chercher, suivre et configurer sans ouvrir le fichier de configuration. Sans clé d'API, sans démon, et le cache disque sert les données tant qu'elles sont fraîches, donc la barre peut tiquer toutes les cinq secondes sans lancer une seule requête.",
+        details: {
+          features: [
+            "Quatre surfaces sur le même binaire : module de barre, panneau, courbe braille dans le terminal, fenêtre GTK4",
+            "Widget Quickshell qui dessine une vraie courbe, sparkline Unicode côté Waybar, scroll pour passer d'une crypto à l'autre",
+            "Sortie JSON complète pour Ags, Eww et les autres : séries normalisées, tendance, alertes et portefeuille en champs séparés",
+            "Portefeuille en lecture seule à partir d'adresses publiques Bitcoin, Ethereum ou Solana, jamais de clé privée",
+            "Alertes de prix par seuil ou par variation, remontées dans la sortie de la barre sans recalcul",
+            "Signal temps réel pour rafraîchir Waybar au scroll, plutôt que d'attendre le prochain intervalle",
+            "Installation scriptée et idempotente qui sauvegarde ce qu'elle modifie et ne touche jamais à la configuration de ta barre",
+          ],
+        },
+      },
     ],
   },
   education: {

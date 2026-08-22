@@ -75,35 +75,41 @@
 		</header>
 
 		{#if meta.image}
-			<a
+			{@const Wrapper = meta.externalUrl ? 'a' : 'div'}
+			<svelte:element
+				this={Wrapper}
 				href={meta.externalUrl}
-				target="_blank"
-				rel="noopener noreferrer"
+				target={meta.externalUrl ? '_blank' : undefined}
+				rel={meta.externalUrl ? 'noopener noreferrer' : undefined}
 				class="group/preview mb-10 block sm:mb-14"
 			>
 				<div
 					class="surface overflow-hidden transition-transform duration-500 group-hover/preview:-translate-y-1"
 				>
-					<div class="flex items-center gap-3 border-b border-zinc-800 bg-zinc-900/80 px-4 py-2.5">
-						<div class="flex gap-1.5" aria-hidden="true">
-							<span class="h-2.5 w-2.5 rounded-full bg-zinc-700"></span>
-							<span class="h-2.5 w-2.5 rounded-full bg-zinc-700"></span>
-							<span class="h-2.5 w-2.5 rounded-full bg-zinc-700"></span>
-						</div>
-						<div class="flex min-w-0 flex-1 justify-center">
-							<span
-								class="flex max-w-full items-center gap-1.5 truncate bg-zinc-800/70 px-3 py-1 font-mono text-xs text-zinc-400"
-								style="border-radius: var(--radius-card)"
-							>
-								<Lock size={11} class="shrink-0" />
-								{displayUrl}
+					<!-- La barre d'adresse n'a de sens que pour un projet qui a un site en
+					     ligne ; un outil de bureau garde juste le cadre et sa capture. -->
+					{#if meta.externalUrl}
+						<div class="flex items-center gap-3 border-b border-zinc-800 bg-zinc-900/80 px-4 py-2.5">
+							<div class="flex gap-1.5" aria-hidden="true">
+								<span class="h-2.5 w-2.5 rounded-full bg-zinc-700"></span>
+								<span class="h-2.5 w-2.5 rounded-full bg-zinc-700"></span>
+								<span class="h-2.5 w-2.5 rounded-full bg-zinc-700"></span>
+							</div>
+							<div class="flex min-w-0 flex-1 justify-center">
+								<span
+									class="flex max-w-full items-center gap-1.5 truncate bg-zinc-800/70 px-3 py-1 font-mono text-xs text-zinc-400"
+									style="border-radius: var(--radius-card)"
+								>
+									<Lock size={11} class="shrink-0" />
+									{displayUrl}
+								</span>
+							</div>
+							<span class="flex shrink-0 items-center gap-1.5 font-mono text-xs text-accent-400">
+								<span class="h-1.5 w-1.5 rounded-full bg-accent-400"></span>
+								<span class="hidden sm:inline">{$t.projectPage.livePreview}</span>
 							</span>
 						</div>
-						<span class="flex shrink-0 items-center gap-1.5 font-mono text-xs text-accent-400">
-							<span class="h-1.5 w-1.5 rounded-full bg-accent-400"></span>
-							<span class="hidden sm:inline">{$t.projectPage.livePreview}</span>
-						</span>
-					</div>
+					{/if}
 					<div class="relative aspect-video w-full overflow-hidden bg-zinc-950">
 						<img
 							src={meta.image}
@@ -112,16 +118,18 @@
 							decoding="async"
 							class="h-full w-full object-cover object-top"
 						/>
-						<span
-							class="absolute right-3 bottom-3 flex items-center gap-2 bg-zinc-950/85 px-3 py-1.5 text-xs font-medium text-white opacity-0 transition-opacity duration-300 group-hover/preview:opacity-100"
-							style="border-radius: var(--radius-card)"
-						>
-							{$t.projectPage.openSite}
-							<ExternalLink size={14} />
-						</span>
+						{#if meta.externalUrl}
+							<span
+								class="absolute right-3 bottom-3 flex items-center gap-2 bg-zinc-950/85 px-3 py-1.5 text-xs font-medium text-white opacity-0 transition-opacity duration-300 group-hover/preview:opacity-100"
+								style="border-radius: var(--radius-card)"
+							>
+								{$t.projectPage.openSite}
+								<ExternalLink size={14} />
+							</span>
+						{/if}
 					</div>
 				</div>
-			</a>
+			</svelte:element>
 		{/if}
 
 		<div class="grid gap-4 md:grid-cols-3">

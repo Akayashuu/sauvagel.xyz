@@ -36,6 +36,11 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://sauvagel.xyz/projects/neublox</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://sauvagel.xyz/projects/wesync</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>

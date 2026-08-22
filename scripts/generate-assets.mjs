@@ -81,6 +81,7 @@ const PROJECTS = [
   { slug: "takt", title: "Takt", sub: "Go · ClickHouse · NATS · SvelteKit" },
   { slug: "naht", title: "Naht", sub: "Rust · Luau · SQLite · Svelte" },
   { slug: "herrscher", title: "Herrscher", sub: "Go · SQLite · Docker · Linux" },
+  { slug: "neublox", title: "Neublox", sub: "Rust · Tauri · MCP · SvelteKit" },
   { slug: "wesync", title: "WeSync", sub: "SvelteKit · TypeScript · PostgreSQL · Docker" },
   { slug: "cryptobar", title: "cryptobar", sub: "Rust · Quickshell · Waybar · GTK4" },
 ];

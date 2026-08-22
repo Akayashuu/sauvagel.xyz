@@ -28,6 +28,18 @@ export const skills = [
   },
 ];
 
+export interface DiagramNode {
+  id: string;
+  label: string;
+  note?: string;
+  accent?: boolean;
+}
+
+export interface Diagram {
+  columns: { title: string; nodes: DiagramNode[] }[];
+  edges: { from: string; to: string; label?: string }[];
+}
+
 export interface ProjectMeta {
   slug: string;
   tech: string[];
@@ -39,6 +51,9 @@ export interface ProjectMeta {
   // iframes live qui rendaient ~5 sites entiers en parallèle (gros lag).
   image?: string;
   ecosystem?: { name: string; url: string; tag: string }[];
+  // Schéma d'architecture des gros projets : les noms de composants sont
+  // techniques, donc ils vivent ici et pas dans les fichiers de traduction.
+  diagram?: Diagram;
 }
 
 export const projectMeta: ProjectMeta[] = [
@@ -89,6 +104,49 @@ export const projectMeta: ProjectMeta[] = [
     logos: ["Go", "ClickHouse", "SvelteKit", "Docker"],
     externalUrl: "https://taktlytics.com",
     image: "/projects/takt.webp",
+    diagram: {
+      columns: [
+        {
+          title: "Collecte",
+          nodes: [
+            { id: "js", label: "takt.js", note: "2,5 ko gzip, sans cookie" },
+            { id: "s2s", label: "SDK serveur", note: "PHP, Node, events achat" },
+          ],
+        },
+        {
+          title: "Ingestion",
+          nodes: [
+            { id: "ingest", label: "ingest", note: "Go, HTTP", accent: true },
+            { id: "nats", label: "NATS JetStream", note: "file durable" },
+            { id: "worker", label: "worker", note: "sharding HRW, KEDA" },
+          ],
+        },
+        {
+          title: "Stockage",
+          nodes: [
+            { id: "ch", label: "ClickHouse", note: "events analytiques" },
+            { id: "pg", label: "Postgres + Ent", note: "comptes, sites, RBAC" },
+          ],
+        },
+        {
+          title: "Lecture",
+          nodes: [
+            { id: "api", label: "api", note: "REST + OpenAPI", accent: true },
+            { id: "dash", label: "dashboard", note: "SvelteKit" },
+          ],
+        },
+      ],
+      edges: [
+        { from: "js", to: "ingest", label: "POST /api/event" },
+        { from: "s2s", to: "ingest" },
+        { from: "ingest", to: "nats", label: "publish" },
+        { from: "nats", to: "worker", label: "pull" },
+        { from: "worker", to: "ch", label: "batch INSERT" },
+        { from: "ch", to: "api" },
+        { from: "pg", to: "api" },
+        { from: "api", to: "dash" },
+      ],
+    },
     ecosystem: [
       { name: "@takt/core", url: "https://github.com/vskstudio/takt-core", tag: "SDK JS" },
       { name: "takt-core-php", url: "https://github.com/vskstudio/takt-core-php", tag: "SDK PHP" },
@@ -121,6 +179,122 @@ export const projectMeta: ProjectMeta[] = [
     color: "#0ea5e9",
     link: "https://github.com/Herrscherd/herrscher",
     logos: ["Go", "Git", "Linux", "Docker"],
+    ecosystem: [
+      { name: "herrscher-contracts", url: "https://github.com/Herrscherd/herrscher-contracts", tag: "Ports" },
+      { name: "herrscher-transport", url: "https://github.com/Herrscherd/herrscher-transport", tag: "Transport" },
+      { name: "herrscher-discord-gateway", url: "https://github.com/Herrscherd/herrscher-discord-gateway", tag: "Passerelle" },
+      { name: "dctl", url: "https://github.com/Herrscherd/dctl", tag: "Client Discord" },
+      { name: "herrscher-claude-backend", url: "https://github.com/Herrscherd/herrscher-claude-backend", tag: "Backend" },
+      { name: "herrscher-codex-backend", url: "https://github.com/Herrscherd/herrscher-codex-backend", tag: "Backend" },
+      { name: "herrscher-cursor-backend", url: "https://github.com/Herrscherd/herrscher-cursor-backend", tag: "Backend" },
+      { name: "herrscher-obsidian-memory", url: "https://github.com/Herrscherd/herrscher-obsidian-memory", tag: "Mémoire" },
+      { name: "herrscher-llm-extractor", url: "https://github.com/Herrscherd/herrscher-llm-extractor", tag: "Mémoire" },
+      { name: "herrscher-orchestrator", url: "https://github.com/Herrscherd/herrscher-orchestrator", tag: "Politique" },
+      { name: "herrscher-superset-skills", url: "https://github.com/Herrscherd/herrscher-superset-skills", tag: "Playbooks" },
+    ],
+    diagram: {
+      columns: [
+        {
+          title: "Bord canal",
+          nodes: [
+            { id: "discord", label: "Discord", note: "passerelle, via dctl" },
+            { id: "tui", label: "Terminal TUI", note: "onglets, kitty ou sixel" },
+            { id: "yours", label: "Ta passerelle", note: "même port neutre" },
+          ],
+        },
+        {
+          title: "Coeur agnostique",
+          nodes: [
+            { id: "contracts", label: "contracts", note: "ports et types neutres", accent: true },
+            { id: "core", label: "daemon", note: "sessions, worktrees git", accent: true },
+            { id: "coord", label: "Coordinator", note: "délégation, fan out, merge" },
+          ],
+        },
+        {
+          title: "Bord modèle",
+          nodes: [
+            { id: "claude", label: "Claude", note: "stream json" },
+            { id: "codex", label: "Codex" },
+            { id: "cursor", label: "Cursor Agent" },
+          ],
+        },
+        {
+          title: "Bord mémoire",
+          nodes: [
+            { id: "vault", label: "Vault Obsidian", note: "projet partagé, agent privé" },
+            { id: "orch", label: "Orchestrator", note: "amorce et consolide le tour" },
+          ],
+        },
+      ],
+      edges: [
+        { from: "discord", to: "contracts" },
+        { from: "tui", to: "contracts", label: "port Gateway" },
+        { from: "yours", to: "contracts" },
+        { from: "core", to: "claude", label: "port Backend" },
+        { from: "core", to: "codex" },
+        { from: "core", to: "cursor" },
+        { from: "coord", to: "vault", label: "port Memory" },
+        { from: "coord", to: "orch" },
+      ],
+    },
+  },
+  {
+    slug: "neublox",
+    tech: ["Rust", "Tauri", "Go", "SvelteKit", "TypeScript", "PostgreSQL", "Luau", "Docker", "MCP", "Linux"],
+    color: "#8b5cf6",
+    link: "https://github.com/orgs/vskstudio/repositories?q=neublox",
+    logos: ["Rust", "Tauri", "SvelteKit", "PostgreSQL"],
+    ecosystem: [
+      { name: "Neublox", url: "https://github.com/orgs/vskstudio/repositories?q=neublox", tag: "Coeur + app" },
+      { name: "neublox-accounts", url: "https://github.com/orgs/vskstudio/repositories?q=neublox-accounts", tag: "Identité" },
+      { name: "neublox-gateway", url: "https://github.com/orgs/vskstudio/repositories?q=neublox-accounts#gateway", tag: "Facturation" },
+      { name: "herrscher", url: "https://github.com/Herrscherd/herrscher", tag: "Châssis" },
+      { name: "naht", url: "https://github.com/vskstudio/naht", tag: "Sync" },
+    ],
+    diagram: {
+      columns: [
+        {
+          title: "Poste de travail",
+          nodes: [
+            { id: "app", label: "App Tauri", note: "Svelte, sessions et vault", accent: true },
+            { id: "studio", label: "Roblox Studio", note: "plugin, client MCP stdio" },
+            { id: "files", label: "Fichiers du projet", note: "source de vérité git" },
+          ],
+        },
+        {
+          title: "Sidecars",
+          nodes: [
+            { id: "daemon", label: "Daemon Neublox", note: "Rust, serveur MCP unifié", accent: true },
+            { id: "herrscher", label: "herrscher", note: "harness d'agents, en Go" },
+            { id: "naht", label: "naht", note: "sync bidirectionnelle, Rust" },
+          ],
+        },
+        {
+          title: "Cloud",
+          nodes: [
+            { id: "accounts", label: "accounts-api", note: "axum, JWT, TOTP, OAuth" },
+            { id: "gw", label: "neublox-gateway", note: "crédits, webhooks Stripe" },
+          ],
+        },
+        {
+          title: "Amont et données",
+          nodes: [
+            { id: "vendors", label: "Claude, Codex", note: "route gateway only" },
+            { id: "pg", label: "Postgres", note: "public et schéma gateway" },
+          ],
+        },
+      ],
+      edges: [
+        { from: "app", to: "daemon", label: "Op::Snapshot" },
+        { from: "studio", to: "daemon", label: "MCP" },
+        { from: "files", to: "naht", label: "merge 3 voies" },
+        { from: "daemon", to: "accounts", label: "HTTPS" },
+        { from: "herrscher", to: "gw", label: "jeton par runtime" },
+        { from: "accounts", to: "pg" },
+        { from: "gw", to: "pg" },
+        { from: "gw", to: "vendors", label: "débit à l'usage" },
+      ],
+    },
   },
   {
     slug: "wesync",

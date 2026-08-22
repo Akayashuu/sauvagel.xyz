@@ -148,6 +148,8 @@ export const en = {
         description:
           "A privacy-friendly, self-hosted web analytics platform, our alternative to Plausible. A Go core with ClickHouse for events and Postgres for relational data, a NATS JetStream ingestion pipeline, and a SvelteKit dashboard. No cookies, no personal data, GDPR-compliant with no consent banner. The core is private, but the whole ecosystem (SDKs, framework integrations, MCP) is open-source.",
         details: {
+          diagramCaption:
+            "A modular monolith: a durable queue separates ingestion from writes, and reads never touch the hot path.",
           features: [
             "Privacy by design: no cookies, no PII, GDPR-compliant with no consent banner",
             "Tracking script < 6 KB, 100% server-side enrichment",
@@ -183,6 +185,8 @@ export const en = {
         description:
           "A self-hosted Go daemon that runs fleets of coding agents: every session is a channel, an agent and its own git worktree, supervised and restarted on its own, with persistent memory in an Obsidian vault recalled before every turn. Agents delegate work to each other across model vendors, and you drive them from Discord, from the terminal, or from your own gateway.",
         details: {
+          diagramCaption:
+            "Hexagonal: contracts is the authority, the core depends on no edge and the edges depend on no core.",
           features: [
             "Durable sessions: a channel, an agent, an isolated worktree, resumed from the backend's own token after a restart",
             "Persistent memory in an Obsidian vault, shared per project and private per agent, recalled before every turn",
@@ -192,6 +196,31 @@ export const en = {
             "Plugins compiled into the binary, xcaddy style: every change to the composition is a transaction that restores the tree when the build refuses",
             "Cross-backend skills, one SKILL.md per playbook",
           ],
+          ecosystemNote:
+            "The daemon and all its official plugins are public: gateways, backends, memory, conversation policy.",
+        },
+      },
+      {
+        name: "Neublox",
+        tagline: "An MCP hub between AI and Roblox Studio",
+        description:
+          "A gateway connecting an AI agent to creation tools: the agent sees Roblox Studio as a tool, not as a window. A Rust core exposed as a unified MCP server, a Tauri desktop app that ships the daemon, herrscher and naht as sidecars, and a Rust cloud for identity and usage billing. Blender is next.",
+        details: {
+          diagramCaption:
+            "The workstation talks to the daemon, the daemon talks to the cloud, and only the cloud talks to model vendors.",
+          features: [
+            "Unified MCP server on the agent side, stdio MCP client on the Roblox Studio side: one surface for the AI",
+            "File and Studio sync through naht, so the source of truth stays a versionable git repository",
+            "Tauri app that browses and edits herrscher's markdown vault like an Obsidian: tree, backlinks, search, graph",
+            "File tree, SCM and diff against HEAD read from the real git worktree, Luau highlighting through full-moon",
+            "accounts-api on axum: email and password or Discord, GitHub and Google OAuth, JWT, rotating refresh with reuse detection, TOTP, revocable devices",
+            "neublox-gateway sits between the client's CLI and upstream vendors, and bills the account on real usage",
+            "Public build locked at compile time: gateway only route, --cmd refused, failure instead of silent degradation",
+            "Gateway token minted per runtime, injected with its base URL, never persisted nor logged",
+            "Releases served from our own server, closed binaries composed outside CI so their source never enters a runner",
+          ],
+          ecosystemNote:
+            "The product is private, but it is assembled from bricks I publish: the herrscher chassis and the naht sync engine.",
         },
       },
       {
@@ -279,6 +308,7 @@ export const en = {
     website: "Website",
     livePreview: "Live preview",
     openSite: "Open site",
+    architecture: "Architecture",
     ecosystem: "Open-source ecosystem",
     ecosystemNote: "The core is private, but every SDK and integration is open-source.",
   },

@@ -70,4 +70,6 @@ export const techIcons: Record<string, TechIcon> = {
 	"QML": { src: "/tech/qt.svg" },
 	"Hyprland": { src: "/tech/hyprland.svg" },
 	"Wayland": { src: "/tech/wayland.svg" },
+	"Tauri": { src: "/tech/tauri.svg" },
+	"MCP": { src: "/tech/mcp.svg" },
 };

@@ -2,6 +2,7 @@
 	import { ArrowLeft, ExternalLink, Lock } from 'lucide-svelte';
 	import GithubIcon from '$lib/components/GithubIcon.svelte';
 	import GenerativeGrid from '$lib/components/GenerativeGrid.svelte';
+	import ArchitectureDiagram from '$lib/components/ArchitectureDiagram.svelte';
 	import TechLogo from '$lib/components/TechLogo.svelte';
 	import { t } from '$lib/i18n';
 
@@ -132,9 +133,9 @@
 			</svelte:element>
 		{/if}
 
-		<div class="grid gap-4 md:grid-cols-3">
+		<div class="grid items-start gap-4 md:grid-cols-3">
 			<div class="md:col-span-2">
-				<div class="surface h-full p-6 sm:p-8">
+				<div class="surface p-6 sm:p-8">
 					<h2 class="section-label">{$t.projectPage.about}</h2>
 					<p class="mt-4 leading-relaxed text-zinc-400">{project.description}</p>
 
@@ -168,9 +169,11 @@
 				{#if meta.ecosystem}
 					<div class="surface p-6">
 						<h3 class="section-label">{$t.projectPage.ecosystem}</h3>
-						<p class="mt-2 text-xs leading-relaxed text-zinc-500">{$t.projectPage.ecosystemNote}</p>
+						<p class="mt-2 text-xs leading-relaxed text-zinc-500">
+								{project.details?.ecosystemNote ?? $t.projectPage.ecosystemNote}
+							</p>
 						<div class="mt-4 flex flex-wrap gap-2">
-							{#each meta.ecosystem as pkg (pkg.url)}
+							{#each meta.ecosystem as pkg (pkg.name)}
 								<a
 									href={pkg.url}
 									target="_blank"
@@ -218,5 +221,19 @@
 				</div>
 			</div>
 		</div>
+
+		{#if meta.diagram}
+			<!-- Le schéma a besoin de la largeur de la page : dans la colonne de
+			     texte, ses quatre bords se réduisaient à une bande à faire défiler. -->
+			<section class="mt-4">
+				<h2 class="section-label">{$t.projectPage.architecture}</h2>
+				<div class="mt-4">
+					<ArchitectureDiagram
+						diagram={meta.diagram}
+						caption={project.details?.diagramCaption ?? project.tagline}
+					/>
+				</div>
+			</section>
+		{/if}
 	</div>
 </section>

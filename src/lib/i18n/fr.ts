@@ -148,6 +148,8 @@ export const fr = {
         description:
           "Une plateforme d'analytics web privacy-friendly et self-hosted, notre alternative à Plausible. Cœur en Go avec ClickHouse pour les events et Postgres pour le relationnel, pipeline d'ingestion NATS JetStream et dashboard SvelteKit. Sans cookies, sans données personnelles, conforme RGPD sans bannière. Le cœur est privé, mais tout l'écosystème (SDK, intégrations framework, MCP) est open-source.",
         details: {
+          diagramCaption:
+            "Monolithe modulaire : une file durable sépare l'ingestion de l'écriture, et la lecture ne touche jamais le chemin chaud.",
           features: [
             "Privacy by design : pas de cookies, pas de PII, RGPD sans bannière de consentement",
             "Script de tracking < 6 Ko, enrichissement 100 % côté serveur",
@@ -183,6 +185,8 @@ export const fr = {
         description:
           "Un démon Go auto-hébergé qui fait tourner des flottes d'agents de code : chaque session est un salon, un agent et son propre worktree git, supervisée et relancée toute seule, avec une mémoire persistante en vault Obsidian relue avant chaque tour. Les agents se délèguent du travail entre eux d'un fournisseur de modèle à l'autre, et se pilotent depuis Discord, depuis le terminal ou depuis ta propre passerelle.",
         details: {
+          diagramCaption:
+            "Hexagonal : contracts est l'autorité, le coeur ne dépend d'aucun bord et les bords ne dépendent d'aucun coeur.",
           features: [
             "Sessions durables : un salon, un agent, un worktree isolé, repris au jeton du backend après un redémarrage",
             "Mémoire persistante en vault Obsidian, partagée par projet et privée par agent, rappelée avant chaque tour",
@@ -192,6 +196,31 @@ export const fr = {
             "Greffons compilés dans le binaire façon xcaddy : chaque changement de composition est une transaction qui restaure l'arbre quand le build refuse",
             "Compétences valables sur tous les backends, un fichier SKILL.md par playbook",
           ],
+          ecosystemNote:
+            "Le daemon et tous ses greffons officiels sont publics : passerelles, backends, mémoire, politique de conversation.",
+        },
+      },
+      {
+        name: "Neublox",
+        tagline: "Hub MCP entre l'IA et Roblox Studio",
+        description:
+          "Une passerelle qui relie un agent IA aux outils de création : l'agent voit Roblox Studio comme un outil, pas comme une fenêtre. Cœur Rust exposé en serveur MCP unifié, application de bureau Tauri qui embarque le daemon, herrscher et naht en sidecars, et un cloud Rust pour l'identité et la facturation à l'usage. Blender est la cible suivante.",
+        details: {
+          diagramCaption:
+            "Le poste de travail parle au daemon, le daemon parle au cloud, et le cloud est le seul à parler aux fournisseurs de modèles.",
+          features: [
+            "Serveur MCP unifié côté agent, client MCP stdio côté Roblox Studio : une seule surface pour l'IA",
+            "Sync fichiers et Studio par naht, donc la source de vérité reste un dépôt git versionnable",
+            "App Tauri qui navigue et édite le vault markdown de herrscher comme un Obsidian : arbre, rétroliens, recherche, graphe",
+            "Arbre de fichiers, SCM et diff vs HEAD lus du vrai worktree git, coloration Luau par full-moon",
+            "accounts-api en axum : email et mot de passe ou OAuth Discord, GitHub, Google, JWT, rafraîchissement rotatif avec détection de réutilisation, TOTP, appareils révocables",
+            "neublox-gateway s'interpose entre le CLI du client et les fournisseurs amont, et débite le compte au réel",
+            "Build public verrouillé à la compilation : route gateway only, --cmd refusé, échec plutôt que dégradation silencieuse",
+            "Jeton de passerelle émis par runtime, injecté avec sa base URL, jamais persisté ni journalisé",
+            "Publication par notre propre serveur de releases, les binaires fermés composés hors CI pour que leur source n'entre jamais dans un runner",
+          ],
+          ecosystemNote:
+            "Le produit est privé, mais il est assemblé à partir de briques que je publie : le châssis herrscher et le moteur de sync naht.",
         },
       },
       {
@@ -279,6 +308,7 @@ export const fr = {
     website: "Site web",
     livePreview: "Aperçu en direct",
     openSite: "Ouvrir le site",
+    architecture: "Architecture",
     ecosystem: "Écosystème open-source",
     ecosystemNote: "Le cœur est privé, mais tous les SDK et intégrations sont open-source.",
   },

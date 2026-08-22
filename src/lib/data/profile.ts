@@ -44,13 +44,15 @@ export interface ProjectMeta {
   slug: string;
   tech: string[];
   color: string;
-  link: string;
+  // Le lien n'existe que si du code est réellement consultable publiquement :
+  // pointer un dépôt privé donne une page 404 au visiteur.
+  link?: string;
   logos: string[];
   externalUrl?: string;
   // Capture statique (webp) servie depuis /static — remplace les anciennes
   // iframes live qui rendaient ~5 sites entiers en parallèle (gros lag).
   image?: string;
-  ecosystem?: { name: string; url: string; tag: string }[];
+  ecosystem?: { name: string; url?: string; tag: string }[];
   // Métadonnées factuelles, relevées sur les dépôts eux-mêmes.
   since?: string;
   visibility?: "public" | "private";
@@ -79,7 +81,6 @@ export const projectMeta: ProjectMeta[] = [
       "Loki",
     ],
     color: "#7c3aed",
-    link: "https://github.com/Akayashuu",
     logos: ["TypeScript", "Discord.js", "RabbitMQ", "Docker"],
     externalUrl: "https://whiteashes.fr",
     image: "/projects/white.webp",
@@ -90,7 +91,6 @@ export const projectMeta: ProjectMeta[] = [
     visibility: "private",
     tech: ["TypeScript", "Node.js", "Discord.js", "Prisma", "PostgreSQL", "SvelteKit", "Tailwind", "Docker", "pnpm"],
     color: "#059669",
-    link: "https://github.com/Akayashuu",
     logos: ["TypeScript", "Discord.js", "PostgreSQL", "Svelte"],
     externalUrl: "https://ender.gg",
     image: "/projects/enderbot.webp",
@@ -101,7 +101,6 @@ export const projectMeta: ProjectMeta[] = [
     visibility: "private",
     tech: ["TypeScript", "Node.js", "Discord.js", "Svelte", "PostgreSQL", "Prisma", "Grafana", "Docker"],
     color: "#db2777",
-    link: "https://github.com/Akayashuu",
     logos: ["TypeScript", "Discord.js", "Svelte", "Docker"],
     externalUrl: "https://ganyu.fr",
     image: "/projects/ganyu.webp",
@@ -262,12 +261,11 @@ export const projectMeta: ProjectMeta[] = [
     visibility: "private",
     tech: ["Rust", "Tauri", "Go", "SvelteKit", "TypeScript", "PostgreSQL", "Luau", "Docker", "MCP", "Linux"],
     color: "#8b5cf6",
-    link: "https://github.com/orgs/vskstudio/repositories?q=neublox",
     logos: ["Rust", "Tauri", "SvelteKit", "PostgreSQL"],
     ecosystem: [
-      { name: "Neublox", url: "https://github.com/orgs/vskstudio/repositories?q=neublox", tag: "Coeur + app" },
-      { name: "neublox-accounts", url: "https://github.com/orgs/vskstudio/repositories?q=neublox-accounts", tag: "Identité" },
-      { name: "neublox-gateway", url: "https://github.com/orgs/vskstudio/repositories?q=neublox-accounts#gateway", tag: "Facturation" },
+      { name: "Neublox", tag: "Coeur + app" },
+      { name: "neublox-accounts", tag: "Identité" },
+      { name: "neublox-gateway", tag: "Facturation" },
       { name: "herrscher", url: "https://github.com/Herrscherd/herrscher", tag: "Châssis" },
       { name: "naht", url: "https://github.com/vskstudio/naht", tag: "Sync" },
     ],
@@ -322,7 +320,6 @@ export const projectMeta: ProjectMeta[] = [
     visibility: "private",
     tech: ["SvelteKit", "TypeScript", "Tailwind", "PostgreSQL", "Docker", "Vitest", "ESLint"],
     color: "#2563eb",
-    link: "https://github.com/orgs/vskstudio/repositories?q=wesync",
     logos: ["SvelteKit", "TypeScript", "Tailwind", "Docker"],
     externalUrl: "https://wesync.fr",
     image: "/projects/wesync.webp",

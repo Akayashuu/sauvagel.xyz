@@ -125,16 +125,18 @@
 			</dl>
 
 			<div class="mt-6 flex flex-wrap gap-3">
-				<a
-					href={meta.link}
-					target="_blank"
-					rel="noopener noreferrer"
-					class="flex items-center gap-2.5 border border-zinc-800 bg-zinc-900/60 px-4 py-2.5 text-sm text-zinc-200 transition-colors hover:border-accent-500/50 hover:text-accent-300"
-					style="border-radius: var(--radius-card)"
-				>
-					<GithubIcon size={16} />
-					{$t.projectPage.github}
-				</a>
+				{#if meta.link}
+					<a
+						href={meta.link}
+						target="_blank"
+						rel="noopener noreferrer"
+						class="flex items-center gap-2.5 border border-zinc-800 bg-zinc-900/60 px-4 py-2.5 text-sm text-zinc-200 transition-colors hover:border-accent-500/50 hover:text-accent-300"
+						style="border-radius: var(--radius-card)"
+					>
+						<GithubIcon size={16} />
+						{$t.projectPage.github}
+					</a>
+				{/if}
 				{#if meta.externalUrl}
 					<a
 						href={meta.externalUrl}
@@ -255,17 +257,29 @@
 						</p>
 						<div class="mt-4 flex flex-wrap gap-2">
 							{#each meta.ecosystem as pkg (pkg.name)}
-								<a
-									href={pkg.url}
-									target="_blank"
-									rel="noopener noreferrer"
-									class="group/pkg flex items-center gap-1.5 border border-zinc-800 px-2.5 py-1 text-xs text-zinc-300 transition-colors hover:border-accent-500/50 hover:text-accent-300"
-									style="border-radius: var(--radius-card)"
-								>
-									<GithubIcon size={13} />
-									<span class="font-mono">{pkg.name}</span>
-									<span class="text-[10px] text-zinc-500">{pkg.tag}</span>
-								</a>
+								{#if pkg.url}
+									<a
+										href={pkg.url}
+										target="_blank"
+										rel="noopener noreferrer"
+										class="group/pkg flex items-center gap-1.5 border border-zinc-800 px-2.5 py-1 text-xs text-zinc-300 transition-colors hover:border-accent-500/50 hover:text-accent-300"
+										style="border-radius: var(--radius-card)"
+									>
+										<GithubIcon size={13} />
+										<span class="font-mono">{pkg.name}</span>
+										<span class="text-[10px] text-zinc-500">{pkg.tag}</span>
+									</a>
+								{:else}
+									<!-- Dépôt privé : le nom reste, le lien mènerait à une 404. -->
+									<span
+										class="flex items-center gap-1.5 border border-zinc-800/60 px-2.5 py-1 text-xs text-zinc-400"
+										style="border-radius: var(--radius-card)"
+									>
+										<Lock size={13} class="text-zinc-600" />
+										<span class="font-mono">{pkg.name}</span>
+										<span class="text-[10px] text-zinc-500">{pkg.tag}</span>
+									</span>
+								{/if}
 							{/each}
 						</div>
 					</div>

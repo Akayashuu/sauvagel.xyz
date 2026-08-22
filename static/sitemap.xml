@@ -16,16 +16,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://sauvagel.xyz/projects/aeroclub-electron</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://sauvagel.xyz/projects/aeroclub-symfony</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://sauvagel.xyz/projects/ganyu</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>

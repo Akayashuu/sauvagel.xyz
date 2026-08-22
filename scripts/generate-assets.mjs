@@ -80,6 +80,8 @@ const PROJECTS = [
   { slug: "ganyu", title: "Ganyu", sub: "TypeScript · Svelte · PostgreSQL · Grafana" },
   { slug: "takt", title: "Takt", sub: "Go · ClickHouse · NATS · SvelteKit" },
   { slug: "naht", title: "Naht", sub: "Rust · Luau · SQLite · Svelte" },
+  { slug: "herrscher", title: "Herrscher", sub: "Go · SQLite · Docker · Linux" },
+  { slug: "wesync", title: "WeSync", sub: "SvelteKit · TypeScript · PostgreSQL · Docker" },
   { slug: "cryptobar", title: "cryptobar", sub: "Rust · Quickshell · Waybar · GTK4" },
 ];
 for (const p of PROJECTS) {

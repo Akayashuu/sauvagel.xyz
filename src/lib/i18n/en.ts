@@ -178,6 +178,37 @@ export const en = {
         },
       },
       {
+        name: "Herrscher",
+        tagline: "Fleets of AI agents that survive a restart",
+        description:
+          "A self-hosted Go daemon that runs fleets of coding agents: every session is a channel, an agent and its own git worktree, supervised and restarted on its own, with persistent memory in an Obsidian vault recalled before every turn. Agents delegate work to each other across model vendors, and you drive them from Discord, from the terminal, or from your own gateway.",
+        details: {
+          features: [
+            "Durable sessions: a channel, an agent, an isolated worktree, resumed from the backend's own token after a restart",
+            "Persistent memory in an Obsidian vault, shared per project and private per agent, recalled before every turn",
+            "Opt-in consolidation of a session's work into memory nodes, with aging, semantic merge and reversible archiving",
+            "Multi-agent delegation across vendors: one run mixes Claude, Codex and Cursor",
+            "Terminal UI with live tabs, images over the kitty protocol or sixel depending on what the terminal supports, degrading silently",
+            "Plugins compiled into the binary, xcaddy style: every change to the composition is a transaction that restores the tree when the build refuses",
+            "Cross-backend skills, one SKILL.md per playbook",
+          ],
+        },
+      },
+      {
+        name: "WeSync",
+        tagline: "A marketplace between Roblox studios and creators",
+        description:
+          "A marketplace connecting Roblox game developers with TikTok and Twitch creators: the studio books a creator to show its game, and the creator is paid once the video is live. The public landing page and signup capture are online, the rest of the platform follows.",
+        details: {
+          features: [
+            "Signup domain in hexagonal architecture: entities, invariants and a persistence port, all testable without SvelteKit or a database",
+            "SvelteKit on adapter-node, deployed with Docker, with a CI you can replay in one command",
+            "Five public pages including legal notice and privacy policy",
+            "Vitest on the domain and on the hero geometry, svelte-check in strict mode",
+          ],
+        },
+      },
+      {
         name: "cryptobar",
         tagline: "Crypto prices in your bar, terminal and desktop",
         description:

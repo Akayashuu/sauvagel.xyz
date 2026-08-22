@@ -178,6 +178,37 @@ export const fr = {
         },
       },
       {
+        name: "Herrscher",
+        tagline: "Des flottes d'agents IA qui survivent au redémarrage",
+        description:
+          "Un démon Go auto-hébergé qui fait tourner des flottes d'agents de code : chaque session est un salon, un agent et son propre worktree git, supervisée et relancée toute seule, avec une mémoire persistante en vault Obsidian relue avant chaque tour. Les agents se délèguent du travail entre eux d'un fournisseur de modèle à l'autre, et se pilotent depuis Discord, depuis le terminal ou depuis ta propre passerelle.",
+        details: {
+          features: [
+            "Sessions durables : un salon, un agent, un worktree isolé, repris au jeton du backend après un redémarrage",
+            "Mémoire persistante en vault Obsidian, partagée par projet et privée par agent, rappelée avant chaque tour",
+            "Consolidation optionnelle du travail d'une session en nœuds de mémoire, avec vieillissement, fusion sémantique et archivage réversible",
+            "Délégation multi agents entre fournisseurs : un même run mélange Claude, Codex et Cursor",
+            "Interface terminal en onglets vivants, images en protocole kitty ou sixel selon ce que le terminal sait faire, dégradation silencieuse",
+            "Greffons compilés dans le binaire façon xcaddy : chaque changement de composition est une transaction qui restaure l'arbre quand le build refuse",
+            "Compétences valables sur tous les backends, un fichier SKILL.md par playbook",
+          ],
+        },
+      },
+      {
+        name: "WeSync",
+        tagline: "Place de marché entre studios Roblox et créateurs",
+        description:
+          "Une place de marché qui met en relation les développeurs de jeux Roblox et les créateurs TikTok ou Twitch : le studio réserve un créateur pour montrer son jeu, et le créateur est payé une fois la vidéo en ligne. La landing publique et la capture d'inscriptions sont en ligne, le reste de la plateforme suit.",
+        details: {
+          features: [
+            "Domaine d'inscription en architecture hexagonale : entités, invariants et port de persistance testables sans SvelteKit ni base de données",
+            "SvelteKit en adapter-node, déployé en Docker, avec une CI rejouable en une commande",
+            "Cinq pages publiques dont les mentions légales et la politique de confidentialité",
+            "Vitest sur le domaine et sur la géométrie du héros, svelte-check en mode strict",
+          ],
+        },
+      },
+      {
         name: "cryptobar",
         tagline: "Cours crypto dans la barre, le terminal et le bureau",
         description:

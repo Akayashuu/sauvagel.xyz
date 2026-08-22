@@ -116,6 +116,22 @@ export const projectMeta: ProjectMeta[] = [
     image: "/projects/naht.webp",
   },
   {
+    slug: "herrscher",
+    tech: ["Go", "Git", "SQLite", "Linux", "Arch", "Docker"],
+    color: "#0ea5e9",
+    link: "https://github.com/Herrscherd/herrscher",
+    logos: ["Go", "Git", "Linux", "Docker"],
+  },
+  {
+    slug: "wesync",
+    tech: ["SvelteKit", "TypeScript", "Tailwind", "PostgreSQL", "Docker", "Vitest", "ESLint"],
+    color: "#2563eb",
+    link: "https://github.com/orgs/vskstudio/repositories?q=wesync",
+    logos: ["SvelteKit", "TypeScript", "Tailwind", "Docker"],
+    externalUrl: "https://wesync.fr",
+    image: "/projects/wesync.webp",
+  },
+  {
     slug: "cryptobar",
     tech: ["Rust", "QML", "GTK4", "Wayland", "Hyprland", "Linux", "Arch"],
     color: "#f7931a",

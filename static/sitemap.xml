@@ -31,6 +31,16 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://sauvagel.xyz/projects/herrscher</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sauvagel.xyz/projects/wesync</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://sauvagel.xyz/projects/cryptobar</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>

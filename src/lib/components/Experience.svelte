@@ -10,10 +10,14 @@
 
 		<!-- Une seule colonne : la frise en zigzag coupait la lecture en deux et
 		     obligeait l'œil à repartir à gauche à chaque poste. -->
-		<div class="relative max-w-4xl border-l border-zinc-800 pl-8 sm:pl-12">
+		<!-- L'écart vit sur le conteneur : posé sur l'article, un last:pb-0 aurait
+		     visé chaque article, seul enfant de son ScrollReveal, donc tous. -->
+		<div
+			class="relative flex max-w-4xl flex-col gap-12 border-l border-zinc-800 pl-8 sm:pl-12 2xl:gap-16"
+		>
 			{#each $t.experience.items as exp, i (exp.company)}
 				<ScrollReveal delay={0.1 * i}>
-					<article class="relative pb-12 last:pb-0">
+					<article class="relative">
 						<!-- Le repère reprend le carré de la grille, pas une pastille ronde. -->
 						<span
 							class="absolute top-1.5 -left-8 h-2.5 w-2.5 border border-primary-400 bg-zinc-950 sm:-left-12"

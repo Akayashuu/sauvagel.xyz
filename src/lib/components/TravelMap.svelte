@@ -51,6 +51,8 @@
 		layover: '✈️',
 	};
 
+	const basemapMaxZoom = 16;
+
 	const tagPriority: string[] = ['lived', 'worked', 'studied', 'layover', 'visited'];
 
 	function primaryTag(tags: string[]): string {
@@ -83,6 +85,7 @@
 			zoomControl: false,
 			attributionControl: false,
 			scrollWheelZoom: true,
+			maxZoom: basemapMaxZoom,
 		});
 
 		map.fitBounds(bounds, { padding: [40, 40] });
@@ -90,18 +93,17 @@
 		L.control.zoom({ position: 'bottomright' }).addTo(map);
 
 		L.tileLayer(
-			'https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png',
+			'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}',
 			{
-				subdomains: 'abcd',
-				maxZoom: 19,
+				maxZoom: basemapMaxZoom,
+				className: 'basemap-base',
 			}
 		).addTo(map);
 
 		L.tileLayer(
-			'https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.png',
+			'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}',
 			{
-				subdomains: 'abcd',
-				maxZoom: 19,
+				maxZoom: basemapMaxZoom,
 				pane: 'shadowPane',
 			}
 		).addTo(map);
@@ -184,8 +186,16 @@
 							<span>{$t.travels.tags[tag]}</span>
 						</div>
 					{/each}
-					<div class="ml-auto font-mono text-xs text-zinc-500">
-						{cities.length} {$t.travels.cities}
+					<div class="ml-auto flex items-center gap-3 font-mono text-xs text-zinc-500">
+						<a
+							href="https://www.esri.com/"
+							target="_blank"
+							rel="noopener noreferrer"
+							class="transition-colors hover:text-zinc-400"
+						>
+							© Esri
+						</a>
+						<span>{cities.length} {$t.travels.cities}</span>
 					</div>
 				</div>
 			</div>
@@ -194,6 +204,10 @@
 </section>
 
 <style>
+	:global(.basemap-base) {
+		filter: contrast(1.8) brightness(0.45) saturate(0.7);
+	}
+
 	:global(.city-marker) {
 		background: transparent !important;
 		border: none !important;

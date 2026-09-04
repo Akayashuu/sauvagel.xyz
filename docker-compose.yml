@@ -1,9 +1,0 @@
-services:
-  app:
-    build: .
-    # Le build SvelteKit est généré dans l image puis recopié sur l hôte à
-    # chaque démarrage (./build), d où il est servi en statique par le reverse
-    # proxy du serveur. Conteneur jetable : il copie puis s arrête.
-    command: sh -c "rm -rf /out/* && cp -a /app/build/. /out/"
-    volumes:
-      - ./build:/out

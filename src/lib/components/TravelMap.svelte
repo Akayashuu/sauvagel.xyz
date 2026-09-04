@@ -204,8 +204,12 @@
 </section>
 
 <style>
+	:global(.leaflet-container.leaflet-container) {
+		background: #18181b;
+	}
+
 	:global(.basemap-base) {
-		filter: contrast(1.8) brightness(0.45) saturate(0.7);
+		filter: contrast(1.2) brightness(0.8) saturate(0.55);
 	}
 
 	:global(.city-marker) {

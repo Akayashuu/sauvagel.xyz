@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { t } from '$lib/i18n';
-	import { profile } from '$lib/data/profile';
+	import { t } from '#lib/i18n/index.ts';
+	import { profile } from '#lib/data/profile.ts';
 
 	let analyticsParts = $derived(
 		$t.privacy.analytics.split(/<\/?strong>/).map((text, i) => ({ text, strong: i % 2 === 1 }))

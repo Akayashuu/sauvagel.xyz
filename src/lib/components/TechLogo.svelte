@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { techIcons } from '$lib/data/tech';
+	import { techIcons } from '#lib/data/tech.ts';
 
 	let {
 		name,

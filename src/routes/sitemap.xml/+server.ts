@@ -1,5 +1,5 @@
-import { posts } from "$lib/data/posts";
-import { projectMeta } from "$lib/data/profile";
+import { posts } from "#lib/data/posts.ts";
+import { projectMeta } from "#lib/data/profile.ts";
 
 export const prerender = true;
 

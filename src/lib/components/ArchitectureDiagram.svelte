@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { ArrowLeftRight } from 'lucide-svelte';
-	import { t } from '$lib/i18n';
-	import type { Diagram } from '$lib/data/profile';
+	import { ArrowLeftRight } from '@lucide/svelte';
+	import { t } from '#lib/i18n/index.ts';
+	import type { Diagram } from '#lib/data/profile.ts';
 
 	let { diagram, caption }: { diagram: Diagram; caption: string } = $props();
 

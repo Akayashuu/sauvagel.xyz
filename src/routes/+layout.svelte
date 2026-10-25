@@ -1,8 +1,8 @@
 <script lang="ts">
 	import '../app.css';
-	import Navbar from '$lib/components/Navbar.svelte';
+	import Navbar from '#lib/components/Navbar.svelte';
 	import { Takt } from '@vskstudio/takt-svelte';
-	import { t, locale } from '$lib/i18n';
+	import { t, locale } from '#lib/i18n/index.ts';
 	import { onMount, tick } from 'svelte';
 	let { children } = $props();
 

@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { ArrowUpRight } from 'lucide-svelte';
-	import { projectMeta } from '$lib/data/profile';
-	import { t } from '$lib/i18n';
+	import { ArrowUpRight } from '@lucide/svelte';
+	import { projectMeta } from '#lib/data/profile.ts';
+	import { t } from '#lib/i18n/index.ts';
 	import ScrollReveal from './ScrollReveal.svelte';
 	import SectionHeader from './SectionHeader.svelte';
 	import GenerativeGrid from './GenerativeGrid.svelte';

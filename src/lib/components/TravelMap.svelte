@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
-	import { browser } from '$app/environment';
-	import { t } from '$lib/i18n';
-	import { cities } from '$lib/data/cities';
-	import { Maximize2, Minimize2 } from 'lucide-svelte';
+	import { browser } from '$app/env';
+	import { t } from '#lib/i18n/index.ts';
+	import { cities } from '#lib/data/cities.ts';
+	import { Maximize2, Minimize2 } from '@lucide/svelte';
 	import ScrollReveal from './ScrollReveal.svelte';
 	import SectionHeader from './SectionHeader.svelte';
 

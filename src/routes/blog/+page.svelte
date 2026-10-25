@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { ArrowRight, Check, ChevronDown, Clock, Hash, Rss, Search, X } from 'lucide-svelte';
-	import GenerativeGrid from '$lib/components/GenerativeGrid.svelte';
-	import TechLogo from '$lib/components/TechLogo.svelte';
-	import { posts } from '$lib/data/posts';
-	import { projectMeta } from '$lib/data/profile';
-	import { techIcons } from '$lib/data/tech';
-	import { t, locale } from '$lib/i18n';
+	import { ArrowRight, Check, ChevronDown, Clock, Hash, Rss, Search, X } from '@lucide/svelte';
+	import GenerativeGrid from '#lib/components/GenerativeGrid.svelte';
+	import TechLogo from '#lib/components/TechLogo.svelte';
+	import { posts } from '#lib/data/posts.ts';
+	import { projectMeta } from '#lib/data/profile.ts';
+	import { techIcons } from '#lib/data/tech.ts';
+	import { t, locale } from '#lib/i18n/index.ts';
 
 	const PER_PAGE = 6;
 

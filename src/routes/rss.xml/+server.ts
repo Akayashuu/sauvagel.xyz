@@ -1,4 +1,4 @@
-import { posts } from "$lib/data/posts";
+import { posts } from "#lib/data/posts.ts";
 
 export const prerender = true;
 

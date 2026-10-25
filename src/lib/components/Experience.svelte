@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { t } from '$lib/i18n';
+	import { t } from '#lib/i18n/index.ts';
 	import ScrollReveal from './ScrollReveal.svelte';
 	import SectionHeader from './SectionHeader.svelte';
 </script>

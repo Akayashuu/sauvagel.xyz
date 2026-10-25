@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { ArrowLeft, Clock } from 'lucide-svelte';
-	import GithubIcon from '$lib/components/GithubIcon.svelte';
-	import GenerativeGrid from '$lib/components/GenerativeGrid.svelte';
-	import PostBody from '$lib/components/PostBody.svelte';
-	import { posts, headingId } from '$lib/data/posts';
-	import { projectMeta } from '$lib/data/profile';
-	import { t, locale } from '$lib/i18n';
+	import { ArrowLeft, Clock } from '@lucide/svelte';
+	import GithubIcon from '#lib/components/GithubIcon.svelte';
+	import GenerativeGrid from '#lib/components/GenerativeGrid.svelte';
+	import PostBody from '#lib/components/PostBody.svelte';
+	import { posts, headingId } from '#lib/data/posts.ts';
+	import { projectMeta } from '#lib/data/profile.ts';
+	import { t, locale } from '#lib/i18n/index.ts';
 
 	let { data } = $props();
 

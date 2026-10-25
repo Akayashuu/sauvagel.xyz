@@ -1,9 +1,9 @@
 <script lang="ts">
-	import ArchitectureDiagram from '$lib/components/ArchitectureDiagram.svelte';
-	import { ArrowRight } from 'lucide-svelte';
-	import { postIcons } from '$lib/data/post-icons';
-	import { headingId, type Block } from '$lib/data/posts';
-	import { t } from '$lib/i18n';
+	import ArchitectureDiagram from '#lib/components/ArchitectureDiagram.svelte';
+	import { ArrowRight } from '@lucide/svelte';
+	import { postIcons } from '#lib/data/post-icons.ts';
+	import { headingId, type Block } from '#lib/data/posts.ts';
+	import { t } from '#lib/i18n/index.ts';
 
 	let { body }: { body: Block[] } = $props();
 </script>

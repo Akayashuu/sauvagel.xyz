@@ -7,14 +7,14 @@
     "#lib": "./src/lib",
     "#lib/*": "./src/lib/*"
   },
-  "packageManager": "pnpm@12.15.0",
+  "packageManager": "bun@1.4.4",
   "scripts": {
-    "dev": "vite dev",
-    "build": "vite build",
-    "preview": "vite preview",
+    "dev": "bun --bun vite dev",
+    "build": "bun --bun vite build",
+    "preview": "bun --bun vite preview",
     "prepare": "svelte-kit sync || echo ''",
-    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+    "check": "svelte-kit sync && bun --bun svelte-check --tsconfig ./tsconfig.json",
+    "check:watch": "svelte-kit sync && bun --bun svelte-check --tsconfig ./tsconfig.json --watch",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },

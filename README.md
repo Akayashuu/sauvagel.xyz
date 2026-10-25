@@ -8,7 +8,7 @@ Portfolio et blog de Léo Sauvage. Site statique prérendu, servi par Nginx sur 
 - Tailwind CSS 4, polices auto-hébergées (Space Grotesk, JetBrains Mono)
 - `adapter-static` : tout le site est prérendu, aucun serveur applicatif en production
 - Leaflet (carte des villes, chargée à la demande) et Takt (mesure d'audience sans cookie)
-- pnpm, ESLint, svelte-check
+- Bun, ESLint, svelte-check
 
 ## Structure
 
@@ -32,14 +32,14 @@ aux données suffit, il n'y a pas de fichier à tenir à jour à la main.
 ## Développement
 
 ```bash
-pnpm install
-pnpm dev          # serveur de développement
-pnpm check        # svelte-check (types, a11y)
-pnpm lint         # eslint
-pnpm build        # build statique dans build/
+bun install
+bun run dev    # serveur de développement
+bun run check  # svelte-check (types, a11y)
+bun run lint   # eslint
+bun run build  # build statique dans build/
 ```
 
-Les images Open Graph se régénèrent avec `node scripts/generate-assets.mjs <dossier-de-travail>`,
+Les images Open Graph se régénèrent avec `bun scripts/generate-assets.mjs <dossier-de-travail>`,
 qui a besoin de `resvg` et des fichiers `.ttf` des deux polices dans ce dossier.
 
 ## Intégration continue et déploiement

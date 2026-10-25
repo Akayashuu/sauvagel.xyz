@@ -19,11 +19,11 @@ export const fr = {
     label: "À propos",
     title: "En quelques mots",
     description:
-      "Je fais du web, du mobile, et parfois des trucs juste pour le fun. J'écris surtout du <strong>TypeScript</strong> et je câble des <strong>systèmes distribués</strong>, et je suis aussi à l'aise sur un frontend ou pour déployer des containers. Je tiens à la qualité du code (Biome, ESLint, typage strict) et j'aime quand c'est bien structuré.",
+      "Je fais du web, du mobile, et parfois des trucs juste pour le fun. J'écris surtout du <strong>TypeScript</strong>, du <strong>Go</strong> et du <strong>Rust</strong>, et je câble des <strong>systèmes distribués</strong>, et je suis aussi à l'aise sur un frontend ou pour déployer des containers. Je tiens à la qualité du code (Biome, ESLint, typage strict) et j'aime quand c'est bien structuré.",
     highlights: [
       {
         title: "Backend d'abord",
-        desc: "Node.js, message queues, microservices. J'aime la partie invisible",
+        desc: "Go, Bun, message queues, microservices. J'aime la partie invisible",
       },
       {
         title: "Frontend aussi",
@@ -35,7 +35,7 @@ export const fr = {
       },
       {
         title: "Side projects",
-        desc: "Bots Discord, un MMORPG textuel, de l'analytics web. J'aime shipper",
+        desc: "Bots Discord, un serveur Minecraft, de l'analytics web. J'aime shipper",
       },
     ],
   },
@@ -91,27 +91,10 @@ export const fr = {
     title: "Ce que j'ai construit",
     items: [
       {
-        name: "White",
-        tagline: "MMORPG textuel sur Discord",
-        description:
-          "Un MMORPG textuel qui tourne entièrement sur Discord. Architecture microservices en TypeScript où chaque service communique via RabbitMQ, avec sharding pour la scalabilité, Drizzle ORM sur PostgreSQL, cache Redis et observabilité complète (Prometheus, Grafana, Loki). Le tout containerisé en Docker.",
-        details: {
-          features: [
-            "Gameplay MMORPG textuel directement dans Discord",
-            "Architecture microservices : chaque service communique via RabbitMQ",
-            "Sharding du bot pour la scalabilité multi-serveurs",
-            "Drizzle ORM avec PostgreSQL pour l'état persistant du jeu",
-            "Redis pour le cache et les files d'attente temps réel",
-            "Stack d'observabilité : Prometheus, Grafana et Loki pour les logs",
-            "Déploiement Dockerisé pour tous les services",
-          ],
-        },
-      },
-      {
         name: "Enderbot",
         tagline: "Bot RPG Discord, 6000+ cartes",
         description:
-          "Un bot RPG Discord avancé combinant exploration, collection de cartes (6000+ cartes de jeux vidéo, anime et manga), économie, craft et guerres multijoueur. Architecture monorepo pnpm en TypeScript avec Prisma sur PostgreSQL, et un dashboard web SvelteKit + Tailwind. Free-to-play, actif depuis 2017.",
+          "Un bot RPG Discord avancé combinant exploration, collection de cartes (6000+ cartes de jeux vidéo, anime et manga), économie, craft et guerres multijoueur. Monorepo Bun : une passerelle Discord en Go (disgo) qui porte tous les shards, un cœur TypeScript relié par RabbitMQ et protobuf, Prisma sur PostgreSQL, Redis, et un dashboard SvelteKit + Tailwind. Free-to-play, actif depuis 2017.",
         details: {
           features: [
             "Plus de 6 000 cartes collectibles issues de jeux vidéo, anime et manga",
@@ -121,25 +104,49 @@ export const fr = {
             "Économie, carte de guerre et classements compétitifs",
             "Dashboard SvelteKit + Tailwind avec logs, classement, bibliothèque et stats serveur",
             "API publique sur ender.gg, déployée en Docker",
-            "Architecture monorepo pnpm avec Prisma et PostgreSQL",
+            "Passerelle Discord en Go (disgo) : tous les shards dans un seul process, reliée au cœur TypeScript par RabbitMQ et protobuf",
+            "Donjons, quêtes et familiers, avec une île d'organisation en 3D (three.js) sur le dashboard",
+            "Monorepo Bun avec Prisma, PostgreSQL et Redis, observabilité Prometheus, Grafana et Loki",
           ],
+        },
+      },
+      {
+        name: "Karamon",
+        tagline: "Serveur Minecraft Cobblemon francophone",
+        description:
+          "Un serveur Minecraft Cobblemon (des Pokémon dans Minecraft) francophone, construit de bout en bout : sept mods Fabric maison en Java par-dessus Cobbleverse, un launcher Electron qui installe tout en un clic, le site karamon.fr avec wiki et boutique, et des services Rust autour du jeu pour l'administration et l'observabilité. Plusieurs mondes : un spawn protégé, un monde ressources remis à zéro chaque nuit et une carte d'aventure permanente de 48 lieux.",
+        details: {
+          diagramCaption:
+            "Le CI publie le pack client, le launcher l'installe puis connecte le joueur ; le serveur de jeu et ses outils tournent en Docker Compose.",
+          features: [
+            "Environ 280 000 lignes de Java réparties en sept mods Fabric et une centaine de modules de gameplay",
+            "Menu K : profil, quêtes, battle pass, guildes et territoires, saisons classées, classements et boutique",
+            "Raids légendaires, hôtel des ventes, événements saisonniers et skins de Pokémon générés par script",
+            "Monde ressources réinitialisé chaque jour, carte d'aventure permanente avec un butin par joueur et par coffre",
+            "Panel d'administration en Rust (axum, sqlx) qui pilote le conteneur Minecraft par l'API Docker",
+            "Launcher Electron multiplateforme avec mises à jour automatiques et Rich Presence Discord",
+            "Site Svelte bilingue prérendu, wiki Markdown et API Rust pour la boutique Stripe",
+          ],
+          ecosystemNote:
+            "Le serveur et ses mods sont privés, le launcher est open-source.",
         },
       },
       {
         name: "Ganyu.fr",
         tagline: "Bot communautaire Discord",
         description:
-          "Un bot Discord pour la gestion de communauté, écrit en TypeScript avec Discord.js, Prisma et PostgreSQL : leveling (100+ niveaux avec rôles automatiques), économie avec récompenses quotidiennes/horaires et gacha avec système de pitié, mini-jeux, modération et messages de bienvenue personnalisés. Dashboard Svelte et API publique, le tout déployé en Docker.",
+          "Un bot Discord pour la gestion de communauté, avec une passerelle Discord en Go (disgo) et un cœur TypeScript sur Bun reliés par RabbitMQ, Prisma et PostgreSQL : leveling avec rôles automatiques, économie et tirages pondérés, mini-jeux et poker en Activité Discord, tickets, modération et messages de bienvenue personnalisés. Dashboard SvelteKit, le tout déployé en Docker.",
         details: {
           features: [
-            "Système de leveling avec 100+ niveaux, XP via texte et vocal",
+            "Système de leveling avec XP via texte et vocal",
             "Attribution automatique de rôles aux paliers de niveau",
             "Économie avec récompenses quotidiennes/horaires et classements serveur",
-            "Système de gacha avec pitié garantie pour des rôles et récompenses exclusifs",
-            "Mini-jeux intégrés jouables directement dans Discord",
+            "Tirages pondérés pour des rôles et récompenses rares",
+            "Mini-jeux dans Discord et Arcade : poker Texas Hold'em en Activité Discord, lobby temps réel en WebSocket",
             "Outils de modération : logs, auto-rôles, messages de bienvenue/départ",
-            "Bot Discord.js avec persistance Prisma + PostgreSQL",
-            "Dashboard Svelte sur ganyu.fr avec stats temps réel et API publique (/api)",
+            "Passerelle Go (disgo) pour tous les shards, cœur TypeScript sur Bun, Prisma + PostgreSQL",
+            "Bots personnalisés pour les serveurs PRO : un orchestrateur Rust lance un conteneur Docker par serveur avec son propre jeton",
+            "Dashboard SvelteKit + Tailwind sur ganyu.fr avec stats temps réel",
           ],
         },
       },
@@ -147,7 +154,7 @@ export const fr = {
         name: "Takt",
         tagline: "Analytics web privacy-friendly, self-hosted",
         description:
-          "Une plateforme d'analytics web privacy-friendly et self-hosted, notre alternative à Plausible. Cœur en Go avec ClickHouse pour les events et Postgres pour le relationnel, pipeline d'ingestion NATS JetStream et dashboard SvelteKit. Sans cookies, sans données personnelles, conforme RGPD sans bannière. Le cœur est privé, mais tout l'écosystème (SDK, intégrations framework, MCP) est open-source.",
+          "Une plateforme d'analytics web privacy-friendly et self-hosted, notre alternative à Plausible. Cœur en Go avec ClickHouse pour les events et Postgres pour le relationnel, pipeline d'ingestion NATS JetStream et dashboard SvelteKit. Sans cookies, sans données personnelles, conforme RGPD sans bannière. Le cœur est privé, mais tout l'écosystème (SDK, intégrations framework) est open-source, et un serveur MCP distant en OAuth 2.1 est intégré à l'API.",
         details: {
           diagramCaption:
             "Monolithe modulaire : une file durable sépare l'ingestion de l'écriture, et la lecture ne touche jamais le chemin chaud.",
@@ -155,11 +162,12 @@ export const fr = {
             "Privacy by design : pas de cookies, pas de PII, RGPD sans bannière de consentement",
             "Script de tracking < 6 Ko, enrichissement 100 % côté serveur",
             "Cœur Go : ingestion HTTP → NATS JetStream → worker → ClickHouse",
-            "Postgres + Ent pour le relationnel, organisations & RBAC, auth sessions + OAuth/OIDC (Argon2id)",
+            "Visibilité IA : trafic venu des assistants et passages des robots d'IA, vérifiés par IP",
+            "Postgres + Ent pour le relationnel, organisations & RBAC, auth sessions + OAuth/OIDC (Argon2id), passkeys et TOTP",
             "Objectifs et entonnoirs de conversion, mode cluster (sharding HRW + autoscaling KEDA)",
             "Observabilité OpenTelemetry → Prometheus / Grafana / Tempo / Loki",
-            "Dashboard SvelteKit + Tailwind, multi-sites, déploiement Docker Compose",
-            "Écosystème open-source : SDK JS (@takt/core) & PHP, wrappers React/Vue/Svelte/Solid/Angular/Astro, Laravel/Symfony, plugin WordPress et serveur MCP",
+            "Dashboard SvelteKit construit avec Bun et embarqué dans le binaire Go, déploiement Docker Compose ou Helm",
+            "Écosystème open-source : SDK JS (@vskstudio/takt-core), PHP et API de lecture, wrappers React/Vue/Svelte/Solid/Angular/Astro, Laravel/Symfony et plugin WordPress",
           ],
         },
       },
@@ -208,34 +216,20 @@ export const fr = {
           "Une passerelle qui relie un agent IA aux outils de création : l'agent voit Roblox Studio comme un outil, pas comme une fenêtre. Cœur Rust exposé en serveur MCP unifié, application de bureau Tauri qui embarque le daemon, herrscher et naht en sidecars, et un cloud Rust pour l'identité et la facturation à l'usage. Blender est la cible suivante.",
         details: {
           diagramCaption:
-            "Le poste de travail parle au daemon, le daemon parle au cloud, et le cloud est le seul à parler aux fournisseurs de modèles.",
+            "Studio et l'agent parlent au daemon, l'app s'authentifie auprès du cloud, et seul le cloud parle aux fournisseurs de modèles.",
           features: [
-            "Serveur MCP unifié côté agent, client MCP stdio côté Roblox Studio : une seule surface pour l'IA",
+            "Serveur MCP unifié côté agent, plugin Studio en Luau relié au daemon en HTTP local : une seule surface pour l'IA",
             "Sync fichiers et Studio par naht, donc la source de vérité reste un dépôt git versionnable",
             "App Tauri qui navigue et édite le vault markdown de herrscher comme un Obsidian : arbre, rétroliens, recherche, graphe",
             "Arbre de fichiers, SCM et diff vs HEAD lus du vrai worktree git, coloration Luau par full-moon",
             "accounts-api en axum : email et mot de passe ou OAuth Discord, GitHub, Google, JWT, rafraîchissement rotatif avec détection de réutilisation, TOTP, appareils révocables",
-            "neublox-gateway s'interpose entre le CLI du client et les fournisseurs amont, et débite le compte au réel",
+            "La passerelle de neublox-accounts s'interpose entre le CLI du client et les fournisseurs amont, et débite le compte au réel",
             "Build public verrouillé à la compilation : route gateway only, --cmd refusé, échec plutôt que dégradation silencieuse",
             "Jeton de passerelle émis par runtime, injecté avec sa base URL, jamais persisté ni journalisé",
             "Publication par notre propre serveur de releases, les binaires fermés composés hors CI pour que leur source n'entre jamais dans un runner",
           ],
           ecosystemNote:
             "Le produit est privé, mais il est assemblé à partir de briques que je publie : le châssis herrscher et le moteur de sync naht.",
-        },
-      },
-      {
-        name: "WeSync",
-        tagline: "Place de marché entre studios Roblox et créateurs",
-        description:
-          "Une place de marché qui met en relation les développeurs de jeux Roblox et les créateurs TikTok ou Twitch : le studio réserve un créateur pour montrer son jeu, et le créateur est payé une fois la vidéo en ligne. La landing publique et la capture d'inscriptions sont en ligne, le reste de la plateforme suit.",
-        details: {
-          features: [
-            "Domaine d'inscription en architecture hexagonale : entités, invariants et port de persistance testables sans SvelteKit ni base de données",
-            "SvelteKit en adapter-node, déployé en Docker, avec une CI rejouable en une commande",
-            "Cinq pages publiques dont les mentions légales et la politique de confidentialité",
-            "Vitest sur le domaine et sur la géométrie du héros, svelte-check en mode strict",
-          ],
         },
       },
       {

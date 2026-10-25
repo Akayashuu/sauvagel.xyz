@@ -73,14 +73,13 @@ mkdirSync("static/og", { recursive: true });
 render("og-home", og({ seed: "leo-sauvage", eyebrow: "Développeur full-stack", title: "Léo Sauvage", subtitle: "TypeScript, Go, Rust et systèmes distribués" }), "static/og/home.png");
 
 const PROJECTS = [
-  { slug: "white", title: "White", sub: "TypeScript · RabbitMQ · PostgreSQL · Docker" },
-  { slug: "enderbot", title: "Enderbot", sub: "TypeScript · Discord.js · Prisma · SvelteKit" },
-  { slug: "ganyu", title: "Ganyu", sub: "TypeScript · Svelte · PostgreSQL · Grafana" },
+  { slug: "enderbot", title: "Enderbot", sub: "TypeScript · Go · Bun · SvelteKit" },
+  { slug: "karamon", title: "Karamon", sub: "Java · Fabric · Rust · Electron" },
+  { slug: "ganyu", title: "Ganyu", sub: "Go · TypeScript · Bun · Rust" },
   { slug: "takt", title: "Takt", sub: "Go · ClickHouse · NATS · SvelteKit" },
   { slug: "naht", title: "Naht", sub: "Rust · Luau · SQLite · Svelte" },
-  { slug: "herrscher", title: "Herrscher", sub: "Go · SQLite · Docker · Linux" },
-  { slug: "neublox", title: "Neublox", sub: "Rust · Tauri · MCP · SvelteKit" },
-  { slug: "wesync", title: "WeSync", sub: "SvelteKit · TypeScript · PostgreSQL · Docker" },
+  { slug: "herrscher", title: "Herrscher", sub: "Go · gRPC · NATS · Linux" },
+  { slug: "neublox", title: "Neublox", sub: "Rust · Tauri · MCP · Svelte" },
   { slug: "cryptobar", title: "cryptobar", sub: "Rust · Quickshell · Waybar · GTK4" },
 ];
 for (const p of PROJECTS) {

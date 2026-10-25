@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { profile } from '$lib/data/profile';
-	import { t } from '$lib/i18n';
+	import { profile } from '#lib/data/profile.ts';
+	import { t } from '#lib/i18n/index.ts';
 	import GenerativeGrid from './GenerativeGrid.svelte';
 	import TextScramble from './TextScramble.svelte';
 	import MagneticButton from './MagneticButton.svelte';
-	import { Mail, MapPin } from 'lucide-svelte';
+	import { Mail, MapPin } from '@lucide/svelte';
 	import GithubIcon from './GithubIcon.svelte';
 </script>
 

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { Menu, X, Globe } from 'lucide-svelte';
-	import { t, locale } from '$lib/i18n';
+	import { Menu, X, Globe } from '@lucide/svelte';
+	import { t, locale } from '#lib/i18n/index.ts';
 
 	let scrolled = $state(false);
 	let mobileOpen = $state(false);

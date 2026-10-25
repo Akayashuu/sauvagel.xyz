@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { profile } from '$lib/data/profile';
-	import { t } from '$lib/i18n';
-	import { Mail, MapPin, Phone, ArrowUpRight } from 'lucide-svelte';
+	import { profile } from '#lib/data/profile.ts';
+	import { t } from '#lib/i18n/index.ts';
+	import { Mail, MapPin, Phone, ArrowUpRight } from '@lucide/svelte';
 	import GithubIcon from './GithubIcon.svelte';
 	import ScrollReveal from './ScrollReveal.svelte';
 	import SectionHeader from './SectionHeader.svelte';

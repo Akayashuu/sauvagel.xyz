@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { ArrowLeft, ArrowRight, ExternalLink, Lock } from 'lucide-svelte';
-	import GithubIcon from '$lib/components/GithubIcon.svelte';
-	import GenerativeGrid from '$lib/components/GenerativeGrid.svelte';
-	import TechLogo from '$lib/components/TechLogo.svelte';
-	import ArchitectureDiagram from '$lib/components/ArchitectureDiagram.svelte';
-	import { projectMeta } from '$lib/data/profile';
-	import { t } from '$lib/i18n';
+	import { ArrowLeft, ArrowRight, ExternalLink, Lock } from '@lucide/svelte';
+	import GithubIcon from '#lib/components/GithubIcon.svelte';
+	import GenerativeGrid from '#lib/components/GenerativeGrid.svelte';
+	import TechLogo from '#lib/components/TechLogo.svelte';
+	import ArchitectureDiagram from '#lib/components/ArchitectureDiagram.svelte';
+	import { projectMeta } from '#lib/data/profile.ts';
+	import { t } from '#lib/i18n/index.ts';
 
 	let { data } = $props();
 

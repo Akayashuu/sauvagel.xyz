@@ -1,4 +1,4 @@
-import { projectMeta } from "$lib/data/profile";
+import { projectMeta } from "#lib/data/profile.ts";
 import { error } from "@sveltejs/kit";
 import type { PageLoad } from "./$types";
 

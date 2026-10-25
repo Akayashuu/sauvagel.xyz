@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { Code2, Server, Smartphone, Gamepad2 } from 'lucide-svelte';
-	import { t } from '$lib/i18n';
+	import { Code2, Server, Smartphone, Gamepad2 } from '@lucide/svelte';
+	import { t } from '#lib/i18n/index.ts';
 	import ScrollReveal from './ScrollReveal.svelte';
 	import SectionHeader from './SectionHeader.svelte';
 

@@ -26,7 +26,7 @@ import {
   TrendingDown,
   TriangleAlert,
   Zap,
-} from "lucide-svelte";
+} from "@lucide/svelte";
 
 export const postIcons = {
   activity: Activity,
